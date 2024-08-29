@@ -1,9 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include<cctype>
+#include <cctype>
 using namespace std;
-/*abcdf*/
+
 class Person {
 private:
      string name;
@@ -48,7 +48,25 @@ public:
           this->age = age;
      }
 
-     
+     void splitName (const string& fullName, string& Name)//dùng trong sắp xếp ds tên khách hàng 
+{
+     //Tìm vị trí khoảng trắng cuối cùng trong chuỗi họ và tên
+     size_t viTriKhoangTrangCuoi = fullName.find_last_of(' ');
+     if(viTriKhoangTrangCuoi != string::npos){
+          Name=fullName.substr(viTriKhoangTrangCuoi+1);
+     } 
+     else{
+          Name=fullName;
+     }
+}
+void toLowerCase(string& str)//dùng trong tìm kiếm theo tên, không pb chữ hoa chữ thường
+{        
+     int i=0;
+     while(str[i] != '\0'){
+          str[i]=tolower(str[i]);
+          i++;
+     }
+}
 };
 
 class Room {
@@ -85,23 +103,3 @@ public:
      }
 
 };
-
-void splitName (const string& fullName, string& Name)//dùng trong sắp xếp ds tên khách hàng 
-{
-     //Tìm vị trí khoảng trắng cuối cùng trong chuỗi họ và tên
-     size_t viTriKhoangTrangCuoi = fullName.find_last_of(' ');
-     if(viTriKhoangTrangCuoi != string::npos){
-          Name=fullName.substr(viTriKhoangTrangCuoi+1);
-     } 
-     else{
-          Name=fullName;
-     }
-}
-void toLowerCase(string& str)//dùng trong tìm kiếm theo tên, không pb chữ hoa chữ thường
-{        
-     int i=0;
-     while(str[i] != '\0'){
-          str[i]=tolower(str[i]);
-          i++;
-     }
-}
