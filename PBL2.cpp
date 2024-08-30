@@ -101,5 +101,4 @@ public:
      void setview(){
           this->view=view;
      }
-
 };
