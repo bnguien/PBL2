@@ -4,23 +4,23 @@
 #include "Person.h"
 using namespace std;
 
-bool Person::setName (string name) {
-     for (int i = 0; i < name.length(); i++) {
-          if (!isalpha(name[i]) || name[i] != ' ') {
-               cout << "\nInvalid value! Name must have only letters!" << endl;
+bool Person::setFullName (const string& fullName) {
+     for (int i = 0; i < fullName.length(); i++) {
+          if (!isalpha(fullName[i]) || fullName[i] != ' ') {
+               cout << "\nInvalid value! Full name must have only letters!" << endl;
                return false; // Nhap ten khong hop le
           } 
      }
 
-     this->name = name;
+     this->fullName = fullName;
      return true; //Nhap ten hop le
 }
 
-string Person::getName () {
-     return name;
+string Person::getFullName () {
+     return fullName;
 }
 
-bool Person::setCCCD (string CCCD) {
+bool Person::setCCCD (const string& CCCD) {
      if (CCCD.length() != 12) {
           cout << "\nInvalid value! CCCD must have exactly 12 digits!" << endl;
           return false; //CCCD khong du 12
@@ -40,7 +40,7 @@ string Person::getCCCD () {
      return CCCD;
 }
 
-bool Person::setPhone (string phone) {
+bool Person::setPhone (const string& phone) {
      if (phone.length() != 10) {
           cout << "\nInvalid value! Phone must have exactly 10 digits!" << endl;
           return false;
@@ -64,7 +64,7 @@ string Person::getPhone () {
      return phone;
 }
 
-void Person::setAdd (string add) {
+void Person::setAdd (const string& add) {
      this->add = add;
 }
 
@@ -72,7 +72,12 @@ string Person::getAdd () {
      return add;
 }
 
-void Person::setAge (int age) {
+bool Person::setAge (int age) {
+     if (age < 16) {
+          cout << "\nThis service is not suitable for individuals under 16 years of age." << endl;
+          return false; //Yeu cau nguoi dung tren 16 tuoi
+     }
+
      this->age = age;
 }
 
