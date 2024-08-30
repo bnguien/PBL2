@@ -3,29 +3,34 @@
 
 class Person {
 private:
-     string name;
+     string fullName;
      string CCCD;
      string phone;
      string add;
      int age;
 public:
      Person () {}
-     Person (string name, string CCCD, string phone, string add, int age) {
-          this->name = name;
+     Person (string fullName, string CCCD, string phone, string add, int age) {
+          this->fullName = fullName;
           this->CCCD = CCCD;
           this->phone = phone;
           this->add = add;
           this->age = age;
      }
-     bool setName (string name);
-     string getName ();
-     bool setCCCD (string CCCD);
+
+     bool setFullName (const string& fullName);
+     string getFullName ();
+     bool setCCCD (const string& CCCD);
      string getCCCD ();
-     bool setPhone (string phone);
+     bool setPhone (const string& phone);
      string getPhone ();
-     void setAdd (string add);
+     void setAdd (const string& add);
      string getAdd ();
-     void setAge (int age);
+     bool setAge (int age);
      int getAge ();
+
+     void splitName (const string &fullName, string &name);
+     void toLowerCase (string &str);
 };
+
 #endif
