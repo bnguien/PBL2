@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-#include <cctype>
+#include <ctype.h>
+#include <sstream>
 #include "Person.h"
 using namespace std;
 
@@ -84,3 +85,19 @@ bool Person::setAge (int age) {
 int Person::getAge () {
      return age;
 }
+
+void Person::standardizeName () {
+     string res = "";
+     stringstream ss (fullName);
+     string token;
+     while (ss >> token) {
+          res += toupper (token[0]);
+          for (size_t i = 1; i < token.length(); i++) {
+               res += tolower (token[i]);
+          }
+          res += " ";
+     }
+     
+     res.erase(res.length() - 1);
+     fullName = res;
+}//Vd: nhap ten nguyen vAn a thi se chuan hoa thanh Nguyen Van A, dung trong in danh sach.
