@@ -3,6 +3,8 @@
 #include <vector>
 #include <cctype>
 #include <sstream>
+#include <sstream>
+
 using namespace std;
 
 class Person {
@@ -81,7 +83,6 @@ void standardizeName() {
         }
         res.erase(res.length() - 1);
         name = res;
-     }/*Vd: nhap ten nguyen vAn a thi se chuan hoa thanh Nguyen Van A, dung trong in danh sach*/
 };
 
 class Room {
