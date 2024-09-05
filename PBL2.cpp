@@ -67,6 +67,20 @@ void toLowerCase(string& str)//dùng trong tìm kiếm theo tên, không pb ch�
           i++;
      }
 }
+void standardizeName() {
+        string res = "";
+        stringstream ss(name);
+        string token;
+        while (ss >> token) {
+            res += toupper(token[0]);
+            for (size_t i = 1; i < token.length(); i++) {
+                res += tolower(token[i]);
+            }
+            res += " ";
+        }
+        res.erase(res.length() - 1);
+        name = res;
+     }/*Vd: nhap ten nguyen vAn a thi se chuan hoa thanh Nguyen Van A, dung trong in danh sach*/
 };
 
 class Room {
