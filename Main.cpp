@@ -22,3 +22,14 @@
 
     cout << std::endl;
 }*/
+/*string getCurrentDate() {
+    // Get the current time
+    time_t now = time(nullptr);
+    // Create a buffer to store the formatted date
+    char buffer[80];
+    // Format the current time as a string with the desired format
+    strftime(buffer, sizeof(buffer), "%d-%m-%Y", localtime(&now));
+    // Convert the buffer to a string and return it
+    return string(buffer);
+}
+*/
