@@ -140,6 +140,5 @@ void printPeople(const vector<Person>& people) {
         cout << "Address: " << person.getAdd() << endl;
         cout << "Age: " << person.getAge() << endl;
         cout << "-----------------------------" << endl;
-        
     }
 }
