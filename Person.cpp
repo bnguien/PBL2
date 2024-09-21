@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include<fstream>
+#include<vector>
 #include <ctype.h>
 #include <sstream>
 #include "Person.h"
@@ -17,7 +19,7 @@ bool Person::setFullName (const string& fullName) {
      return true; //Nhap ten hop le
 }
 
-string Person::getFullName () {
+string Person::getFullName () const {
      return fullName;
 }
 
@@ -37,7 +39,7 @@ bool Person::setCCCD (const string& CCCD) {
      return true; //Nhap CCCD hop le
 }
 
-string Person::getCCCD () {
+string Person::getCCCD () const {
      return CCCD;
 }
 
@@ -61,7 +63,7 @@ bool Person::setPhone (const string& phone) {
      return true;
 }
 
-string Person::getPhone () {
+string Person::getPhone () const {
      return phone;
 }
 
@@ -69,7 +71,7 @@ void Person::setAdd (const string& add) {
      this->add = add;
 }
 
-string Person::getAdd () {
+string Person::getAdd () const{
      return add;
 }
 
@@ -82,7 +84,7 @@ bool Person::setAge (int age) {
      this->age = age;
 }
 
-int Person::getAge () {
+int Person::getAge () const{
      return age;
 }
 
@@ -101,3 +103,42 @@ void Person::standardizeName () {
      res.erase(res.length() - 1);
      fullName = res;
 }//Vd: nhap ten nguyen vAn a thi se chuan hoa thanh Nguyen Van A, dung trong in danh sach.
+vector<Person> readFilePerson(const string& fileName) {
+    ifstream file(fileName);
+    vector<Person> people;
+    string line;
+
+    if (!file.is_open()) {
+        cout << "Cannot open file!" << endl;
+        return people;
+    }
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string fullName, CCCD, phone, add, ageStr;
+        int age;
+
+        getline(ss, fullName, '|');
+        getline(ss, CCCD, '|');
+        getline(ss, phone, '|');
+        getline(ss, add, '|');
+        getline(ss, ageStr, '|');
+        age = stoi(ageStr);  // Chuyển đổi từ chuỗi sang số nguyên
+
+        Person person(fullName, CCCD, phone, add, age);
+        people.push_back(person);
+    }
+
+    file.close();
+    return people;
+}
+void printPeople(const vector<Person>& people) {
+    for (const auto& person : people) {
+        cout << "Full Name: " << person.getFullName() << endl;
+        cout << "CCCD: " << person.getCCCD() << endl;
+        cout << "Phone: " << person.getPhone() << endl;
+        cout << "Address: " << person.getAdd() << endl;
+        cout << "Age: " << person.getAge() << endl;
+        cout << "-----------------------------" << endl;
+    }
+}
