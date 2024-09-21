@@ -1,90 +1,90 @@
-S101	Single	350.000/night	Available
-S102	Single	350.000/night	Available
-S103	Single	350.000/night	Available
-S104	Single	350.000/night	Available
-S105	Single	350.000/night	Available
-S106	Single	350.000/night	Available
-S107	Single	400.000/night	Available
-S108	Single	400.000/night	Available
-S109	Single	400.000/night	Available
-S110	Single	400.000/night	Available
-D101	Double	500.000/night	Available
-D102	Double	500.000/night	Available
-D103	Double	500.000/night	Available
-D104	Double	500.000/night	Available
-D105	Double	500.000/night	Available
-D106	Double	500.000/night	Available
-D107	Double	580.000/night	Available
-D108	Double	580.000/night	Available
-D109	Double	580.000/night	Available
-D110	Double	580.000/night	Available
-T101	Triple	650.000/night	Available
-T102	Triple	650.000/night	Available
-T103	Triple	650.000/night	Available
-T104	Triple	650.000/night	Available
-T105	Triple	650.000/night	Available
-T106	Triple	650.000/night	Available
-T107	Triple	650.000/night	Available
-T108	Triple	650.000/night	Available
-T109	Triple	650.000/night	Available
-T110	Triple	650.000/night	Available
-S201	Single	400.000/night	Available
-S202	Single	400.000/night	Available
-S203	Single	400.000/night	Available
-S204	Single	400.000/night	Available
-S205	Single	400.000/night	Available
-S206	Single	400.000/night	Available
-S207	Single	430.000/night	Available
-S208	Single	430.000/night	Available
-S209	Single	430.000/night	Available
-S210	Single	430.000/night	Available
-D201	Double	550.000/night	Available
-D202	Double	550.000/night	Available
-D203	Double	550.000/night	Available
-D204	Double	550.000/night	Available
-D205	Double	550.000/night	Available
-D206	Double	550.000/night	Available
-D207	Double	580.000/night	Available
-D208	Double	580.000/night	Available
-D209	Double	580.000/night	Available
-D210	Double	580.000/night	Available
-T201	Triple	700.000/night	Available
-T202	Triple	700.000/night	Available
-T203	Triple	700.000/night	Available
-T204	Triple	700.000/night	Available
-T205	Triple	700.000/night	Available
-T206	Triple	700.000/night	Available
-T207	Triple	700.000/night	Available
-T208	Triple	700.000/night	Available
-T209	Triple	700.000/night	Available
-T210	Triple	700.000/night	Available
-S301	Single	450.000/night	Available
-S302	Single	450.000/night	Available
-S303	Single	450.000/night	Available
-S304	Single	450.000/night	Available
-S305	Single	450.000/night	Available
-S306	Single	450.000/night	Available
-S307	Single	480.000/night	Available
-S308	Single	480.000/night	Available
-S309	Single	480.000/night	Available
-S310	Single	480.000/night	Available
-D301	Double	600.000/night	Available
-D302	Double	600.000/night	Available
-D303	Double	600.000/night	Available
-D304	Double	600.000/night	Available
-D305	Double	600.000/night	Available
-D306	Double	600.000/night	Available
-D307	Double	650.000/night	Available
-D308	Double	650.000/night	Available
-D309	Double	650.000/night	Available
-D310	Double	650.000/night	Available
-T301	Triple	750.000/night	Available
-T302	Triple	750.000/night	Available
-T303	Triple	750.000/night	Available
-T304	Triple	750.000/night	Available
-T305	Triple	750.000/night	Available
-T306	Triple	750.000/night	Available
-T307	Triple	750.000/night	Available
-T308	Triple	750.000/night	Available
-T309	Triple	750.000/night	Available
-T310	Triple	750.000/night	Available
+S101|Single|350.000/night|Available
+S102|Single|350.000/night|Available
+S103|Single|350.000/night|Available
+S104|Single|350.000/night|Available
+S105|Single|350.000/night|Available
+S106|Single|350.000/night|Available
+S107|Single|400.000/night|Available
+S108|Single|400.000/night|Available
+S109|Single|400.000/night|Available
+S110|Single|400.000/night|Available
+D101|Double|500.000/night|Available
+D102|Double|500.000/night|Available
+D103|Double|500.000/night|Available
+D104|Double|500.000/night|Available
+D105|Double|500.000/night|Available
+D106|Double|500.000/night|Available
+D107|Double|580.000/night|Available
+D108|Double|580.000/night|Available
+D109|Double|580.000/night|Available
+D110|Double|580.000/night|Available
+T101|Triple|650.000/night|Available
+T102|Triple|650.000/night|Available
+T103|Triple|650.000/night|Available
+T104|Triple|650.000/night|Available
+T105|Triple|650.000/night|Available
+T106|Triple|650.000/night|Available
+T107|Triple|650.000/night|Available
+T108|Triple|650.000/night|Available
+T109|Triple|650.000/night|Available
+T110|Triple|650.000/night|Available
+S201|Single|400.000/night|Available
+S202|Single|400.000/night|Available
+S203|Single|400.000/night|Available
+S204|Single|400.000/night|Available
+S205|Single|400.000/night|Available
+S206|Single|400.000/night|Available
+S207|Single|430.000/night|Available
+S208|Single|430.000/night|Available
+S209|Single|430.000/night|Available
+S210|Single|430.000/night|Available
+D201|Double|550.000/night|Available
+D202|Double|550.000/night|Available
+D203|Double|550.000/night|Available
+D204|Double|550.000/night|Available
+D205|Double|550.000/night|Available
+D206|Double|550.000/night|Available
+D207|Double|580.000/night|Available
+D208|Double|580.000/night|Available
+D209|Double|580.000/night|Available
+D210|Double|580.000/night|Available
+T201|Triple|700.000/night|Available
+T202|Triple|700.000/night|Available
+T203|Triple|700.000/night|Available
+T204|Triple|700.000/night|Available
+T205|Triple|700.000/night|Available
+T206|Triple|700.000/night|Available
+T207|Triple|700.000/night|Available
+T208|Triple|700.000/night|Available
+T209|Triple|700.000/night|Available
+T210|Triple|700.000/night|Available
+S301|Single|450.000/night|Available
+S302|Single|450.000/night|Available
+S303|Single|450.000/night|Available
+S304|Single|450.000/night|Available
+S305|Single|450.000/night|Available
+S306|Single|450.000/night|Available
+S307|Single|480.000/night|Available
+S308|Single|480.000/night|Available
+S309|Single|480.000/night|Available
+S310|Single|480.000/night|Available
+D301|Double|600.000/night|Available
+D302|Double|600.000/night|Available
+D303|Double|600.000/night|Available
+D304|Double|600.000/night|Available
+D305|Double|600.000/night|Available
+D306|Double|600.000/night|Available
+D307|Double|650.000/night|Available
+D308|Double|650.000/night|Available
+D309|Double|650.000/night|Available
+D310|Double|650.000/night|Available
+T301|Triple|750.000/night|Available
+T302|Triple|750.000/night|Available
+T303|Triple|750.000/night|Available
+T304|Triple|750.000/night|Available
+T305|Triple|750.000/night|Available
+T306|Triple|750.000/night|Available
+T307|Triple|750.000/night|Available
+T308|Triple|750.000/night|Available
+T309|Triple|750.000/night|Available
+T310|Triple|750.000/night|Available
