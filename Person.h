@@ -1,6 +1,9 @@
 #ifndef PERSON_H
 #define PERSON_H
+#include <string>
+#include <iostream> 
 
+using namespace std; 
 class Person {
 private:
      string fullName;
@@ -26,15 +29,15 @@ public:
      }
 
      bool setFullName (const string& fullName);
-     string getFullName ();
+     string getFullName () const;
      bool setCCCD (const string& CCCD);
-     string getCCCD ();
+     string getCCCD () const;
      bool setPhone (const string& phone);
-     string getPhone ();
+     string getPhone () const;
      void setAdd (const string& add);
-     string getAdd ();
+     string getAdd () const;
      bool setAge (int age);
-     int getAge ();
+     int getAge () const;
 
      void splitName (const string &fullName, string &name);
      void toLowerCase (string &str);
