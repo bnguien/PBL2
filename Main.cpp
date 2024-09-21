@@ -43,6 +43,7 @@ int main() {
     vector<Room> room= readFileRoom(fileRoom);
     // In danh sách khách hàng từ file
     printPeople(people);
+    //In danh sách phòng từ file
     printRoom(room);
     return 0;
 }
