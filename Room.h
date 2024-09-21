@@ -8,29 +8,26 @@ private:
      string type; //single, double, suite, delux, standard
      string price;
      string status; //booked, unbooked
-     int view;
 public:
      Room () {}
-     Room (string ID, string type, string price, string status, int view) : ID(ID), type(type), price(price), status(status), view(view) {}
+     Room (string ID, string type, string price, string status) : ID(ID), type(type), price(price), status(status) {}
      Room (const Room &R) {
           this->ID = R.ID;
           this->type = R.type;
           this->price = R.price;
           this->status = R.status;
-          this->view = R.view;
-     }
+    }
 
      void setID (const string& ID);
-     string getID ();
+     string getID () const ;
      bool setType (const string& type);
-     string getType ();
+     string getType () const ;
      void setPrice (const string& price);
-     string getPrice ();
+     string getPrice () const ;
      bool setStatus (const string& status);
-     string getStatus ();
+     string getStatus () const;
      bool setView (const int& view);
-     int getView ();
-
+     
      ~ Room () {}
 };
 
