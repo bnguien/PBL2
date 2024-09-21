@@ -33,3 +33,16 @@
     return string(buffer);
 }
 */
+/*Test thử thoi chứ chưa chính thức nha*/
+#include "Person.cpp"
+#include "Room.cpp"
+int main() {
+    string fileCus = "Customer.txt"; 
+    string fileRoom ="Room.txt";
+    vector<Person> people = readFilePerson(fileCus);
+    vector<Room> room= readFileRoom(fileRoom);
+    // In danh sách khách hàng từ file
+    printPeople(people);
+    printRoom(room);
+    return 0;
+}
