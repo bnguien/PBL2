@@ -81,11 +81,11 @@ bool Person::setAge (int age) {
           return false; //Yeu cau nguoi dung tren 16 tuoi
      }
 
-     this->age = age;
+     this->DOB = DOB;
 }
 
-int Person::getAge () const{
-     return age;
+int Person::getDOB () const{
+     return DOB;
 }
 
 void Person::standardizeName () {
@@ -115,17 +115,17 @@ vector<Person> readFilePerson(const string& fileName) {
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string fullName, CCCD, phone, add, ageStr;
-        int age;
+        string fullName, CCCD, phone, add, DOBStr;
+        int DOB;
 
         getline(ss, fullName, '|');
         getline(ss, CCCD, '|');
         getline(ss, phone, '|');
         getline(ss, add, '|');
-        getline(ss, ageStr, '|');
-        age = stoi(ageStr);  // Chuyển đổi từ chuỗi sang số nguyên
+        getline(ss, DOBStr, '|');
+        DOB = stoi(DOBStr);  // Chuyển đổi từ chuỗi sang số nguyên
 
-        Person person(fullName, CCCD, phone, add, age);
+        Person person(fullName, CCCD, phone, add, DOB);
         people.push_back(person);
     }
 
@@ -138,7 +138,7 @@ void printPeople(const vector<Person>& people) {
         cout << "CCCD: " << person.getCCCD() << endl;
         cout << "Phone: " << person.getPhone() << endl;
         cout << "Address: " << person.getAdd() << endl;
-        cout << "Age: " << person.getAge() << endl;
+        cout << "DOB: " << person.getDOB() << endl;
         cout << "-----------------------------" << endl;
     }
 }
