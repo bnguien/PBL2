@@ -75,18 +75,23 @@ string Person::getAdd () const{
      return add;
 }
 
-bool Person::setAge (int age) {
-     if (age < 16) {
-          cout << "\nThis service is not suitable for individuals under 16 years of age." << endl;
-          return false; //Yeu cau nguoi dung tren 16 tuoi
-     }
-
-     this->DOB = DOB;
+void Person::setGender (const string& gender){
+     this->gender=gender;
 }
 
-int Person::getDOB () const{
-     return DOB;
+string Person::getGender () const{
+     return gender;
 }
+
+bool Person::setDOB(const Date& dob) {
+    this->DOB = dob;
+    return true;
+}
+
+Date Person::getDOB() const {
+    return DOB;
+}
+
 
 void Person::standardizeName () {
      string res = "";
@@ -115,17 +120,18 @@ vector<Person> readFilePerson(const string& fileName) {
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string fullName, CCCD, phone, add, DOBStr;
-        int DOB;
+        string fullName, CCCD, phone, add,gender, DOBstr;
+        Date DOB;
 
         getline(ss, fullName, '|');
         getline(ss, CCCD, '|');
         getline(ss, phone, '|');
         getline(ss, add, '|');
+        getline(ss, gender, '|');
         getline(ss, DOBStr, '|');
-        DOB = stoi(DOBStr);  // Chuyển đổi từ chuỗi sang số nguyên
+        DOB = Date(DOBStr);
 
-        Person person(fullName, CCCD, phone, add, DOB);
+        Person person(fullName, CCCD, phone, add,gender,DOB);
         people.push_back(person);
     }
 
@@ -139,6 +145,7 @@ void printPeople(const vector<Person>& people) {
         cout << "Phone: " << person.getPhone() << endl;
         cout << "Address: " << person.getAdd() << endl;
         cout << "DOB: " << person.getDOB() << endl;
+        cout<<"Gender: "<<person.getGender()<<endl;
         cout << "-----------------------------" << endl;
     }
 }
