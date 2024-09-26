@@ -1,5 +1,6 @@
 #ifndef PERSON_H
 #define PERSON_H
+#include "Date.h"
 #include <string>
 #include <iostream> 
 
@@ -10,7 +11,8 @@ private:
      string CCCD;
      string phone;
      string add;
-     int DOB;
+     string gender;
+     Date DOB;
 public:
      Person () {}
      Person (const Person &P) {
@@ -18,13 +20,15 @@ public:
           this->CCCD = P.CCCD;
           this->phone = P.phone;
           this->add = P.add;
+          this->gender=P.gender;
           this->DOB = P.DOB;
      }
-     Person (string fullName, string CCCD, string phone, string add, int DOB) {
+     Person (string fullName, string CCCD, string phone, string add,string gender, Date DOB) {
           this->fullName = fullName;
           this->CCCD = CCCD;
           this->phone = phone;
           this->add = add;
+          this->gender=gender;
           this->DOB = DOB;
      }
 
@@ -36,8 +40,10 @@ public:
      string getPhone () const;
      void setAdd (const string& add);
      string getAdd () const;
-     bool setAge (int age);
-     int getDOB () const;
+     void setGender (const string& gender);
+     string getGender() const;
+     bool setDOB (const Date& DOB);
+     Date getDOB () const;
 
      void splitName (const string &fullName, string &name);
      void toLowerCase (string &str);
