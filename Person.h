@@ -10,7 +10,7 @@ private:
      string CCCD;
      string phone;
      string add;
-     int age;
+     int DOB;
 public:
      Person () {}
      Person (const Person &P) {
@@ -18,14 +18,14 @@ public:
           this->CCCD = P.CCCD;
           this->phone = P.phone;
           this->add = P.add;
-          this->age = P.age;
+          this->DOB = P.DOB;
      }
-     Person (string fullName, string CCCD, string phone, string add, int age) {
+     Person (string fullName, string CCCD, string phone, string add, int DOB) {
           this->fullName = fullName;
           this->CCCD = CCCD;
           this->phone = phone;
           this->add = add;
-          this->age = age;
+          this->DOB = DOB;
      }
 
      bool setFullName (const string& fullName);
@@ -37,7 +37,7 @@ public:
      void setAdd (const string& add);
      string getAdd () const;
      bool setAge (int age);
-     int getAge () const;
+     int getDOB () const;
 
      void splitName (const string &fullName, string &name);
      void toLowerCase (string &str);
