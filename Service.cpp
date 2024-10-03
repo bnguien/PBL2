@@ -16,7 +16,7 @@ Service::Service(const vector<string> &service_info)
      description = service_info[3];
      price = service_info[4];
 }
-
+Service::~Service () {}
 void displayService(const vector<Service> &services)
 {
      for (const auto &service : services)
@@ -24,27 +24,30 @@ void displayService(const vector<Service> &services)
           string border = "+---------------+-----------------------------------+";
           Sleep(1000);
           cout << border << endl;
-          cout << "| Service ID    | " << setw(34) << service.ID << "|" << endl;
+          cout << "| Service ID    | " << left << setw(34) << service.ID << "|" << endl;
 
           if (service.name == "Food")
-               changeConsoleColor(3);
+               changeConsoleColor(9);
           else if (service.name == "Snack")
-               changeConsoleColor(2);
+               changeConsoleColor(10);
           else if (service.name == "Drinks")
                changeConsoleColor(6);
           else if (service.name == "Laundary")
                changeConsoleColor(5);
           cout << border << endl;
           
-          cout << "| Service Name  | " << setw(34) << service.name << "|" << endl;
+          cout << "| Service Name  | " << left << setw(34) << service.name << "|" << endl;
           cout << border << endl;
-          cout << "| Service Type  | " << setw(34) << service.type << "|" << endl;
+          changeConsoleColor (12);
+          cout << "| Service Type  | " << left << setw(34) << service.type << "|" << endl;
           cout << border << endl;
-          cout << "| Service Desc  | " << setw(34) << service.description << "|" << endl;
+          changeConsoleColor (8);
+          cout << "| Service Desc  | " << left << setw(34) << service.description << "|" << endl;
           cout << border << endl;
           changeConsoleColor(7);
-          cout << "| Price         | " << setw(34) << service.price << "|" << endl;
+          cout << "| Price         | " << left << setw(34) << service.price << "|" << endl;
           cout << border << endl;
+          cout << endl;
      }
 }
 
@@ -64,12 +67,18 @@ vector<Service> readFileService(const string &fileName)
      {
           stringstream ss(line);
           vector<string> service_info;
+          string temp;
 
-          getline(ss, service_info[0], '|');
-          getline(ss, service_info[1], '|');
-          getline(ss, service_info[2], '|');
-          getline(ss, service_info[3], '|');
-          getline(ss, service_info[4], '|');
+          getline(ss, temp, '|');
+          service_info.push_back(temp);
+          getline(ss, temp, '|');
+          service_info.push_back(temp);
+          getline(ss, temp, '|');
+          service_info.push_back(temp);
+          getline(ss, temp, '|');
+          service_info.push_back(temp);
+          getline(ss, temp, '|');
+          service_info.push_back(temp);
 
           Service S(service_info);
           services.push_back(S);
