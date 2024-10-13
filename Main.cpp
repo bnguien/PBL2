@@ -36,9 +36,12 @@
 /*Test thử thoi chứ chưa chính thức nha*/
 #include "Person.cpp"
 #include "Room.cpp"
+#include "Date.cpp"
+#include<iostream>
+
 int main() {
 
-    string fileCus = "Guest.txt"; 
+    string fileCus = "Customer.txt"; 
     string fileRoom ="Room.txt";
     vector<Person> people = readFilePerson(fileCus);
     vector<Room> room= readFileRoom(fileRoom);
