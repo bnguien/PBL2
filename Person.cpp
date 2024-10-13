@@ -128,8 +128,8 @@ vector<Person> readFilePerson(const string& fileName) {
         getline(ss, phone, '|');
         getline(ss, add, '|');
         getline(ss, gender, '|');
-        getline(ss, DOBStr, '|');
-        DOB = Date(DOBStr);
+        getline(ss, DOBstr, '|');
+        DOB = Date(DOBstr);
 
         Person person(fullName, CCCD, phone, add,gender,DOB);
         people.push_back(person);
@@ -144,7 +144,8 @@ void printPeople(const vector<Person>& people) {
         cout << "CCCD: " << person.getCCCD() << endl;
         cout << "Phone: " << person.getPhone() << endl;
         cout << "Address: " << person.getAdd() << endl;
-        cout << "DOB: " << person.getDOB() << endl;
+        cout << "DOB: ";
+        person.getDOB().display();
         cout<<"Gender: "<<person.getGender()<<endl;
         cout << "-----------------------------" << endl;
     }
