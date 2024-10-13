@@ -1,17 +1,53 @@
-#include<iostream>
+#include <iostream>
+#include <string>
+#include<fstream>
+#include<vector>
+#include <ctype.h>
+#include <sstream>
 #include "Date.h"
-
-Date::Date(const Date& d){
-    this->day=d.day;
-    this->month=d.month;
-    this->year=d.year;
-}
+using namespace std;
 
 Date::Date(int day, int month, int year){
     this->day=day;
     this->month=month;
     this->year=year;
 }
+
+Date::Date(const string& dateStr) {
+    stringstream ss(dateStr);
+    string token;
+
+    getline(ss, token, '/');
+    try {
+        day = stoi(token); 
+    } catch (const invalid_argument& e) {
+        cout << "Invalid input for day: " << token << endl;
+        return;
+    }
+
+    getline(ss, token, '/');
+    try {
+        month = stoi(token);
+    } catch (const invalid_argument& e) {
+        cout << "Invalid input for month: " << token << endl;
+        return;
+    }
+
+    getline(ss, token, '/');
+    try {
+        year = stoi(token); 
+    } catch (const invalid_argument& e) {
+        cout << "Invalid input for year: " << token << endl;
+        return;
+    }
+
+    if (!setDay(day) || !setMonth(month) || !setYear(year)) {
+        cout << "Invalid date: " << dateStr << endl;
+    }
+}
+
+
+Date::~Date(){}
 
 bool Date::isLeapYear(int year) const{
     if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
@@ -66,4 +102,17 @@ bool Date::setYear (const int& year){
 }
 int Date::getYear () const {
     return year;
+}
+void Date::display(){
+		  string day = to_string(this->day);
+		  string month = to_string(this->month);
+		  string year = to_string(this->year);
+		  if (day.length() == 1) {
+			  day = "0" + day;
+		  }
+		  if (month.length() == 1) {
+			  month = "0" + month;
+		  }
+		  cout << day + "/" + month + "/" + year << endl;
+	 
 }
