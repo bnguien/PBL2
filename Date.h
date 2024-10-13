@@ -9,10 +9,9 @@ class Date{
         int day, month, year;
     public:
         Date(){};
-        Date(const Date& d);
         Date(int day, int month, int year);
+        Date(const string& dateStr);
         void display();
-        void standardizeDate();
         bool isLeapYear(int year) const;
         ~Date();
 
