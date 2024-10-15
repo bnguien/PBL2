@@ -37,16 +37,13 @@
 #include "Person.cpp"
 #include "Room.cpp"
 #include "Date.cpp"
+#include "Customer.cpp"
 #include<iostream>
 
 int main() {
-
     string fileCus = "Customer.txt"; 
-    string fileRoom ="Room.txt";
-    vector<Person> people = readFilePerson(fileCus);
-    vector<Room> room= readFileRoom(fileRoom);
-    // In danh sách khách hàng từ file
-    printPeople(people);
-    
-     return 0;
+    vector<Customer> customers = readFileCustomer(fileCus);
+    cout<<"Booked customers list"<<endl;
+    customers[0].displayCustomer(customers);
+    return 0;
 }
