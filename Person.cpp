@@ -127,9 +127,9 @@ vector<Person> readFilePerson(const string& fileName) {
         getline(ss, CCCD, '|');
         getline(ss, phone, '|');
         getline(ss, add, '|');
-        getline(ss, gender, '|');
         getline(ss, DOBstr, '|');
         DOB = Date(DOBstr);
+        getline(ss, gender, '|');
 
         Person person(fullName, CCCD, phone, add,gender,DOB);
         people.push_back(person);
