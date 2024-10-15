@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include<fstream>
-#include<vector>
+#include <fstream>
+#include <vector>
 #include <ctype.h>
 #include <sstream>
 #include "Person.h"
@@ -138,7 +138,7 @@ vector<Person> readFilePerson(const string& fileName) {
     file.close();
     return people;
 }
-void printPeople(const vector<Person>& people) {
+void Person::displayPerson(const vector<Person>& people) {
     for (const auto& person : people) {
         cout << "Full Name: " << person.getFullName() << endl;
         cout << "CCCD: " << person.getCCCD() << endl;
