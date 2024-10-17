@@ -36,15 +36,14 @@
 /*Test thử thoi chứ chưa chính thức nha*/
 #include "Person.cpp"
 #include "Room.cpp"
-int main() {
+#include "Date.cpp"
+#include "Customer.cpp"
+#include<iostream>
 
-    string fileCus = "Guest.txt"; 
-    string fileRoom ="Room.txt";
-    vector<Person> people = readFilePerson(fileCus);
-    vector<Room> room= readFileRoom(fileRoom);
-    // In danh sách khách hàng từ file
-    printPeople(people);
-    //In danh sách phòng từ file
-    printRoom(room);
+int main() {
+    string fileCus = "Customer.txt"; 
+    vector<Customer> customers = readFileCustomer(fileCus);
+    cout<<"Booked customers list"<<endl;
+    customers[0].displayCustomer(customers);
     return 0;
 }

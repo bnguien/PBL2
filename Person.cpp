@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include<fstream>
-#include<vector>
+#include <fstream>
+#include <vector>
 #include <ctype.h>
 #include <sstream>
 #include "Person.h"
@@ -127,9 +127,9 @@ vector<Person> readFilePerson(const string& fileName) {
         getline(ss, CCCD, '|');
         getline(ss, phone, '|');
         getline(ss, add, '|');
+        getline(ss, DOBstr, '|');
+        DOB = Date(DOBstr);
         getline(ss, gender, '|');
-        getline(ss, DOBStr, '|');
-        DOB = Date(DOBStr);
 
         Person person(fullName, CCCD, phone, add,gender,DOB);
         people.push_back(person);
@@ -138,13 +138,14 @@ vector<Person> readFilePerson(const string& fileName) {
     file.close();
     return people;
 }
-void printPeople(const vector<Person>& people) {
+void Person::displayPerson(const vector<Person>& people) {
     for (const auto& person : people) {
         cout << "Full Name: " << person.getFullName() << endl;
         cout << "CCCD: " << person.getCCCD() << endl;
         cout << "Phone: " << person.getPhone() << endl;
         cout << "Address: " << person.getAdd() << endl;
-        cout << "DOB: " << person.getDOB() << endl;
+        cout << "DOB: ";
+        person.getDOB().display();
         cout<<"Gender: "<<person.getGender()<<endl;
         cout << "-----------------------------" << endl;
     }

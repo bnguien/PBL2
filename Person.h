@@ -48,7 +48,7 @@ public:
      void splitName (const string &fullName, string &name);
      void toLowerCase (string &str);
      void standardizeName ();
-
+     void displayPerson(const vector<Person>& people);
      ~ Person() {}
 };
 
