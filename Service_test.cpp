@@ -1,6 +1,4 @@
-//ngựa ngựa test thêm mà file không chạy được =)))))
-
-#include "Service.h"
+#include "Service.cpp"
 
 int main ()
 {

@@ -39,9 +39,24 @@ bool Room::setStatus (const string &status) {
      }
      else return 0; //sai dinh dang trang thai, can nhap lai
 }
+
 string Room::getStatus () const {
      return status;
 }
+
+bool Room::checkAvailable ()
+{
+     if (this->status == "Available")
+          return true;
+     else if (this->status == "Unavailable")
+          return false;
+     else 
+     {
+          cout << "\nInvalid information" << endl;
+          return false;
+     }
+}
+
 vector<Room> readFileRoom(const string& fileName) {
     ifstream file(fileName);
     vector<Room> rooms;
