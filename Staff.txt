@@ -1,0 +1,6 @@
+Nguyen Thuy Trang|079189451230|Nu|0962348231|Hai Chau|07/10/1989|R01|Receptionist|Full-time|9.850.000/month|12/10/2023
+Pham Thi Doan Trang|079187032159|Nu|0957213458|Lien Chieu|11/07/1987|R02|Receptionist|Full-time|9.850.000/month|12/10/2023
+Doan Gia Hieu|048095127840|Nam|0346897721|Lien Chieu|28/01/1995|R03|Receptionist|Full-time|7.530.000/month|12/01/2024
+Duong Van Gia Minh|048088564981|Nam|0487915786|Thanh Khe|02/02/1988|R04|Manger Receptionist|Full-time|12.550.000/month|12/10/2023
+Tran Thi Thanh Thuy|046301789140|Nu|0561789524|Thanh Khe|12/03/2001|R05|Receptionist|Part-time|6.700.000/month|12/01/2024
+Huynh Bao Khanh|046299102457|Nam|0394562478|Cam Le|24/05/1999|B01|Bellman|Full-time|6.000.000/month|12/10/2023

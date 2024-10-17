@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <iomanip>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 class Service {
