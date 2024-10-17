@@ -22,6 +22,7 @@ class Customer : public Person
          Customer(const Person& person, const vector<string>& roomIDs, const Date& arrivalDate) 
         : Person(person), roomIDs(roomIDs), arrivalDate(arrivalDate) {}
          void displayCustomer(const vector<Customer>& customers);
+         void bookedRoom();
         ~Customer();
 };
 #endif
