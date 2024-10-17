@@ -39,6 +39,7 @@ bool Room::setStatus (const string &status) {
      }
      else return 0; //sai dinh dang trang thai, can nhap lai
 }
+
 string Room::getStatus () const {
      return status;
 }
