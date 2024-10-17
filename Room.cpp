@@ -52,7 +52,7 @@ bool Room::checkAvailable ()
           return false;
      else 
      {
-          cout << "\nInvalid information!" << endl;
+          cout << "\nInvalid information" << endl;
           return false;
      }
 }
