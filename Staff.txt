@@ -1,6 +1,28 @@
-Nguyen Thuy Trang|079189451230|Nu|0962348231|Hai Chau|07/10/1989|R01|Receptionist|Full-time|9.850.000/month|12/10/2023
-Pham Thi Doan Trang|079187032159|Nu|0957213458|Lien Chieu|11/07/1987|R02|Receptionist|Full-time|9.850.000/month|12/10/2023
-Doan Gia Hieu|048095127840|Nam|0346897721|Lien Chieu|28/01/1995|R03|Receptionist|Full-time|7.530.000/month|12/01/2024
-Duong Van Gia Minh|048088564981|Nam|0487915786|Thanh Khe|02/02/1988|R04|Manger Receptionist|Full-time|12.550.000/month|12/10/2023
-Tran Thi Thanh Thuy|046301789140|Nu|0561789524|Thanh Khe|12/03/2001|R05|Receptionist|Part-time|6.700.000/month|12/01/2024
-Huynh Bao Khanh|046299102457|Nam|0394562478|Cam Le|24/05/1999|B01|Bellman|Full-time|6.000.000/month|12/10/2023
+Nguyen Thi Bao Ngan|046305001210|0375317270|Thua Thien Hue|Nu|12/10/2005|M01|Manager|20.500.000/month
+Nguyen Dang Bao Nguyen|049305002562|0521345690|Quang Nam|Nu|02/04/2005|M02|Manager|20.500.000/month
+Nguyen Thuy Trang|079199045672|0346725617|TP Ho Chi Minh|Nu|13/10/1999|R01|Receptionist|9.700.000/month
+Tran Nguyen Kim Ngan|046305011670|Thua Thien Hue|Nu|17/09/2005|R02|Receptionist|8.350.000/month
+Ha Thuc Minh Quan|046201004549|Thua Thien Hue|Nam|30/03/2001|R03|Receptionist|8.350.000/month
+Tran Thuc Thang Long|049095008982|Quang Nam|Nam|24/11/1995|R04|Receptionist|9.700.000/month
+Dang Ngoc Huyen|
+Vo Thi Bao Ngoc|
+Bui Hoai Huong|
+Nguyen Bao Hoang|
+Hoang Huu Thanh Hoang|
+Ninh Ngoc Linh|
+Nguyen Nguyen Thanh Ngan|
+Dao Huu Kim Quy|
+Dinh Tuan Dat|
+Nguyen Minh Trung Hieu|
+Le Van Xin|
+Lam Thi Thanh Ngoc|
+Van Ngoc Bach|
+Trieu Thi Ngoc Chau|
+Cao Chau Huu Minh|
+Vo Quang Minh|
+Ha Thi Thanh Kim|046302008617|Thua Thien Hue|10/02/2002|S01|Server|6.800.000/month
+Quach Kim Ngoc Lien|046196007176|Thua Thien Hue|17/09/1996|S02|Server|7.350.000/month
+Doan Dinh Minh Hieu|049094012460|Quang Nam|Nam|04/07/1994|S03|Server|8.000.000/month
+Nguyen Viet Hoang|048092034125|Da Nang|Nam|14/02/1992|S04|Server|8.000.000/month
+Hoang Tran Ngoc Linh|048300002425|Da Nang|Nu|11/05/2000|S05|Server|7.350.000/month
+Huynh Ngoc Hung|045201023418|Quang Tri|Nam|05/06/2001|S06|Server|7.350.000/month
