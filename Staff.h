@@ -19,11 +19,9 @@ public:
      void setSalary (const string& salary);
      string getSalary () const;
 
-     void displayStaff (const vector<Staff> &staffs);
+     void displayStaff (const vector<Staff>& staffs);
 
      ~ Staff () {}
 };
-
-vector<Staff> readFileStaff (const string &fileName);
 
 #endif
