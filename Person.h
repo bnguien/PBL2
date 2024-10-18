@@ -2,9 +2,11 @@
 #define PERSON_H
 #include "Date.h"
 #include <string>
+#include <vector>
 #include <iostream> 
 
 using namespace std; 
+
 class Person {
 private:
      string fullName;
