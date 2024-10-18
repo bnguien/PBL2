@@ -97,10 +97,11 @@ vector<Staff> readFileStaff (const string &fileName)
 
 void Staff::displayStaff (const vector<Staff>& staffs)
 {
+     cout << setw(13) << "\nSTAFFS' INFORMATION IN OUR HOTEL" << endl;
      for (const auto &staff : staffs)
      {
+          Sleep (1000);
           string border = "+---------------+----------------------------------------+";
-          cout << setw(13) << "STAFFS' INFORMATION IN OUR HOTEL";
           cout << border << endl;
           if (staff.getPosition() == "Manager")
                changeConsoleColor (4);
@@ -118,7 +119,7 @@ void Staff::displayStaff (const vector<Staff>& staffs)
           cout << border << endl;
           cout << "| Gender        | " << left << setw (39) << staff.getGender() << "|" << endl;
           cout << border << endl;
-          cout << "| Date of birth | " << left << setw (39) << staff.getDOB() << "|" << endl;
+          cout << "| Date of birth | " << left << setw (39) << staff.getDOB().toString() << "|" << endl;
           
           if (staff.getPosition() == "Manager")
                changeConsoleColor (2);
