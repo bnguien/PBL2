@@ -91,7 +91,7 @@ void Customer::displayCustomer(const vector<Customer>& customers)
         cout << "| Gender        | " << left << setw (39) << customer.getGender() << "|" << endl;
         cout << border << endl;
         cout << "| Date of birth | " << left << setw (39); 
-        customer.getDOB().toString();
+        customer.getDOB().display();
         cout << "|" << endl;
         
         cout << border << endl;
@@ -100,11 +100,13 @@ void Customer::displayCustomer(const vector<Customer>& customers)
         {
             cout << room << " ";
         }
-
+        cout<<endl;
         cout << border << endl;
         cout << "| Arrival Date  | " << left << setw (39);
         customer.arrivalDate.display(); 
         cout << "|" << endl;
+        cout << border <<endl;
+        cout << endl;
     }
 }
 
