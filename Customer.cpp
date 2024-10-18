@@ -104,7 +104,7 @@ void Customer::displayCustomer(const vector<Customer>& customers)
 
         cout << border << endl;
         cout << "| Arrival Date  | " << left << setw (39);
-        arrivalDate.display(); 
+        customer.arrivalDate.display(); 
         cout << "|" << endl;
 
         cout << border << endl;
