@@ -21,8 +21,12 @@ class Customer : public Person
             }
          Customer(const Person& person, const vector<string>& roomIDs, const Date& arrivalDate) 
         : Person(person), roomIDs(roomIDs), arrivalDate(arrivalDate) {}
-         void displayCustomer(const vector<Customer>& customers);
-         void bookedRoom();
+        void displayCustomer(const vector<Customer>& customers);
+        void setArrivalDate(const Date& arrivalDate);
+        Date getArrivalDate () const;
+        vector<string> getRoomIDs() const;
+        void setRoomIDs(const vector<string>& roomIDs);
+        void bookedRoom();
         ~Customer();
 };
 #endif
