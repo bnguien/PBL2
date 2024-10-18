@@ -105,12 +105,6 @@ void Customer::displayCustomer(const vector<Customer>& customers)
         cout << "| Arrival Date  | " << left << setw (39);
         customer.arrivalDate.display(); 
         cout << "|" << endl;
-
-        cout << border << endl;
-        cout << endl;
-        cout << "Arrival Date: ";
-        arrivalDate.display(); 
-        cout << "-----------------------------" << endl;
     }
 }
 
