@@ -146,7 +146,7 @@ void Date::display() const
     {
         monthStr = "0" + monthStr;
     }
-    cout << dayStr + "/" + monthStr + "/" + yearStr << endl;
+    cout << dayStr + "/" + monthStr + "/" + yearStr;
 }
 
 string Date::toString() const
