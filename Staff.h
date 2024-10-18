@@ -1,8 +1,6 @@
 #ifndef STAFF_H
 #define STAFF_H
 #include "Person.h"
-#include <iostream>
-using namespace std;
 
 class Staff : public Person
 {
@@ -21,12 +19,7 @@ public:
      void setSalary (const string& salary);
      string getSalary () const;
 
-     void displayStaff (const vector<Staff>& staffs);
-     void addStaff ();
-
      ~ Staff () {}
 };
-
-vector<Staff> readFileStaff (const string &fileName)
 
 #endif
