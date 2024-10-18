@@ -1,4 +1,0 @@
-1. hiển thị room trong customer
-2. hiển thị room trong class Room
-3. hiển thị thông tin đặt hàng của khách 
-4. chỉ Manager mới coi được in4 staff
