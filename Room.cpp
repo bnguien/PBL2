@@ -57,7 +57,7 @@ bool Room::checkAvailable ()
      }
 }
 
-vector<Room> readFileRoom(const string& fileName) {
+vector<Room> Room::readFileRoom(const string& fileName) {
     ifstream file(fileName);
     vector<Room> rooms;
     string line;
@@ -83,7 +83,7 @@ vector<Room> readFileRoom(const string& fileName) {
     file.close();
     return rooms;
 }
-void printRoom(const vector<Room>& rooms) {
+void Room::printRoom(const vector<Room>& rooms) {
     for (const auto& room : rooms) {
         cout << "ID: " << room.getID() << endl;
         cout << "Type: " << room.getType() << endl;
