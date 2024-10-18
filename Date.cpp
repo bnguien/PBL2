@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -122,4 +123,12 @@ void Date::display() const {
 
 string Date::toString() const {
         return to_string(day) + "/" + to_string(month) + "/" + to_string(year);
-    }
+}
+
+ostream& operator << (ostream& os, const Date& date)
+{
+    os << setw(2) << setfill('0') << date.day << "/"  
+       << setw(2) << setfill('0') << date.month << "/" 
+       << date.year; 
+    return os;
+}
