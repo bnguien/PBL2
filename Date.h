@@ -23,7 +23,5 @@ public:
     int getMonth() const;
     bool setYear(const int& year);
     int getYear() const;
-
-    friend ostream& operator << (ostream &os, const Date &date);
 };
 #endif
