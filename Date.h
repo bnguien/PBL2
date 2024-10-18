@@ -23,5 +23,7 @@ public:
     int getMonth() const;
     bool setYear(const int& year);
     int getYear() const;
+
+    string toString() const;
 };
 #endif
