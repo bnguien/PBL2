@@ -7,7 +7,7 @@ class Staff : public Person
 private:
      string ID, position, salary;
 public:
-     Staff ();
+     Staff () {}
      Staff (const Staff &s) : Person (s), ID(s.ID), position(s.position), salary (s.salary) {}
      Staff (string fullName, string CCCD, string phone, string add, string gender, Date DOB, string ID, string position, string salary) 
                                         : Person (fullName, CCCD, phone, add, gender, DOB), ID (ID), position(position), salary (salary) {}
