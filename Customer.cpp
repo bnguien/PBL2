@@ -5,6 +5,8 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <windows.h>
+#include <iomanip>
 using namespace std;
 
 void Customer::setArrivalDate(const Date& arrivalDate)
@@ -71,24 +73,42 @@ vector<Customer> readFileCustomer(const string& fileName) {
 }
 
 
-void Customer::displayCustomer(const vector<Customer>& customers) {
+void Customer::displayCustomer(const vector<Customer>& customers) 
+{
+    cout << "\n" << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
+
     for (const auto &customer : customers) {
-        cout << "Full Name: " << customer.getFullName() << endl;
-        cout << "CCCD: " << customer.getCCCD() << endl;
-        cout << "Phone: " << customer.getPhone() << endl;
-        cout << "Address: " << customer.getAdd() << endl;
-        cout << "DOB: ";
-        customer.getDOB().display(); 
-        cout << "Gender: " << customer.getGender() << endl;
+        Sleep (1000);
+        string border = "+---------------+----------------------------------------+";
+        cout << border << endl;
+        cout << "| Full Name     | " << left << setw (39) << customer.getFullName() << "|" << endl;
+        cout << border << endl;
+        cout << "| CCCD          | " << left << setw (39) << customer.getCCCD() << "|" << endl;
+        cout << border << endl;
+        cout << "| Phone         | " << left << setw (39) << customer.getPhone() << "|" << endl;
+        cout << border << endl;
+        cout << "| Address       | " << left << setw (39) << customer.getAdd() << "|" << endl;
+        cout << border << endl;
+        cout << "| Gender        | " << left << setw (39) << customer.getGender() << "|" << endl;
+        cout << border << endl;
+        cout << "| Date of birth | " << left << setw (39); 
+        customer.getDOB().toString();
+        cout << "|" << endl;
         
-        cout << "Room IDs: ";
-        for (const auto &room : customer.roomIDs) {
+        cout << border << endl;
+        cout << "| Room IDs                                               |" << endl;
+        for (const auto &room : customer.roomIDs) 
+        {
             cout << room << " ";
         }
-        cout << endl;
-        cout << "Arrival Date: ";
+
+        cout << border << endl;
+        cout << "| Arrival Date  | " << left << setw (39);
         arrivalDate.display(); 
-        cout << "-----------------------------" << endl;
+        cout << "|" << endl;
+
+        cout << border << endl;
+        cout << endl;
     }
 }
 
