@@ -7,6 +7,25 @@
 #include <sstream>
 using namespace std;
 
+void Customer::setArrivalDate(const Date& arrivalDate)
+{
+    this->arrivalDate = arrivalDate;
+}
+
+Date Customer :: getArrivalDate () const
+{
+    return arrivalDate;
+}
+
+vector<string>Customer::getRoomIDs() const 
+{
+        return roomIDs;
+}
+
+void Customer::setRoomIDs(const vector<string>& roomIDs)
+{
+    this->roomIDs = roomIDs;
+}
 vector<Customer> readFileCustomer(const string& fileName) {
     ifstream file(fileName);
     vector<Customer> customers;
@@ -74,40 +93,62 @@ void Customer::displayCustomer(const vector<Customer>& customers) {
 }
 
 void saveCustomerToFile(const Customer& customer, const string& fileName) {
-    ofstream file(fileName, ios::app); // Mở file trong chế độ append
-
+    ofstream file(fileName, ios::app); 
+    static bool isFirstWrite = true;
     if (!file.is_open()) {
         cout << "Cannot open customer file!" << endl;
         return;
     }
 
-    // Lưu thông tin khách hàng vào file
+    if (!isFirstWrite) {
+        file << endl; 
+        isFirstWrite = false; 
+    }
+
     file << customer.getFullName() << "|"
          << customer.getCCCD() << "|"
          << customer.getPhone() << "|"
          << customer.getAdd() << "|"
-         << customer.getDOB().toString() << "|"  // Đảm bảo lớp Date có hàm toString()
+         << customer.getDOB().toString() << "|"  
          << customer.getGender() << "|";
 
-    // Lưu Room IDs (các phòng mà khách hàng đã đặt)
-    for (size_t i = 0; i < customer.roomIDs.size(); ++i) {
-        file << customer.roomIDs[i];
-        if (i < customer.roomIDs.size() - 1) {
-            file << ",";  // Ngăn cách các Room ID bằng dấu phẩy
+    vector<string> roomIDs = customer.getRoomIDs();
+    for (size_t i = 0; i < roomIDs.size(); ++i) {
+        file << roomIDs[i];
+        if (i < roomIDs.size() - 1) {
+            file << ",";  
         }
     }
 
-    file << "|" << customer.getArrivalDate().toString() << endl;  // Ngày đến
+    file << "|" << customer.getArrivalDate().toString() << endl;  
+    file.close();
+}
+
+void updateRoomFile(const vector<Room>& rooms, const string& fileRoom) {
+    ofstream file(fileRoom);
+    if (!file.is_open()) {
+        cout << "Cannot open room file!" << endl;
+        return;
+    }
+
+    for (const auto& room : rooms) {
+        file << room.getID() << "|"
+             << room.getType() << "|"
+             << room.getPrice() << "|"
+             << room.getStatus() << endl;
+    }
+
     file.close();
 }
 
 void Customer::bookedRoom()
-{
+{ 
+    Room room;
     string fileRoom = "Room.txt"; 
-    vector<Room> rooms = readFileRoom(fileRoom);
+    vector<Room> rooms =room.readFileRoom(fileRoom);
 
     cout << "List of hotel rooms:" << endl;
-    printRoom(rooms);
+    room.printRoom(rooms);
     cout << "-------------------------------------" << endl;
     cout << "Enter the room ID you want to book: ";
     
@@ -138,16 +179,16 @@ void Customer::bookedRoom()
                 cout << "Enter your gender: ";
                 getline(cin, gender);
 
-                cout << "Enter your date of birth (YYYY-MM-DD): ";
+                cout << "Enter your date of birth (DD/MM/YYYY): ";
                 getline(cin, DOBstr);
                 Date DOB(DOBstr); 
 
                 string arrivalDateStr;
-                cout << "Enter your arrival date (YYYY-MM-DD): ";
+                cout << "Enter your arrival date (DD/MM/YYYY): ";
                 getline(cin, arrivalDateStr);
                 Date arrivalDate(arrivalDateStr);
 
-               Person person(fullName, CCCD, phone, add, gender, DOB);
+                Person person(fullName, CCCD, phone, add, gender, DOB);
                 vector<string> roomIDs = {roomID}; 
                 Customer newCustomer(person, roomIDs, arrivalDate);
 
@@ -155,6 +196,8 @@ void Customer::bookedRoom()
 
                 string customerFile = "Customer.txt"; 
                 saveCustomerToFile(newCustomer, customerFile);
+                updateRoomFile(rooms, fileRoom);
+
 
                 cout << "Booking successful for room: " << roomID << endl;
             } else {
@@ -164,7 +207,7 @@ void Customer::bookedRoom()
         }
     }
 
-    if (!roomFound) {
+    if (!roomFound) { 
         cout << "Room ID not found. Please check and try again." << endl;
     }
 }
