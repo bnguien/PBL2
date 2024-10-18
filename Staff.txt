@@ -9,7 +9,7 @@ Vo Thi Bao Ngoc|044300652372|0385710298|Quang Binh|Nu|17/09/2000|H02|Housekeepin
 Bui Hoai Huong|048302128945|0561024897|Da Nang|Nu|08/11/2002|H03|Housekeeping|4.720.000/month
 Nguyen Bao Hoang|048097654870|0394267895|Da Nang|Nam|11/03/1997|H04|Housekeeping|5.620.000/month
 Hoang Huu Thanh Hoang|046203451023|0789120456|Nam|Thua Thien Hue|06/04/2003|H05|Housekeeping|5.620.000/month
-Ninh Ngoc Linh|045196447216|0369245563|Quang Tri||Nu|10/02/1996|L01|Laundry|5.490.000/month
+Ninh Ngoc Linh|045196447216|0369245563|Quang Tri|Nu|10/02/1996|L01|Laundry|5.490.000/month
 Dao Huu Kim Quy|049201471138|0945317863|Quang Nam|Nam|10/02/2001|L02|Laundry|4.740.000/month
 Dinh Tuan Dat|051098453341|0354436981|Quang Ngai|Nam|23/03/1998|L03|Laundry|3.500.000/month
 Van Ngoc Linh Nhien|079304635712|0934566228|TP Ho Chi Minh|Nu|25/06/2004|L04|Laundry|3.500.000/month
