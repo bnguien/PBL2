@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -119,3 +120,7 @@ void Date::display() const {
     }
     cout << dayStr + "/" + monthStr + "/" + yearStr << endl;
 }
+
+string Date::toString() const {
+        return to_string(day) + "/" + to_string(month) + "/" + to_string(year);
+    }
