@@ -57,7 +57,6 @@ vector<Customer> readFileCustomer(const string& fileName) {
         while (getline(roomIDStream, roomID, ',')) {
             roomIDs.push_back(roomID);
         }
-
         getline(ss, arrivalDateStr);
         arrivalDate = Date(arrivalDateStr);
 
@@ -87,7 +86,7 @@ void Customer::displayCustomer(const vector<Customer>& customers) {
         }
         cout << endl;
         cout << "Arrival Date: ";
-        arrivalDate.display(); 
+        customer.arrivalDate.display(); 
         cout << "-----------------------------" << endl;
     }
 }
