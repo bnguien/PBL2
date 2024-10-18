@@ -30,7 +30,8 @@ public:
      string getStatus() const;
 
      bool checkAvailable ();
-
+     static vector<Room> readFileRoom(const string& fileName);
+     static void printRoom(const vector<Room>& rooms);
      ~Room() {}
 };
 
