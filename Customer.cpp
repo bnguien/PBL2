@@ -218,6 +218,8 @@ void Customer::bookedRoom()
 
 
                 cout << "Booking successful for room: " << roomID << endl;
+                cout << "You have an account to login to check your information"<<endl;
+                cout << "Please login with user name (Your full name is written without diacritics) and password (your phone number) to see your information"<<endl;
             } else {
                 cout << "Room is unavailable. Please choose another room." << endl;
             }
