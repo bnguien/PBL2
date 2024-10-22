@@ -93,9 +93,9 @@ Date Person::getDOB() const {
 }
 
 
-void Person::standardizeName () {
+string Person::standardizeString (const string& input) {
      string res = "";
-     stringstream ss (fullName);
+     stringstream ss (input);
      string token;
      while (ss >> token) {
           res += toupper (token[0]);
@@ -106,8 +106,8 @@ void Person::standardizeName () {
      }
      
      res.erase(res.length() - 1);
-     fullName = res;
-}//Vd: nhap ten nguyen vAn a thi se chuan hoa thanh Nguyen Van A, dung trong in danh sach.
+     return res;
+}
 vector<Person> readFilePerson(const string& fileName) {
     ifstream file(fileName);
     vector<Person> people;
