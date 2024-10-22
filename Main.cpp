@@ -155,6 +155,8 @@ int main() {
             while (!loggedIn) {
                 setColor(9);
                 cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
+                setColor (3);
+                cout << "Login as admin" << endl;
                 setColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
                 setColor(10);
@@ -226,6 +228,8 @@ int main() {
             while (!loggedIn) {
                 setColor(9);
                 cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
+                setColor (3);
+                cout << "Login as customer" << endl;
                 setColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
                 setColor(10);
@@ -255,23 +259,23 @@ int main() {
                     string border = "+---------------+----------------------------------------+";
                     cout << border << endl;
                     setColor(3);
-                    cout << "|1. Search for available room" << right << setw(31) << "|" << endl;
+                    cout << "|1. Search for available room" << right << setw(29) << "|" << endl;
                     setColor(10);
                     cout << border << endl;
                     setColor(3);
-                    cout << "|2. Book room" << right << setw(46) << "|" << endl;
+                    cout << "|2. Book room" << right << setw(45) << "|" << endl;
                     setColor(10);
                     cout << border << endl;
                     setColor(3);
-                    cout << "|3. Check your information" << right << setw(33) << "|" << endl;
+                    cout << "|3. Check your information" << right << setw(32) << "|" << endl;
                     setColor(10);
                     cout << border << endl;
                     setColor(3);
-                    cout << "|4. Checkout" << right << setw(47) << "|" << endl;
+                    cout << "|4. Checkout" << right << setw(46) << "|" << endl;
                     setColor(10);
                     cout << border << endl;
                     setColor(3);
-                    cout << "|5. Exit" << right << setw(51) << "|" << endl;
+                    cout << "|5. Exit" << right << setw(50) << "|" << endl;
                     setColor(10);
                     cout << border << endl;
                     setColor(6);
