@@ -26,7 +26,9 @@ class Customer : public Person
         Date getArrivalDate () const;
         vector<string> getRoomIDs() const;
         void setRoomIDs(const vector<string>& roomIDs);
+        static vector<Customer> readFileCustomer(const string& fileName);
         void bookedRoom();
+        void checkInfor(const string& inputUserName, const vector<Customer>& customers);
         ~Customer();
 };
 #endif
