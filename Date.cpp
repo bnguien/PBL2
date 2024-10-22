@@ -151,13 +151,17 @@ void Date::display() const
 
 string Date::toString() const
 {
-    return to_string(day) + "/" + to_string(month) + "/" + to_string(year);
+    stringstream ss;
+    ss << setw(2) << setfill('0') << day << "/"
+       << setw(2) << setfill('0') << month << "/"
+       << year;
+    return ss.str();   
 }
 
 ostream& operator << (ostream& os, const Date& date)
 {
-    os << setw(2) << setfill('0') << date.day << "/"  
-       << setw(2) << setfill('0') << date.month << "/" 
-       << date.year; 
+    os << setw(2) << setfill('0') << date.getDay() << "/"
+       << setw(2) << setfill('0') << date.getMonth() << "/"
+       << date.getYear();
     return os;
 }
