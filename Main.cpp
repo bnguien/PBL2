@@ -1,91 +1,18 @@
+#include "Login.cpp" 
 #include "Person.cpp"
 #include "Room.cpp"
 #include "Date.cpp"
 #include "Customer.cpp"
 #include "Staff.cpp"
 #include <iostream>
-#include <conio.h>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <iomanip>
 #include <windows.h>
-#include <algorithm>
 
 using namespace std;
-
-void setColor(int color) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}
-
-void loadingBarAnimation() {
-    const int totalProgress = 100; 
-    const int barWidth = 50;
-
-    for (int progress = 0; progress <= totalProgress; ++progress) {
-        int completedWidth = barWidth * progress / totalProgress;
-
-        cout << "\r[";
-        for (int i = 0; i < barWidth; ++i) {
-            cout << (i < completedWidth ? "=" : " ");
-        }
-        cout << "] " << progress << "%";
-        cout.flush();
-
-        Sleep(5);
-    }
-
-    cout << endl;
-}
-
-static inline string trim(string s) {
-    s.erase(s.begin(), find_if(s.begin(), s.end(), [](unsigned char ch) {
-        return !isspace(ch);
-    }));
-    s.erase(find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
-        return !isspace(ch);
-    }).base(), s.end());
-    return s;
-}
-
-string toLower(string s) {
-    transform(s.begin(), s.end(), s.begin(), ::tolower);
-    return s;
-}
-
-string createUsername(const string& fullName) {
-    string username = fullName;
-    username.erase(remove(username.begin(), username.end(), ' '), username.end());
-    return toLower(username); 
-}
-
-string inputPassword() {
-    string password;
-    char ch;
-    while ((ch = _getch()) != 13) { // 13 is Enter
-        if (ch == 8) { // 8 is Backspace
-            if (!password.empty()) {
-                cout << "\b \b"; // erase last '*'
-                password.pop_back();
-            }
-        } else if (isprint(ch)) {
-            password.push_back(ch);
-            cout << '*'; // show '*' for each character
-        }
-    }
-    cout << endl;
-    return password;
-}
-
-bool login(const vector<pair<string, string>>& accounts, const string& username, const string& password) {
-    for (const auto& account : accounts) {
-        if (account.first == username && account.second == password) {
-            return true;
-        }
-    }
-    return false;
-}
 
 int main() {
     string choice;
@@ -123,33 +50,13 @@ int main() {
         string inputUsername, inputPasswordStr;
 
         if (option == 'a') {
-            ifstream file("Staff.txt");
+            vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
             vector<pair<string, string>> accounts;
-            string line;
 
-            if (!file.is_open()) {
-                cout << "Cannot open file!" << endl;
-                return 1;
-            }
-
-            while (getline(file, line)) {
-                stringstream ss(line);
-                string fullName, CCCD, phone, address, gender, dob, position, salary;
-
-                getline(ss, fullName, '|');
-                getline(ss, CCCD, '|');
-                getline(ss, phone, '|');
-                getline(ss, address, '|');
-                getline(ss, gender, '|');
-                getline(ss, dob, '|');
-                getline(ss, position, '|');
-                getline(ss, salary, '|');
-
-                string username = createUsername(fullName);
-                accounts.push_back(make_pair(trim(username), trim(phone)));
-            }
-
-            file.close();
+            for (const auto& staff : staffs) {
+                string username = createUsername(staff.getFullName());
+                accounts.push_back(make_pair(trim(username), trim(staff.getPhone())));
+             }
 
             bool loggedIn = false;
             while (!loggedIn) {
@@ -186,44 +93,13 @@ int main() {
                 }
             }
         } else if (option == 'c') {
-            ifstream file("Customer.txt");
+            vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
             vector<pair<string, string>> accounts;
-            string line;
 
-            if (!file.is_open()) {
-                cout << "Cannot open file!" << endl;
-                return 1;
-            }
-
-            while (getline(file, line)) {
-                stringstream ss(line);
-                string fullName, CCCD, phone, add, gender, DOBstr, roomIDStr, arrivalDateStr;
-                Date DOB, arrivalDate;
-
-                getline(ss, fullName, '|');
-                getline(ss, CCCD, '|');
-                getline(ss, phone, '|');
-                getline(ss, add, '|');
-                getline(ss, DOBstr, '|');
-                DOB = Date(DOBstr);
-                getline(ss, gender, '|');
-
-                vector<string> roomIDs;
-                getline(ss, roomIDStr, '|');
-
-                stringstream roomIDStream(roomIDStr);
-                string roomID;
-                while (getline(roomIDStream, roomID, ',')) {
-                    roomIDs.push_back(roomID);
-                }
-                getline(ss, arrivalDateStr);
-                arrivalDate = Date(arrivalDateStr);
-
-                string username = createUsername(fullName);
-                accounts.push_back(make_pair(trim(username), trim(phone)));
-            }
-
-            file.close();
+            for (const auto& customer : customers) {
+                string username = createUsername(customer.getFullName());
+                accounts.push_back(make_pair(trim(username), trim(customer.getPhone())));
+             }
             bool loggedIn = false;
             while (!loggedIn) {
                 setColor(9);
@@ -243,7 +119,7 @@ int main() {
                 inputPasswordStr = inputPassword();
                 setColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
-                
+
                 if (login(accounts, inputUsername, inputPasswordStr)) {
                     setColor(4);
                     cout << "LOGIN SUCCESSFULLY" << endl;
@@ -253,44 +129,95 @@ int main() {
                     loggedIn = true;
                     setColor(7);
                     system("cls");
-                    setColor(9);
-                    cout << "\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-                    setColor(10);
-                    string border = "+---------------+----------------------------------------+";
-                    cout << border << endl;
-                    setColor(3);
-                    cout << "|1. Search for available room" << right << setw(29) << "|" << endl;
-                    setColor(10);
-                    cout << border << endl;
-                    setColor(3);
-                    cout << "|2. Book room" << right << setw(45) << "|" << endl;
-                    setColor(10);
-                    cout << border << endl;
-                    setColor(3);
-                    cout << "|3. Check your information" << right << setw(32) << "|" << endl;
-                    setColor(10);
-                    cout << border << endl;
-                    setColor(3);
-                    cout << "|4. Checkout" << right << setw(46) << "|" << endl;
-                    setColor(10);
-                    cout << border << endl;
-                    setColor(3);
-                    cout << "|5. Exit" << right << setw(50) << "|" << endl;
-                    setColor(10);
-                    cout << border << endl;
-                    setColor(6);
-                    cout << "Please enter your option: ";
-                    setColor(7);
+                    bool continueUsing = true; 
+                    while (continueUsing) {
+                        setColor(9);
+                        cout << "\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
+                        setColor(10);
+                        string border = "+---------------+----------------------------------------+";
+                        cout << border << endl;
+                        setColor(3);
+                        cout << "|1. Check your information" << right << setw(32) << "|" << endl;
+                        setColor(10);
+                        cout << border << endl;
+                        setColor(3);
+                        cout << "|2. Book service" << right << setw(42) << "|" << endl;
+                        setColor(10);
+                        cout << border << endl;
+                        setColor(3);
+                        cout << "|3. Checkout" << right << setw(46) << "|" << endl;
+                        setColor(10);
+                        cout << border << endl;
+                        setColor(3);
+                        cout << "|4. Check bill" << right << setw(44) << "|" << endl;
+                        setColor(10);
+                        cout << border << endl;
+                        setColor(3);
+                        cout << "|0. Exit" << right << setw(50) << "|" << endl;
+                        setColor(10);
+                        cout << border << endl;
+                        setColor(6);
+                        cout << "Please enter your option: ";
+                        setColor(7);
+                        int choice;
+                        cin >> choice;
+
+                        switch(choice){
+                            case 1:
+                            {
+                                Customer cus;
+                                cus.checkInfor(inputUsername, customers); 
+                                break;
+                            }
+                            case 2:
+                            {
+                                //Xử lý đặt dịch vụ 
+                                break;
+                            }
+                            case 3: 
+                            {
+                                // Xử lý checkout
+                                break;
+                            }
+                            case 4:
+                            {
+                                //Xử lý kiểm tra hóa đơn
+                                break;
+                            }
+                            case 0:
+                            {   
+                                setColor(3);
+                                cout<<"Hope to see you again~~~"<<endl;
+                                setColor(7);
+                                continueUsing = false;
+                                break;
+                            }
+                            default:
+                            {
+                                cout << "Invalid option, please try again." << endl;
+                                break;
+                            }
+                        }
+                        if (continueUsing) {
+                            char continueChoice;
+                            setColor(6);
+                            cout << "Do you want to continue? (y/n): ";
+                            setColor(7);
+                            cin >> continueChoice;
+                            system("cls");
+                            if (tolower(continueChoice) != 'y') {
+                                continueUsing = false; 
+                            }
+                        }
+                    }
                 } else {
                     setColor(4);
                     cout << "PLEASE LOGIN AGAIN (Username or password is incorrect)!!!!" << endl;
-                    system("pause");
                     setColor(7);
+                    system("pause");
                     system("cls");
                 }
             }
-        } else if (option == 'e') {
-            return 0;
         }
     }
     return 0;
