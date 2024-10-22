@@ -17,6 +17,7 @@ public:
      Service (const Service &s);
      Service (const vector<string> &service_info);
 
+     static string getServiceName(const string& id, const vector<Service>& services);
      friend void displayService (const vector<Service> &services);
 
      ~Service ();
