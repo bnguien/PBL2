@@ -1,10 +1,5 @@
 #include "Service.h"
-
-void changeConsoleColor(int colorCode)
-{
-     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-     SetConsoleTextAttribute(hConsole, colorCode);
-}
+#include "Utility.h"
 
 Service::Service() {}
 Service::Service(const Service &s) : ID(s.ID), name(s.name), type(s.type), description(s.description), price(s.price) {}
@@ -86,4 +81,13 @@ vector<Service> readFileService(const string &fileName)
 
      file.close();
      return services;
+}
+
+string Service::getServiceName(const string& id, const vector<Service>& services) {
+   for (const auto& service : services) {
+    if (service.ID == id) {
+        return service.name; 
+    }
+}
+return "Unknown Service"; 
 }
