@@ -42,7 +42,7 @@ public:
 
      void splitName (const string &fullName, string &name);
      void toLowerCase (string &str);
-     void standardizeName ();
+     string standardizeString (const string& input);
      static vector<Person> readFilePerson(const string& fileName);
      static void displayPerson(const vector<Person>& people);
      ~ Person() {}
