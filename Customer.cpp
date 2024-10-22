@@ -30,6 +30,14 @@ void Customer::setRoomIDs(const vector<string>& roomIDs)
 {
     this->roomIDs = roomIDs;
 }
+
+bool Customer::getCheckedOut() const {
+    return checkedOut;
+}
+
+void Customer::setCheckedOut(bool status) {
+    this->checkedOut = status;
+}
 vector<Customer> Customer::readFileCustomer(const string& fileName) {
     ifstream file(fileName);
     vector<Customer> customers;
@@ -75,43 +83,60 @@ vector<Customer> Customer::readFileCustomer(const string& fileName) {
 }
 
 
-void Customer::displayCustomer(const vector<Customer>& customers) 
-{
+void Customer::displayCustomer(const vector<Customer>& customers, const vector<Service>& services) {
     cout << "\n" << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
 
     for (const auto &customer : customers) {
-        Sleep (1000);
         string border = "+---------------+----------------------------------------+";
         cout << border << endl;
-        cout << "| Full Name     | " << left << setw (39) << customer.getFullName() << "|" << endl;
+        cout << "| Full Name     | " << left << setw(39) << customer.getFullName() << "|" << endl;
         cout << border << endl;
-        cout << "| CCCD          | " << left << setw (39) << customer.getCCCD() << "|" << endl;
+        cout << "| CCCD          | " << left << setw(39) << customer.getCCCD() << "|" << endl;
         cout << border << endl;
-        cout << "| Phone         | " << left << setw (39) << customer.getPhone() << "|" << endl;
+        cout << "| Phone         | " << left << setw(39) << customer.getPhone() << "|" << endl;
         cout << border << endl;
-        cout << "| Address       | " << left << setw (39) << customer.getAdd() << "|" << endl;
+        cout << "| Address       | " << left << setw(39) << customer.getAdd() << "|" << endl;
         cout << border << endl;
-        cout << "| Gender        | " << left << setw (39) << customer.getGender() << "|" << endl;
+        cout << "| Gender        | " << left << setw(39) << customer.getGender() << "|" << endl;
         cout << border << endl;
-        cout << "| Date of birth | " << left << setw (39); 
+        cout << "| Date of birth | " << left << setw(39);
         customer.getDOB().display();
-        cout << "|" << endl;
-        
+        cout << "|" << endl;        
         cout << border << endl;
         cout << "| Room IDs                                               |" << endl;
-        for (const auto &room : customer.roomIDs) 
-        {
+
+        for (const auto &room : customer.roomIDs) {
             cout << room << " ";
         }
-        cout<<endl;
+        cout << endl;
         cout << border << endl;
-        cout << "| Arrival Date  | " << left << setw (39);
-        customer.arrivalDate.display(); 
+
+        cout << "| Arrival Date  | " << left << setw(39);
+        customer.arrivalDate.display();
         cout << "|" << endl;
-        cout << border <<endl;
+        cout << border << endl;
+        cout << "| Services      | " << left << setw(39);
+
+        if (customer.serviceIDs.empty()) {
+            cout << "No services booked";
+        } else {
+            bool first = true;
+            for (const auto &serviceID : customer.serviceIDs) {
+                if (!first) {
+                    cout << ",";
+                }
+                string serviceName = Service::getServiceName(serviceID, services);
+                cout << serviceName << " (" << serviceID << ")";
+                first = false;
+            }
+        }
+        cout << "|" << endl;
+        cout << border << endl;
+
         cout << endl;
     }
 }
+
 
 void saveCustomerToFile(const Customer& customer, const string& fileName) {
     ofstream file(fileName, ios::app);     
@@ -287,16 +312,38 @@ void Customer::bookedRoom() {
     cout << "Please login with your username (Your full name is written without diacritics) and password (your phone number) to see your information." << endl;
 }
 
-void Customer::checkInfor(const string& inputUserName, const vector<Customer>& customers) {
-   
+void Customer::checkInfor(const string& inputUserName, const vector<Customer>& customers, const vector<Service>& services) {
     for (const auto& customer : customers) {
         if (createUsername(customer.getFullName()) == inputUserName) {
             vector<Customer> loggedInCustomer = { customer }; 
-            displayCustomer(loggedInCustomer);
+            displayCustomer(loggedInCustomer, services);
             return; 
         }
     }
     cout << "No customer found with the username: " << inputUserName << endl;
 }
 
+void Customer::checkout(const string& inputUserName, const vector<Customer>& customers)
+{
+    cout<<"You want to checkout? Are you sure? (y/n): ";
+    string choice;
+    cin>>choice;
+    if (choice =="y" || choice == "Y")
+    {
+        for (const auto& customer : customers)
+        {
+            if(createUsername(customer.getFullName()) == inputUserName)
+            {
+                setCheckedOut(true);
+                vector<Customer> loggedInCustomer = { customer };
+                cout << "Thank you for confirming your checkout!" << endl;
+                return;
+    }
+            }
+        }
+    else if (choice == "n" || choice == "N")
+    {
+        cout<<"Checkout cancelled"<<endl;
+    }
+}
 Customer::~Customer() {}
