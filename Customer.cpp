@@ -1,5 +1,6 @@
 #include "Customer.h"
 #include "Room.h"
+#include "Login.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -29,7 +30,7 @@ void Customer::setRoomIDs(const vector<string>& roomIDs)
 {
     this->roomIDs = roomIDs;
 }
-vector<Customer> readFileCustomer(const string& fileName) {
+vector<Customer> Customer::readFileCustomer(const string& fileName) {
     ifstream file(fileName);
     vector<Customer> customers;
     string line;
@@ -284,6 +285,18 @@ void Customer::bookedRoom() {
     cout << endl;
     cout << "You have an account to login to check your information." << endl;
     cout << "Please login with your username (Your full name is written without diacritics) and password (your phone number) to see your information." << endl;
+}
+
+void Customer::checkInfor(const string& inputUserName, const vector<Customer>& customers) {
+   
+    for (const auto& customer : customers) {
+        if (createUsername(customer.getFullName()) == inputUserName) {
+            vector<Customer> loggedInCustomer = { customer }; 
+            displayCustomer(loggedInCustomer);
+            return; 
+        }
+    }
+    cout << "No customer found with the username: " << inputUserName << endl;
 }
 
 Customer::~Customer() {}
