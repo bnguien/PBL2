@@ -1,15 +1,10 @@
 #include "Staff.h"
+#include "Utility.h"
 #include <windows.h>
 #include <unordered_set>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-
-void changeConsoleColor(int colorCode)
-{
-     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-     SetConsoleTextAttribute(hConsole, colorCode);
-}
 
 void Staff::setID (const string& ID)
 {
