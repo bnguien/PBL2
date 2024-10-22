@@ -4,6 +4,8 @@
 #include "Date.cpp"
 #include "Customer.cpp"
 #include "Staff.cpp"
+#include "Service.cpp"
+#include "Utility.cpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -166,7 +168,8 @@ int main() {
                             case 1:
                             {
                                 Customer cus;
-                                cus.checkInfor(inputUsername, customers); 
+                                vector<Service> services;
+                                cus.checkInfor(inputUsername, customers, services); 
                                 break;
                             }
                             case 2:

@@ -24,7 +24,8 @@ public:
     bool setYear(const int& year);
     int getYear() const;
     string toString() const;
-
+    string getCurrentDate();
+    
     friend ostream& operator << (ostream& os, const Date& date);
 };
 #endif

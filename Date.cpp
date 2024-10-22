@@ -158,6 +158,13 @@ string Date::toString() const
     return ss.str();   
 }
 
+string Date::getCurrentDate() {
+    time_t now = time(nullptr);
+    char buffer[80];
+    strftime(buffer, sizeof(buffer), "%d-%m-%Y", localtime(&now));
+    return string(buffer);
+}
+
 ostream& operator << (ostream& os, const Date& date)
 {
     os << setw(2) << setfill('0') << date.getDay() << "/"
