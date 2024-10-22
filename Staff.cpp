@@ -58,7 +58,7 @@ string Staff::getSalary () const
      return this->salary;
 }
 
-vector<Staff> readFileStaff (const string &fileName)
+vector<Staff> Staff :: readFileStaff (const string &fileName)
 {
      ifstream file(fileName);
      vector<Staff> staffs;
