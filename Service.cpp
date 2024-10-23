@@ -12,6 +12,28 @@ Service::Service(const vector<string> &service_info)
      price = service_info[4];
 }
 Service::~Service () {}
+
+string Service::getID() const
+{
+     return this->ID;
+}
+string Service::getName() const
+{
+     return this->name;
+}
+string Service::getType() const
+{
+     return this->type;
+}
+string Service::getDesc() const
+{
+     return this->description;
+}
+string Service::getPrice() const
+{
+     return this->price;
+}
+
 void displayService(const vector<Service> &services)
 {
      for (const auto &service : services)

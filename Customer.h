@@ -22,6 +22,7 @@ class Customer : public Person
                                       arrivalDate(g.arrivalDate), checkedOut(g.checkedOut) {}
          Customer(const Person& person, const vector<string>& roomIDs, const Date& arrivalDate) 
         : Person(person), roomIDs(roomIDs), arrivalDate(arrivalDate), checkedOut(false) {}
+        
         void displayCustomer(const vector<Customer>& customers, const vector<Service>& services);
         void setArrivalDate(const Date& arrivalDate);
         Date getArrivalDate () const;
@@ -29,6 +30,7 @@ class Customer : public Person
         void setRoomIDs(const vector<string>& roomIDs);
         bool getCheckedOut() const;
         void setCheckedOut(bool status);
+        
         static vector<Customer> readFileCustomer(const string& fileName);
         void bookedRoom();
         void bookService();
