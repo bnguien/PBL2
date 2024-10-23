@@ -1,30 +1,30 @@
-SF01|Food|Standard|Breakfast|60.000/person
-SF02|Food|Standard|Launch|120.000/person
-SF03|Food|Standard|Dinner|250.000/person
-SF04|Food|Standard|Combo|400.000/person
-SF05|Food|Standard|Family combo|1.500.000/4 people
-SF06|Food|Luxury|Breakfast|150.000/person
-SF07|Food|Luxury|Launch|250.000/person
-SF08|Food|Luxury|Dinner|500.000/person
-SF09|Food|Luxury|Combo|850.000/person
-SF10|Food|Luxury|Family combo|3.200.000/4 people
-SS01|Snack|-|Potato chips|45.000/bag
-SS02|Snack|-|Peanuts|30.000/bag
-SS03|Snack|-|Chocolate bars|75.000/piece
-SD01|Drinks|Can|Beer|100.000/can
-SD02|Drinks|Can|Soft drinks|55.000/can
-SD03|Drinks|Can|Soda|45.000/can
-SD04|Drinks|Bottle|Beer|75.000/bottle
-SD05|Drinks|Bottle|Soft drinks|40.000/bottle
-SD06|Drinks|Bottle|Mineral water|15.000/bottle
-SD07|Drinks|Bottle|Fruit juice|65.000/bottle
-SL01|Laundary|Regular Wash|Shirt|45.000/item
-SL02|Laundary|Regular Wash|Trousers|65.000/item
-SL03|Laundary|Regular Wash|Suit Jacket|100.000/item
-SL04|Laundary|Regular Wash|Dress|85.000/item
-SL05|Laundary|Regular Wash|Skirt|70.000/item
-SL06|Laundary|Dry Cleaning|Shirt|100.000/item
-SL07|Laundary|Dry Cleaning|Trousers|120.000/item
-SL08|Laundary|Dry Cleaning|Suit Jacket|200.000/item
-SL09|Laundary|Dry Cleaning|Dress|150.000/item
-SL10|Laundary|Dry Cleaning|Skirt|125.000/item
+F01|Food|Standard|Breakfast|60.000/person
+F02|Food|Standard|Launch|120.000/person
+F03|Food|Standard|Dinner|250.000/person
+F04|Food|Standard|Combo|400.000/person
+F05|Food|Standard|Family combo|1.500.000/4 people
+F06|Food|Luxury|Breakfast|150.000/person
+F07|Food|Luxury|Launch|250.000/person
+F08|Food|Luxury|Dinner|500.000/person
+F09|Food|Luxury|Combo|850.000/person
+F10|Food|Luxury|Family combo|3.200.000/4 people
+S01|Snack|-|Potato chips|45.000/bag
+S02|Snack|-|Peanuts|30.000/bag
+S03|Snack|-|Chocolate bars|75.000/piece
+D01|Drinks|Can|Beer|100.000/can
+D02|Drinks|Can|Soft drinks|55.000/can
+D03|Drinks|Can|Soda|45.000/can
+D04|Drinks|Bottle|Beer|75.000/bottle
+D05|Drinks|Bottle|Soft drinks|40.000/bottle
+D06|Drinks|Bottle|Mineral water|15.000/bottle
+D07|Drinks|Bottle|Fruit juice|65.000/bottle
+L01|Laundary|Regular Wash|Shirt|45.000/item
+L02|Laundary|Regular Wash|Trousers|65.000/item
+L03|Laundary|Regular Wash|Suit Jacket|100.000/item
+L04|Laundary|Regular Wash|Dress|85.000/item
+L05|Laundary|Regular Wash|Skirt|70.000/item
+L06|Laundary|Dry Cleaning|Shirt|100.000/item
+L07|Laundary|Dry Cleaning|Trousers|120.000/item
+L08|Laundary|Dry Cleaning|Suit Jacket|200.000/item
+L09|Laundary|Dry Cleaning|Dress|150.000/item
+L10|Laundary|Dry Cleaning|Skirt|125.000/item
