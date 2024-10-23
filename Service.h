@@ -17,6 +17,12 @@ public:
      Service (const Service &s);
      Service (const vector<string> &service_info);
 
+     string getID() const;
+     string getName() const;
+     string getType() const;
+     string getDesc() const;
+     string getPrice() const;
+
      friend void displayService (const vector<Service> &services);
 
      ~Service ();
