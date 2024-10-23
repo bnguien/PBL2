@@ -1,15 +1,10 @@
 #include "Staff.h"
+#include "Utility.h"
 #include <windows.h>
 #include <unordered_set>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-
-void changeConsoleColor(int colorCode)
-{
-     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-     SetConsoleTextAttribute(hConsole, colorCode);
-}
 
 void Staff::setID (const string& ID)
 {
@@ -58,7 +53,7 @@ string Staff::getSalary () const
      return this->salary;
 }
 
-vector<Staff> readFileStaff (const string &fileName)
+vector<Staff> Staff :: readFileStaff (const string &fileName)
 {
      ifstream file(fileName);
      vector<Staff> staffs;
@@ -104,6 +99,8 @@ void Staff::displayStaff (const vector<Staff>& staffs)
           string border = "+---------------+----------------------------------------+";
           if (staff.getPosition() == "Manager")
                changeConsoleColor (4);
+          else
+               changeConsoleColor (7);
           cout << border << endl;
           cout << "| Full Name     | " << left << setw (39) << staff.getFullName() << "|" << endl;
           cout << border << endl;
@@ -120,7 +117,7 @@ void Staff::displayStaff (const vector<Staff>& staffs)
           cout << "| Gender        | " << left << setw (39) << staff.getGender() << "|" << endl;
           cout << border << endl;
           cout << "| Date of birth | " << left << setw (39); 
-          staff.getDOB().toString();
+          staff.getDOB().display();
           cout << "|" << endl;
           
           if (staff.getPosition() == "Manager")

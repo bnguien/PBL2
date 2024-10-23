@@ -146,18 +146,29 @@ void Date::display() const
     {
         monthStr = "0" + monthStr;
     }
-    cout << dayStr + "/" + monthStr + "/" + yearStr << endl;
+    cout << dayStr + "/" + monthStr + "/" + yearStr;
 }
 
 string Date::toString() const
 {
-    return to_string(day) + "/" + to_string(month) + "/" + to_string(year);
+    stringstream ss;
+    ss << setw(2) << setfill('0') << day << "/"
+       << setw(2) << setfill('0') << month << "/"
+       << year;
+    return ss.str();   
+}
+
+string Date::getCurrentDate() {
+    time_t now = time(nullptr);
+    char buffer[80];
+    strftime(buffer, sizeof(buffer), "%d-%m-%Y", localtime(&now));
+    return string(buffer);
 }
 
 ostream& operator << (ostream& os, const Date& date)
 {
-    os << setw(2) << setfill('0') << date.day << "/"  
-       << setw(2) << setfill('0') << date.month << "/" 
-       << date.year; 
+    os << setw(2) << setfill('0') << date.getDay() << "/"
+       << setw(2) << setfill('0') << date.getMonth() << "/"
+       << date.getYear();
     return os;
 }

@@ -1,14 +1,14 @@
 #include "Customer.h"
 #include "Room.h"
 #include "Service.h"
+#include "Login.h"
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <vector>
 #include <sstream>
 #include <windows.h>
-#include <iomanip>
-
+#include <algorithm>
 using namespace std;
 
 void loadingBarAnimation(int color)
@@ -70,8 +70,15 @@ void Customer::setRoomIDs(const vector<string> &roomIDs)
 {
     this->roomIDs = roomIDs;
 }
-vector<Customer> readFileCustomer(const string &fileName)
-{
+
+bool Customer::getCheckedOut() const {
+    return checkedOut;
+}
+
+void Customer::setCheckedOut(bool status) {
+    this->checkedOut = status;
+}
+vector<Customer> Customer::readFileCustomer(const string& fileName) {
     ifstream file(fileName);
     vector<Customer> customers;
     string line;
@@ -109,6 +116,7 @@ vector<Customer> readFileCustomer(const string &fileName)
         arrivalDate = Date(arrivalDateStr);
 
         Person person(fullName, CCCD, phone, add, gender, DOB);
+        fullName = person.standardizeString(fullName);
         Customer customer(person, roomIDs, arrivalDate);
         customers.push_back(customer);
     }
@@ -117,13 +125,10 @@ vector<Customer> readFileCustomer(const string &fileName)
     return customers;
 }
 
-void Customer::displayCustomer(const vector<Customer> &customers)
-{
-    cout << "\n"
-         << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
+void Customer::displayCustomer(const vector<Customer>& customers, const vector<Service>& services) {
+    cout << "\n" << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
 
-    for (const auto &customer : customers)
-    {
+    for (const auto &customer : customers) {
         Sleep(1000);
         string border = "+---------------+----------------------------------------+";
         cout << border << endl;
@@ -138,23 +143,44 @@ void Customer::displayCustomer(const vector<Customer> &customers)
         cout << "| Gender        | " << left << setw(39) << customer.getGender() << "|" << endl;
         cout << border << endl;
         cout << "| Date of birth | " << left << setw(39);
-        customer.getDOB().toString();
-        cout << "|" << endl;
-
+        customer.getDOB().display();
+        cout << "|" << endl;        
         cout << border << endl;
         cout << "| Room IDs                                               |" << endl;
-        for (const auto &room : customer.roomIDs)
-        {
+
+        for (const auto &room : customer.roomIDs) {
             cout << room << " ";
         }
-
+        cout << endl;
         cout << border << endl;
+
         cout << "| Arrival Date  | " << left << setw(39);
         customer.arrivalDate.display();
         cout << "|" << endl;
+        cout << border << endl;
+        cout << "| Services      | " << left << setw(39);
+
+        if (customer.serviceIDs.empty()) {
+            cout << "No services booked";
+        } else {
+            bool first = true;
+            for (const auto &serviceID : customer.serviceIDs) {
+                if (!first) {
+                    cout << ",";
+                }
+                string serviceName = Service::getServiceName(serviceID, services);
+                cout << serviceName << " (" << serviceID << ")";
+                first = false;
+            }
+        }
+        cout << "|" << endl;
+        cout << border << endl;
+
+        cout << endl;
     }
 }
 
+/*<<<<<<< _ydragn._
 void saveCustomerToFile(const Customer &customer, const string &fileName)
 {
     ofstream file(fileName, ios::app);
@@ -169,6 +195,18 @@ void saveCustomerToFile(const Customer &customer, const string &fileName)
     {
         file << endl;
         isFirstWrite = false;
+=======*/
+
+void saveCustomerToFile(const Customer& customer, const string& fileName) {
+    ofstream file(fileName, ios::app);     
+    if (!file.is_open()) {
+        cout << "Cannot open customer file!" << endl;
+        return;
+    }
+    file.seekp(0, ios::end); 
+    if (file.tellp() > 0) { 
+        file << endl; 
+//>>>>>>> main
     }
 
     file << customer.getFullName() << "|"
@@ -188,7 +226,12 @@ void saveCustomerToFile(const Customer &customer, const string &fileName)
         }
     }
 
+/*<<<<<<< _ydragn._
     file << "|" << customer.getArrivalDate().toString() << endl;
+=======*/
+    file << "|" << customer.getArrivalDate().toString() << "|" << endl;
+    file.seekp(0, ios::end);  
+//>>>>>>> main
     file.close();
 }
 
@@ -212,15 +255,15 @@ void updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
     file.close();
 }
 
-void Customer::bookedRoom()
-{
+void Customer::bookedRoom() { 
     Room room;
-    string fileRoom = "Room.txt";
+    string fileRoom = "Room.txt"; 
     vector<Room> rooms = room.readFileRoom(fileRoom);
 
     cout << "List of hotel rooms:" << endl;
     room.printRoom(rooms);
     cout << "-------------------------------------" << endl;
+/*<<<<<<< _ydragn._
     cout << "Enter the room ID you want to book: ";
 
     string roomID;
@@ -235,39 +278,115 @@ void Customer::bookedRoom()
             if (room.checkAvailable())
             {
                 cout << "Room is available. Proceed with booking." << endl;
+=======*/
 
-                string fullName, CCCD, phone, add, gender, DOBstr;
-                cout << "Enter your full name: ";
-                cin.ignore();
-                getline(cin, fullName);
+    vector<string> availableRoomIDs; 
+    while (true) {
+        cout << "Enter the room IDs you want to book (separated by commas): ";     
+        string roomIDsInput;
+        cin.ignore();
+        getline(cin, roomIDsInput); 
 
-                cout << "Enter your CCCD: ";
-                getline(cin, CCCD);
+        vector<string> roomIDs;
+        stringstream ss(roomIDsInput);
+        string roomID;
 
-                cout << "Enter your phone number: ";
-                getline(cin, phone);
+        while (getline(ss, roomID, ',')) {
+            roomID.erase(remove_if(roomID.begin(), roomID.end(), ::isspace), roomID.end());
+            if (!roomID.empty()) { 
+                roomIDs.push_back(roomID);
+            }
+        }
+//>>>>>>> main
 
-                cout << "Enter your address: ";
-                getline(cin, add);
+        availableRoomIDs.clear(); 
+        vector<string> unavailableRoomIDs;
 
-                cout << "Enter your gender: ";
-                getline(cin, gender);
+        for (const auto &roomID : roomIDs) {
+            bool roomFound = false;
+            for (auto &room : rooms) {
+                if (room.getID() == roomID) {
+                    roomFound = true;
+                    if (room.checkAvailable()) {
+                        availableRoomIDs.push_back(roomID);
+                    } else {
+                        unavailableRoomIDs.push_back(roomID);
+                    }
+                    break; 
+                }
+            }
 
+            if (!roomFound) { 
+                cout << "Room ID " << roomID << " not found. Please check and try again." << endl;
+            }
+        }
+
+        if (!unavailableRoomIDs.empty()) {
+            cout << "Rooms ";
+            for (size_t i = 0; i < unavailableRoomIDs.size(); ++i) {
+                cout << unavailableRoomIDs[i];
+                if (i < unavailableRoomIDs.size() - 1) {
+                    cout << ", ";  
+                }
+            }
+            cout << " are unavailable. Please choose another room." << endl;
+            continue; 
+        }
+
+        if (!availableRoomIDs.empty()) {
+            cout << "Rooms ";
+            for (size_t i = 0; i < availableRoomIDs.size(); ++i) {
+                cout << availableRoomIDs[i];
+                if (i < availableRoomIDs.size() - 1) {
+                    cout << " and ";
+                }
+            }
+            cout << " are available. Proceeding with booking." << endl;
+            break; 
+        } else {
+            cout << "No available rooms selected. Please try again." << endl;
+        }
+    }
+
+    string fullName, CCCD, phone, add, gender, DOBstr, arrivalDateStr;
+    Date DOB, arrivalDate;
+
+    cout << "Enter your full name: ";
+    getline(cin, fullName);
+
+    cout << "Enter your CCCD: ";
+    getline(cin, CCCD);
+
+    cout << "Enter your phone number: ";
+    getline(cin, phone);
+
+/*<<<<<<< _ydragn._
                 cout << "Enter your date of birth (DD/MM/YYYY): ";
                 getline(cin, DOBstr);
                 Date DOB(DOBstr);
+=======*/
+    cout << "Enter your address: ";
+    getline(cin, add);
+//>>>>>>> main
 
-                string arrivalDateStr;
-                cout << "Enter your arrival date (DD/MM/YYYY): ";
-                getline(cin, arrivalDateStr);
-                Date arrivalDate(arrivalDateStr);
+    cout << "Enter your gender: ";
+    getline(cin, gender);
 
+/*<<<<<<< _ydragn._
                 Person person(fullName, CCCD, phone, add, gender, DOB);
                 vector<string> roomIDs = {roomID};
                 Customer newCustomer(person, roomIDs, arrivalDate);
+=======*/
+    cout << "Enter your date of birth (DD/MM/YYYY): ";
+    getline(cin, DOBstr);
+    DOB = Date(DOBstr); 
+//>>>>>>> main
 
-                room.setStatus("Unavailable");
+    cout << "Enter your arrival date (DD/MM/YYYY): ";
+    getline(cin, arrivalDateStr);
+    arrivalDate = Date(arrivalDateStr);
 
+/*<<<<<<< _ydragn._
                 string customerFile = "Customer.txt";
                 saveCustomerToFile(newCustomer, customerFile);
                 updateRoomFile(rooms, fileRoom);
@@ -279,13 +398,47 @@ void Customer::bookedRoom()
                 cout << "Room is unavailable. Please choose another room." << endl;
             }
             break;
+=======*/
+    fullName = Person::standardizeString(fullName); 
+    add = Person::standardizeString(add); 
+    gender = Person::standardizeString(gender);
+    Person person(fullName, CCCD, phone, add, gender, DOB);
+
+    Customer newCustomer(person, availableRoomIDs, arrivalDate);
+    string customerFile = "Customer.txt"; 
+    saveCustomerToFile(newCustomer, customerFile);
+
+    for (auto &room : rooms) {
+        if (find(availableRoomIDs.begin(), availableRoomIDs.end(), room.getID()) != availableRoomIDs.end()) {
+            room.setStatus("Unavailable");
+//>>>>>>> main
         }
     }
+    updateRoomFile(rooms, fileRoom);
+    cout << "Booking successful for rooms: ";
+    for (const auto& bookedID : availableRoomIDs) {
+        cout << bookedID << " ";
+    }
+    cout << endl;
+    cout << "You have an account to login to check your information." << endl;
+    cout << "Please login with your username (Your full name is written without diacritics) and password (your phone number) to see your information." << endl;
+}
 
+/*<<<<<<< _ydragn._
     if (!roomFound)
     {
         cout << "Room ID not found. Please check and try again." << endl;
+=======*/
+void Customer::checkInfor(const string& inputUserName, const vector<Customer>& customers, const vector<Service>& services) {
+    for (const auto& customer : customers) {
+        if (createUsername(customer.getFullName()) == inputUserName) {
+            vector<Customer> loggedInCustomer = { customer }; 
+            displayCustomer(loggedInCustomer, services);
+            return; 
+        }
+//>>>>>>> main
     }
+    cout << "No customer found with the username: " << inputUserName << endl;
 }
 //Chuc nang khi login customer
 void Customer::bookServices()
@@ -393,4 +546,27 @@ void Customer::bookServices()
         cout << "Service booked successfully for Room ID: " << roomID << endl;
 }
 
+void Customer::checkout(const string& inputUserName, const vector<Customer>& customers)
+{
+    cout<<"You want to checkout? Are you sure? (y/n): ";
+    string choice;
+    cin>>choice;
+    if (choice =="y" || choice == "Y")
+    {
+        for (const auto& customer : customers)
+        {
+            if(createUsername(customer.getFullName()) == inputUserName)
+            {
+                setCheckedOut(true);
+                vector<Customer> loggedInCustomer = { customer };
+                cout << "Thank you for confirming your checkout!" << endl;
+                return;
+    }
+            }
+        }
+    else if (choice == "n" || choice == "N")
+    {
+        cout<<"Checkout cancelled"<<endl;
+    }
+}
 Customer::~Customer() {}
