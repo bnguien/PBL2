@@ -33,7 +33,7 @@ class Customer : public Person
         
         static vector<Customer> readFileCustomer(const string& fileName);
         void bookedRoom();
-        void bookService();
+        void bookServices();
         void checkInfor(const string& inputUserName, const vector<Customer>& customers, const vector<Service>& services);
         void checkout(const string& inputUserName, const vector<Customer>& customers);
         ~Customer();
