@@ -18,7 +18,7 @@ string Room::getID() const
 
 bool Room::setType(const string &type)
 {
-     if (type == "Single" || type == "Double" || type == "Suite" || type == "Standard" || type == "Delux")
+     if (type == "Single" || type == "Double" || type == "Triple" )
      {
           this->type = type;
           return 1; // Nhap dung loai phong
@@ -123,37 +123,24 @@ void Room::printRoom(const vector<Room> &rooms)
      }
 }
 
-static void updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
+void Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
 {
-     ofstream file(fileRoom);
-     if (!file.is_open())
-     {
-          cout << "Cannot open room file!" << endl;
-          return;
-     }
+    ofstream file(fileRoom);
+    if (!file.is_open())
+    {
+        cout << "Cannot open room file!" << endl;
+        return;
+    }
 
-     for (const auto &room : rooms)
-     {
-          file << room.getID() << "|"
-               << room.getType() << "|"
-               << room.getPrice() << "|"
-               << room.getStatus() << "|";
-          if (room.getServiceIDs().size() == 1 && room.getServiceIDs()[0] == "None")
-          {
-               file << "None";
-          }
-          else
-          {
-               for (const auto &service : room.getServiceIDs())
-               {
-                    file << service << ",";
-               }
-               file.seekp (-1, ios_base::cur); //xoa dau phay cuoi
-          }
-          file << endl;
-     }
+    for (const auto &room : rooms)
+    {
+        file << room.getID() << "|"
+             << room.getType() << "|"
+             << room.getPrice() << "|"
+             << room.getStatus() << endl;
+    }
 
-     file.close();
+    file.close();
 }
 
 void Room::addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs)
