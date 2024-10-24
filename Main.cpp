@@ -5,7 +5,7 @@
 #include "Customer.cpp"
 #include "Staff.cpp"
 #include "Service.cpp"
-#include "Utility.cpp"
+#include "Function.cpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -18,35 +18,35 @@ using namespace std;
 
 int main() {
     string choice;
-    setColor(9);
+    changeConsoleColor(9);
     cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-    setColor(3);
+    changeConsoleColor(3);
     cout << "Do you already have an account? (yes/no)" << endl;
-    setColor(7);
+    changeConsoleColor(7);
     cin >> choice;
 
     if (choice == "no") {
         system("cls");
-        setColor(9);
+        changeConsoleColor(9);
         cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-        setColor(11);
+        changeConsoleColor(11);
         cout << "Don't miss out! Let's get your room booked right now!" << endl;
         system("pause");
-        setColor(7);
+        changeConsoleColor(7);
         Customer customer; 
         customer.bookedRoom();
     } else if (choice == "yes") {
         system("cls");
         char option;
         cout << "******************************************************************" << endl;
-        setColor(9);
+        changeConsoleColor(9);
         cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-        setColor(14);
+        changeConsoleColor(14);
         cout << "Login as" << endl;
         cout << "ADMIN LOGIN - press a" << endl;
         cout << "CUSTOMER LOGIN - press c" << endl;
         cout << "EXIT PROGRAM - press e" << endl;
-        setColor(7);
+        changeConsoleColor(7);
         option = _getch();
         system("cls");
         string inputUsername, inputPasswordStr;
@@ -62,34 +62,34 @@ int main() {
 
             bool loggedIn = false;
             while (!loggedIn) {
-                setColor(9);
+                changeConsoleColor(9);
                 cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-                setColor (3);
+                changeConsoleColor (3);
                 cout << "Login as admin" << endl;
-                setColor(6);
+                changeConsoleColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
-                setColor(10);
+                changeConsoleColor(10);
                 cout << "USER NAME (Your full name is written without diacritics): ";
-                setColor(7);
+                changeConsoleColor(7);
                 cin >> inputUsername;
                 inputUsername = toLower(inputUsername);
-                setColor(10);
+                changeConsoleColor(10);
                 cout << "PASSWORD (Your phone number): ";
-                setColor(7);
+                changeConsoleColor(7);
                 inputPasswordStr = inputPassword();
-                setColor(6);
+                changeConsoleColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
                 loadingBarAnimation();
                 bool loginResult = login(accounts, inputUsername, inputPasswordStr);
                 if (loginResult) {
-                    setColor(4);
+                    changeConsoleColor(4);
                     cout << "LOGIN SUCCESSFULLY, ENTER TO CONTINUE" << endl;
-                    setColor(7);
+                    changeConsoleColor(7);
                     loggedIn = true;
                 } else {
-                    setColor(4);
+                    changeConsoleColor(4);
                     cout << "PLEASE LOGIN AGAIN (Username or password is incorrect)!!!!" << endl;
-                    setColor(7);
+                    changeConsoleColor(7);
                     system("pause");
                     system("cls");
                 }
@@ -104,63 +104,63 @@ int main() {
              }
             bool loggedIn = false;
             while (!loggedIn) {
-                setColor(9);
+                changeConsoleColor(9);
                 cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-                setColor (3);
+                changeConsoleColor (3);
                 cout << "Login as customer" << endl;
-                setColor(6);
+                changeConsoleColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
-                setColor(10);
+                changeConsoleColor(10);
                 cout << "USER NAME (Your full name is written without diacritics): ";
-                setColor(7);
+                changeConsoleColor(7);
                 cin >> inputUsername;
                 inputUsername = toLower(inputUsername);
-                setColor(10);
+                changeConsoleColor(10);
                 cout << "PASSWORD (Your phone number): ";
-                setColor(7);
+                changeConsoleColor(7);
                 inputPasswordStr = inputPassword();
-                setColor(6);
+                changeConsoleColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
 
                 if (login(accounts, inputUsername, inputPasswordStr)) {
-                    setColor(4);
+                    changeConsoleColor(4);
                     cout << "LOGIN SUCCESSFULLY" << endl;
-                    setColor(6);
+                    changeConsoleColor(6);
                     loadingBarAnimation();
                     system("pause");
                     loggedIn = true;
-                    setColor(7);
+                    changeConsoleColor(7);
                     system("cls");
                     bool continueUsing = true; 
                     while (continueUsing) {
-                        setColor(9);
+                        changeConsoleColor(9);
                         cout << "\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-                        setColor(10);
+                        changeConsoleColor(10);
                         string border = "+---------------+----------------------------------------+";
                         cout << border << endl;
-                        setColor(3);
+                        changeConsoleColor(3);
                         cout << "|1. Check your information" << right << setw(32) << "|" << endl;
-                        setColor(10);
+                        changeConsoleColor(10);
                         cout << border << endl;
-                        setColor(3);
+                        changeConsoleColor(3);
                         cout << "|2. Book service" << right << setw(42) << "|" << endl;
-                        setColor(10);
+                        changeConsoleColor(10);
                         cout << border << endl;
-                        setColor(3);
+                        changeConsoleColor(3);
                         cout << "|3. Checkout" << right << setw(46) << "|" << endl;
-                        setColor(10);
+                        changeConsoleColor(10);
                         cout << border << endl;
-                        setColor(3);
+                        changeConsoleColor(3);
                         cout << "|4. Check bill" << right << setw(44) << "|" << endl;
-                        setColor(10);
+                        changeConsoleColor(10);
                         cout << border << endl;
-                        setColor(3);
+                        changeConsoleColor(3);
                         cout << "|0. Exit" << right << setw(50) << "|" << endl;
-                        setColor(10);
+                        changeConsoleColor(10);
                         cout << border << endl;
-                        setColor(6);
+                        changeConsoleColor(6);
                         cout << "Please enter your option: ";
-                        setColor(7);
+                        changeConsoleColor(7);
                         int choice;
                         cin >> choice;
 
@@ -174,7 +174,9 @@ int main() {
                             }
                             case 2:
                             {
-                                //Xử lý đặt dịch vụ 
+                                Customer cus;
+                                cus.bookServices(); 
+                                break;
                                 break;
                             }
                             case 3: 
@@ -189,9 +191,9 @@ int main() {
                             }
                             case 0:
                             {   
-                                setColor(3);
+                                changeConsoleColor(3);
                                 cout<<"Hope to see you again~~~"<<endl;
-                                setColor(7);
+                                changeConsoleColor(7);
                                 continueUsing = false;
                                 break;
                             }
@@ -203,9 +205,9 @@ int main() {
                         }
                         if (continueUsing) {
                             char continueChoice;
-                            setColor(6);
+                            changeConsoleColor(6);
                             cout << "Do you want to continue? (y/n): ";
-                            setColor(7);
+                            changeConsoleColor(7);
                             cin >> continueChoice;
                             system("cls");
                             if (tolower(continueChoice) != 'y') {
@@ -214,9 +216,9 @@ int main() {
                         }
                     }
                 } else {
-                    setColor(4);
+                    changeConsoleColor(4);
                     cout << "PLEASE LOGIN AGAIN (Username or password is incorrect)!!!!" << endl;
-                    setColor(7);
+                    changeConsoleColor(7);
                     system("pause");
                     system("cls");
                 }
