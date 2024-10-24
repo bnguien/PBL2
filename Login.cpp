@@ -1,29 +1,5 @@
-#include "login.h"
+#include "Login.h"
 #include <windows.h>
-
-void setColor(int color) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}
-
-void loadingBarAnimation() {
-    const int totalProgress = 100; 
-    const int barWidth = 50;
-
-    for (int progress = 0; progress <= totalProgress; ++progress) {
-        int completedWidth = barWidth * progress / totalProgress;
-
-        cout << "\r["; 
-        for (int i = 0; i < barWidth; ++i) {
-            cout << (i < completedWidth ? "=" : " ");
-        }
-        cout << "] " << progress << "%";
-        cout.flush();
-
-        Sleep(5);
-    }
-
-    cout << endl;
-}
 
 static inline string trim(string s) {
     s.erase(s.begin(), find_if(s.begin(), s.end(), [](unsigned char ch) {

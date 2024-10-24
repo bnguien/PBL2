@@ -10,8 +10,6 @@
 
 using namespace std;
 
-void setColor(int color);
-void loadingBarAnimation();
 static inline string trim(string s);
 string toLower(string s);
 string createUsername(const string& fullName);
