@@ -7,7 +7,7 @@ class Room
 {
 private:
      string ID;
-     string type; // single, double, suite, delux, standard
+     string type;
      string price;
      string status;
      vector<string> serviceIDs;
