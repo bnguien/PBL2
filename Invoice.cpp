@@ -19,7 +19,7 @@ string Invoice::createID(const Customer& customer)
     return invoiceID;
 }
 
-void Invoice::calculateTotalPrice(const string& roomFile, const string& serviceFile) {
+/*void Invoice::calculateTotalPrice(const string& roomFile, const string& serviceFile) {
     ifstream roomData(roomFile);
     ifstream serviceData(serviceFile);
     string line;
@@ -54,7 +54,7 @@ void Invoice::calculateTotalPrice(const string& roomFile, const string& serviceF
     }
     serviceData.close();
     totalPrice = roomTotal + serviceTotal;
-}
+}*/
 
 void Invoice::printInvoice() {
     cout << "Invoice ID: " << InvoiceID << endl;
