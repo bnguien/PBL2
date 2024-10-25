@@ -1,7 +1,6 @@
 #ifndef ROOM_H
 #define ROOM_H
-#include <string>
-#include "Vector.h"
+#include "Function.h"
 
 class Room
 {
