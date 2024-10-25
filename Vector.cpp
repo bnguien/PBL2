@@ -63,7 +63,7 @@ const T &vector<T>::operator[](size_t index) const
 template <typename T>
 const T &vector<T>::get(size_t index) const
 {
-    if (index >= size)
+    if (index >= size_)
     {
         throw std::out_of_range("Index out of range");
     }
@@ -73,7 +73,7 @@ const T &vector<T>::get(size_t index) const
 template <typename T>
 void vector<T>::set(size_t index, const T &value)
 {
-    if (index >= size)
+    if (index >= size_)
     {
         throw std::out_of_range("Index out of range");
     }

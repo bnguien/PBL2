@@ -3,6 +3,7 @@
 #include "Service.h"
 #include "Login.h"
 #include "Function.h"
+#include "Vector.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -152,23 +153,6 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
     }
 }
 
-/*<<<<<<< _ydragn._
-void saveCustomerToFile(const Customer &customer, const string &fileName)
-{
-    ofstream file(fileName, ios::app);
-    static bool isFirstWrite = true;
-    if (!file.is_open())
-    {
-        cout << "Cannot open customer file!" << endl;
-        return;
-    }
-
-    if (!isFirstWrite)
-    {
-        file << endl;
-        isFirstWrite = false;
-=======*/
-
 void saveCustomerToFile(const Customer &customer, const string &fileName)
 {
     ofstream file(fileName, ios::app);
@@ -181,7 +165,6 @@ void saveCustomerToFile(const Customer &customer, const string &fileName)
     if (file.tellp() > 0)
     {
         file << endl;
-        //>>>>>>> main
     }
 
     file << customer.getFullName() << "|"
@@ -336,13 +319,15 @@ void Customer::bookedRoom()
     string customerFile = "Customer.txt";
     saveCustomerToFile(newCustomer, customerFile);
 
-    for (auto &room : rooms)
+    for (auto &roomRef : rooms)
     {
+        Room room = roomRef;
         if (find(availableRoomIDs.begin(), availableRoomIDs.end(), room.getID()) != availableRoomIDs.end())
         {
             room.setStatus("Unavailable");
         }
     }
+
     room.updateRoomFile(rooms, fileRoom);
     cout << "Booking successful for rooms: ";
     for (const auto &bookedID : availableRoomIDs)
