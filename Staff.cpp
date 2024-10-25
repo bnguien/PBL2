@@ -1,5 +1,6 @@
 #include "Staff.h"
 #include "Function.h"
+#include "Vector.h"
 #include <windows.h>
 #include <unordered_set>
 #include <fstream>

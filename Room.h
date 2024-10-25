@@ -1,7 +1,7 @@
 #ifndef ROOM_H
 #define ROOM_H
 #include <string>
-#include <vector>
+#include "Vector.h"
 
 class Room
 {
@@ -28,7 +28,7 @@ public:
      void setServiceIDs (const vector<string> serviceIDs);
      vector<string> getServiceIDs() const;
 
-     bool checkAvailable ();
+     bool checkAvailable () const;
      static vector<Room> readFileRoom(const string& fileName);
      static void printRoom(const vector<Room>& rooms);
      static void updateRoomFile(const vector<Room> &rooms, const string &fileRoom);
