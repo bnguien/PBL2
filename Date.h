@@ -1,7 +1,6 @@
 #ifndef DATE_H
 #define DATE_H
-#include <string>
-#include <iostream> 
+#include "Function.h"
 
 using namespace std; 
 
