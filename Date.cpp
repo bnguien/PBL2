@@ -2,10 +2,10 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
-#include <vector>
 #include <ctype.h>
 #include <sstream>
 #include "Date.h"
+#include "Vector.h"
 
 using namespace std;
 
