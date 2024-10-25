@@ -1,11 +1,4 @@
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <fstream>
-#include <ctype.h>
-#include <sstream>
-#include "Date.h"
-#include "Vector.h"
+#include "Function.h"
 
 using namespace std;
 
