@@ -7,6 +7,7 @@
 #include <conio.h>
 #include <iostream>
 #include "Vector.h"
+#include "Function.h"
 
 using namespace std;
 
