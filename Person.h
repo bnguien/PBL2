@@ -1,9 +1,6 @@
 #ifndef PERSON_H
 #define PERSON_H
-#include "Date.h"
-#include "Vector.h"
-#include <string>
-#include <iostream> 
+#include "Function.h" 
 
 using namespace std; 
 
