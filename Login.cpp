@@ -1,11 +1,4 @@
-#include "Login.h"
-#include "Vector.h"
 #include "Function.h"
-#include <windows.h>
-#include <iostream>
-#include <string.h>
-#include <algorithm>
-#include <cctype>
 
 static inline string trim(string s) {
     s.erase(s.begin(), find_if(s.begin(), s.end(), [](unsigned char ch) {

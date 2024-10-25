@@ -1,15 +1,5 @@
-#include "Customer.h"
-#include "Room.h"
-#include "Service.h"
-#include "Login.h"
 #include "Function.h"
-#include "Vector.h"
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <windows.h>
-#include <algorithm>
+
 using namespace std;
 
 void Customer::setArrivalDate(const Date &arrivalDate)

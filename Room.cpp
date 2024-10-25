@@ -1,10 +1,4 @@
-#include <iostream>
-#include <string>
-#include <cctype>
-#include <sstream>
-#include <fstream>
-#include "Room.h"
-#include "Vector.h"
+#include "Function.h"
 using namespace std;
 
 void Room::setID(const string &ID)

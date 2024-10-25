@@ -1,12 +1,6 @@
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
-#include "Person.h"
-#include "Date.h"
-#include "Service.h"
-#include "Room.h"
-#include "Vector.h"
-#include <iostream>
-#include <string>
+#include "Function.h"
 using namespace std;
 
 class Customer : public Person

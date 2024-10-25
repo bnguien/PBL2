@@ -1,14 +1,4 @@
-#include "Invoice.h"
-#include "Customer.h"
-#include "Date.h"
-#include "Vector.h"
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <windows.h>
-#include <iomanip>
-#include <algorithm>
+#include "Function.h"
 using namespace std;
 
 string Invoice::createID(const Customer& customer)

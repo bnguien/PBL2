@@ -1,10 +1,4 @@
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <ctype.h>
-#include <sstream>
-#include "Person.h"
-#include "Vector.h"
+#include "Function.h"
 using namespace std;
 
 bool Person::setFullName (const string& fullName) {

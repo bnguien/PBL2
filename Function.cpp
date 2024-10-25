@@ -1,6 +1,3 @@
-#include <iostream>  
-#include <string>   
-#include <windows.h>
 #include "Function.h"
 
 using namespace std;

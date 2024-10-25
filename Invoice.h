@@ -1,13 +1,7 @@
 #ifndef INVOICE_H
 #define INVOICE_H
 
-#include "Date.h"
-#include "Customer.h"
-#include "Vector.h"
-#include <iostream>
-#include <string>
-#include <math.h>
-#include <fstream>
+#include "Function.h"
 using namespace std;
 
 class Invoice 
