@@ -1,6 +1,7 @@
 #ifndef STAFF_H
 #define STAFF_H
 #include "Person.h"
+#include "Vector.h"
 
 class Staff : public Person
 {
