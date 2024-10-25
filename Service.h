@@ -1,12 +1,6 @@
 #ifndef SERVICE_H
 #define SERVICE_H
-#include "Vector.h"
-#include <iostream>
-#include <string>
-#include <windows.h>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
+#include "Function.h"
 
 using namespace std;
 class Service {
