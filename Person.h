@@ -1,8 +1,8 @@
 #ifndef PERSON_H
 #define PERSON_H
 #include "Date.h"
+#include "Vector.h"
 #include <string>
-#include <vector>
 #include <iostream> 
 
 using namespace std; 
