@@ -24,11 +24,12 @@ public:
      string getPrice() const;
 
      
-     vector<Service> readFileService(const string &fileName);
+     
      static string getServiceName(const string& id, const vector<Service>& services);
      friend void displayService (const vector<Service> &services);
 
      ~Service ();
      //friend class Admin;
 };
+vector<Service> readFileService(const string &fileName);
 #endif
