@@ -1,11 +1,11 @@
-#include "Login.cpp" 
-#include "Person.cpp"
-#include "Room.cpp"
-#include "Date.cpp"
-#include "Customer.cpp"
-#include "Staff.cpp"
-#include "Service.cpp"
-#include "Function.cpp"
+#include "Login.h" 
+#include "Person.h"
+#include "Room.h"
+#include "Date.h"
+#include "Customer.h"
+#include "Staff.h"
+#include "Service.h"
+#include "Function.h"
 #include "Vector.h"
 #include <iostream>
 #include <fstream>
@@ -58,13 +58,13 @@ int main() {
             for (const auto& staff : staffs) {
                 string username = createUsername(staff.getFullName());
                 accounts.push_back(make_pair(trim(username), trim(staff.getPhone())));
-             }
+            }
 
             bool loggedIn = false;
             while (!loggedIn) {
                 changeConsoleColor(9);
                 cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-                changeConsoleColor (3);
+                changeConsoleColor(3);
                 cout << "Login as admin" << endl;
                 changeConsoleColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
@@ -101,12 +101,12 @@ int main() {
             for (const auto& customer : customers) {
                 string username = createUsername(customer.getFullName());
                 accounts.push_back(make_pair(trim(username), trim(customer.getPhone())));
-             }
+            }
             bool loggedIn = false;
             while (!loggedIn) {
                 changeConsoleColor(9);
                 cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << endl;
-                changeConsoleColor (3);
+                changeConsoleColor(3);
                 cout << "Login as customer" << endl;
                 changeConsoleColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
@@ -164,41 +164,34 @@ int main() {
                         int choice;
                         cin >> choice;
 
-                        switch(choice){
-                            case 1:
-                            {
+                        switch(choice) {
+                            case 1: {
                                 Customer cus;
                                 vector<Service> services;
                                 cus.checkInfor(inputUsername, customers, services); 
                                 break;
                             }
-                            case 2:
-                            {
+                            case 2: {
                                 Customer cus;
                                 cus.bookServices(); 
                                 break;
-                                break;
                             }
-                            case 3: 
-                            {
+                            case 3: {
                                 // Xử lý checkout
                                 break;
                             }
-                            case 4:
-                            {
-                                //Xử lý kiểm tra hóa đơn
+                            case 4: {
+                                // Xử lý kiểm tra hóa đơn
                                 break;
                             }
-                            case 0:
-                            {   
+                            case 0: {   
                                 changeConsoleColor(3);
-                                cout<<"Hope to see you again~~~"<<endl;
+                                cout << "Hope to see you again~~~" << endl;
                                 changeConsoleColor(7);
                                 continueUsing = false;
                                 break;
                             }
-                            default:
-                            {
+                            default: {
                                 cout << "Invalid option, please try again." << endl;
                                 break;
                             }
