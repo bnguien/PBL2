@@ -1,12 +1,6 @@
 #ifndef LOGIN_H
 #define LOGIN_H
 
-#include <string>
-#include <utility>
-#include <algorithm>
-#include <conio.h>
-#include <iostream>
-#include "Vector.h"
 #include "Function.h"
 
 using namespace std;
