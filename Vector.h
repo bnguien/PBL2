@@ -1,6 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
-#include <iostream>
+
+#include "Function.h"
+
 using namespace std;
 
 template <typename T>
@@ -12,49 +14,27 @@ private:
     size_t capacity_;
 
 public:
-    vector() : data(nullptr), size_(0), capacity_(1) {
-        data = new T[capacity_];
-    }
-
-    vector(const T *array, size_t n) : size_(0), capacity_(n) {
-        data = new T[capacity_];
-        for (size_t i = 0; i < n; ++i) {
-            push_back(array[i]);
-        }
-    }
-
-    vector(size_t n, const T& value = T()) : size_(n), capacity_(n) {
-        data = new T[capacity_];
-        for (size_t i = 0; i < n; ++i) {
-            data[i] = value;
-        }
-    }
-    vector(initializer_list<T> list) : size_(0), capacity_(list.size()) {
-        data = new T[capacity_];
-        for (const auto &item : list) {
-            push_back(item);
-        }
-    }
-    ~vector(){delete data;}
+    vector();
+    vector(const T *array, size_t n);
+    vector(size_t n, const T &value = T());
+    vector(initializer_list<T> list);
+    ~vector();
 
     size_t size() const;
     size_t capacity() const;
     bool empty() const;
     void push_back(const T &value);
     void pop_back();
+    T &get(size_t index);
     const T &get(size_t index) const;
     void set(size_t index, const T &value);
     void clear();
-    T &operator[](size_t index);
-    const T *begin() const
-    {
-        return data;
-    }
 
-    const T *end() const
-    {
-        return data + size_;
-    }
+    T &operator[](size_t index);
     const T &operator[](size_t index) const;
+
+    T *begin() const;
+    T *end() const;
 };
+
 #endif
