@@ -2,12 +2,11 @@
 #include "Customer.cpp" 
 #include "Room.cpp"
 #include "Service.cpp"
-#include "Vector.cpp"
 #include "Staff.cpp"
 #include "Date.cpp"
+#include "Login.cpp"
 #include "Function.h"
-#include "Login.h"
-
+#include "Vector.h"
 using namespace std;
 
 int main() {
