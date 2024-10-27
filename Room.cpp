@@ -59,7 +59,7 @@ void Room::setServiceIDs (const vector<string> serviceIDs)
      }
      else
      {
-          for (int i = 0; i < serviceIDs.size(); ++i)
+          for (size_t i = 0; i < serviceIDs.size(); ++i)
           {
                this->serviceIDs.push_back(serviceIDs[i]);
           }
@@ -115,7 +115,7 @@ vector<Room> Room::readFileRoom(const string &fileName)
 }
 void Room::printRoom(const vector<Room> &rooms)
 {
-     for (int i = 0; i < rooms.size(); ++i)
+     for (size_t i = 0; i < rooms.size(); ++i)
      {
           const Room &room = rooms[i];
           cout << "ID: " << room.getID() << endl;
@@ -135,7 +135,7 @@ void Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
           return;
      }
 
-     for (int i = 0; i < rooms.size(); ++i)
+     for (size_t i = 0; i < rooms.size(); ++i)
      {
           const Room &room = rooms[i];
           file << room.getID() << "|"
@@ -159,7 +159,7 @@ void Room::addServiceByRoomID(const string &roomID, const vector<string> &servic
     vector<Room> rooms = readFileRoom(fileRoom);
     bool roomFound = false;
 
-    for (int i = 0; i < rooms.size(); ++i)
+    for (size_t i = 0; i < rooms.size(); ++i)
     {
         Room &room = rooms[i];
 
