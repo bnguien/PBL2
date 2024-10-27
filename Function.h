@@ -17,4 +17,6 @@
 #include <cctype>
 #include <initializer_list>
 #include <stdexcept>
+#include <ctime>
+#include "Vector.h"
 #endif 
