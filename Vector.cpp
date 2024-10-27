@@ -1,30 +1,24 @@
 #include "Vector.h"
 
 template <typename T>
-vector<T>::vector() : data(nullptr), size_(0), capacity_(1) {
-    data = new T[capacity_];
-}
+vector<T>::vector() : data(nullptr), size_(0), capacity_(0) {}
 
 template <typename T>
-vector<T>::vector(const T *array, size_t n) : size_(0), capacity_(n) {
+vector<T>::vector(const T* array, size_t n) : size_(n), capacity_(n) {
     data = new T[capacity_];
-    for (size_t i = 0; i < n; ++i) {
-        push_back(array[i]);
-    }
+    std::copy(array, array + n, data);
 }
 
 template <typename T>
 vector<T>::vector(size_t n, const T& value) : size_(n), capacity_(n) {
     data = new T[capacity_];
-    for (size_t i = 0; i < n; ++i) {
-        data[i] = value;
-    }
+    std::fill(data, data + size_, value);
 }
 
 template <typename T>
-vector<T>::vector(initializer_list<T> list) : size_(0), capacity_(list.size()) {
+vector<T>::vector(std::initializer_list<T> list) : size_(0), capacity_(list.size()) {
     data = new T[capacity_];
-    for (const auto &item : list) {
+    for (const auto& item : list) {
         push_back(item);
     }
 }
@@ -50,18 +44,9 @@ bool vector<T>::empty() const {
 }
 
 template <typename T>
-void vector<T>::push_back(const T &value) {
+void vector<T>::push_back(const T& value) {
     if (size_ == capacity_) {
-        size_t newCapacity = (capacity_ == 0 ? 1 : capacity_ * 2);
-        T *newData = new T[newCapacity];
-
-        for (size_t i = 0; i < size_; ++i) {
-            newData[i] = data[i];
-        }
-
-        delete[] data;
-        data = newData;
-        capacity_ = newCapacity;
+        resize(capacity_ == 0 ? 1 : capacity_ * 2);
     }
     data[size_++] = value;
 }
@@ -74,7 +59,7 @@ void vector<T>::pop_back() {
 }
 
 template <typename T>
-T &vector<T>::operator[](size_t index) {
+T& vector<T>::operator[](size_t index) {
     if (index >= size_) {
         throw std::out_of_range("Index out of range");
     }
@@ -82,7 +67,7 @@ T &vector<T>::operator[](size_t index) {
 }
 
 template <typename T>
-const T &vector<T>::operator[](size_t index) const {
+const T& vector<T>::operator[](size_t index) const {
     if (index >= size_) {
         throw std::out_of_range("Index out of range");
     }
@@ -90,27 +75,23 @@ const T &vector<T>::operator[](size_t index) const {
 }
 
 template <typename T>
-T &vector<T>::get(size_t index) {
-    if (index >= size_) {
-        throw std::out_of_range("Index out of range");
-    }
-    return data[index];
+T* vector<T>::begin() {
+    return data;
 }
 
 template <typename T>
-const T &vector<T>::get(size_t index) const {
-    if (index >= size_) {
-        throw std::out_of_range("Index out of range");
-    }
-    return data[index];
+T* vector<T>::end() {
+    return data + size_;
 }
 
 template <typename T>
-void vector<T>::set(size_t index, const T &value) {
-    if (index >= size_) {
-        throw std::out_of_range("Index out of range");
-    }
-    data[index] = value;
+const T* vector<T>::begin() const {
+    return data;
+}
+
+template <typename T>
+const T* vector<T>::end() const {
+    return data + size_;
 }
 
 template <typename T>
@@ -119,11 +100,25 @@ void vector<T>::clear() {
 }
 
 template <typename T>
-T *vector<T>::begin() const {
-    return data;
+void vector<T>::resize(size_t newCapacity) {
+    T* newData = new T[newCapacity];
+    std::copy(data, data + size_, newData);
+    delete[] data;
+    data = newData;
+    capacity_ = newCapacity;
+}
+template <typename T>
+T& vector<T>::get(size_t index) {
+    if (index >= size_) {
+        throw std::out_of_range("Index out of range");
+    }
+    return data[index];
 }
 
 template <typename T>
-T *vector<T>::end() const {
-    return data + size_;
+const T& vector<T>::get(size_t index) const {
+    if (index >= size_) {
+        throw std::out_of_range("Index out of range");
+    }
+    return data[index];
 }

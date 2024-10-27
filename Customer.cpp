@@ -38,7 +38,7 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
 
     if (!file.is_open())
     {
-        cout << "Cannot open file!" << endl;
+        std::cout << "Cannot open file!" << endl;
         return customers;
     }
 
@@ -80,46 +80,46 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
 
 void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
 {
-    cout << "\n"
+    std::cout << "\n"
          << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
 
     for (const auto &customer : customers)
     {
         Sleep(1000);
         string border = "+---------------+----------------------------------------+";
-        cout << border << endl;
-        cout << "| Full Name     | " << left << setw(39) << customer.getFullName() << "|" << endl;
-        cout << border << endl;
-        cout << "| CCCD          | " << left << setw(39) << customer.getCCCD() << "|" << endl;
-        cout << border << endl;
-        cout << "| Phone         | " << left << setw(39) << customer.getPhone() << "|" << endl;
-        cout << border << endl;
-        cout << "| Address       | " << left << setw(39) << customer.getAdd() << "|" << endl;
-        cout << border << endl;
-        cout << "| Gender        | " << left << setw(39) << customer.getGender() << "|" << endl;
-        cout << border << endl;
-        cout << "| Date of birth | " << left << setw(39);
+        std::cout << border << endl;
+        std::cout << "| Full Name     | " << left << setw(39) << customer.getFullName() << "|" << endl;
+        std::cout << border << endl;
+        std::cout << "| CCCD          | " << left << setw(39) << customer.getCCCD() << "|" << endl;
+        std::cout << border << endl;
+        std::cout << "| Phone         | " << left << setw(39) << customer.getPhone() << "|" << endl;
+        std::cout << border << endl;
+        std::cout << "| Address       | " << left << setw(39) << customer.getAdd() << "|" << endl;
+        std::cout << border << endl;
+        std::cout << "| Gender        | " << left << setw(39) << customer.getGender() << "|" << endl;
+        std::cout << border << endl;
+        std::cout << "| Date of birth | " << left << setw(39);
         customer.getDOB().display();
-        cout << "|" << endl;
-        cout << border << endl;
-        cout << "| Room IDs                                               |" << endl;
+        std::cout << "|" << endl;
+        std::cout << border << endl;
+        std::cout << "| Room IDs                                               |" << endl;
 
         for (const auto &room : customer.roomIDs)
         {
-            cout << room << " ";
+            std::cout << room << " ";
         }
-        cout << endl;
-        cout << border << endl;
+        std::cout << endl;
+        std::cout << border << endl;
 
-        cout << "| Arrival Date  | " << left << setw(39);
+        std::cout << "| Arrival Date  | " << left << setw(39);
         customer.getArrivalDate().display();
-        cout << "|" << endl;
-        cout << border << endl;
-        cout << "| Services      | " << left << setw(39);
+        std::cout << "|" << endl;
+        std::cout << border << endl;
+        std::cout << "| Services      | " << left << setw(39);
 
         if (customer.serviceIDs.empty())
         {
-            cout << "No services booked";
+            std::cout << "No services booked";
         }
         else
         {
@@ -128,17 +128,17 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
             {
                 if (!first)
                 {
-                    cout << ",";
+                    std::cout << ",";
                 }
                 string serviceName = Service::getServiceName(serviceID, services);
-                cout << serviceName << " (" << serviceID << ")";
+                std::cout << serviceName << " (" << serviceID << ")";
                 first = false;
             }
         }
-        cout << "|" << endl;
-        cout << border << endl;
+        std::cout << "|" << endl;
+        std::cout << border << endl;
 
-        cout << endl;
+        std::cout << endl;
     }
 }
 
@@ -147,7 +147,7 @@ void saveCustomerToFile(const Customer &customer, const string &fileName)
     ofstream file(fileName, ios::app);
     if (!file.is_open())
     {
-        cout << "Cannot open customer file!" << endl;
+        std::cout << "Cannot open customer file!" << endl;
         return;
     }
     file.seekp(0, ios::end);
@@ -184,7 +184,7 @@ void Customer::bookedRoom()
     vector<Room> rooms = room.readFileRoom(fileRoom);
 
     string roomType;
-    cout << "Enter the type of room you want to book (single, double, triple): ";
+    std::cout << "Enter the type of room you want to book (single, double, triple): ";
     cin >> roomType;
     cin.ignore();
 
@@ -202,24 +202,24 @@ void Customer::bookedRoom()
 
     if (filteredRooms.empty())
     {
-        cout << "No rooms available for the selected type: " << roomType << endl;
+        std::cout << "No rooms available for the selected type: " << roomType << endl;
         return;
     }
 
-    cout << "Available rooms of type " << roomType << ":" << endl;
+    std::cout << "Available rooms of type " << roomType << ":" << endl;
     for (const auto &filteredRoom : filteredRooms)
     {
-        cout << "ID: " << filteredRoom.getID() << endl;
-        cout << "Type: " << filteredRoom.getType() << endl;
-        cout << "Price (VND/night): " << filteredRoom.getPrice() << "/night" << endl;
-        cout << "Status: " << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << endl;
-        cout << "-----------------------------" << endl;
+        std::cout << "ID: " << filteredRoom.getID() << endl;
+        std::cout << "Type: " << filteredRoom.getType() << endl;
+        std::cout << "Price (VND/night): " << filteredRoom.getPrice() << "/night" << endl;
+        std::cout << "Status: " << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << endl;
+        std::cout << "-----------------------------" << endl;
     }
 
     vector<string> availableRoomIDs;
     while (true)
     {
-        cout << "Enter the room IDs you want to book (separated by commas): ";
+        std::cout << "Enter the room IDs you want to book (separated by commas): ";
         string roomIDsInput;
         getline(cin, roomIDsInput);
 
@@ -277,62 +277,62 @@ void Customer::bookedRoom()
 
         if (!unavailableRoomIDs.empty())
         {
-            cout << "Rooms ";
+            std::cout << "Rooms ";
             for (size_t i = 0; i < unavailableRoomIDs.size(); ++i)
             {
-                cout << unavailableRoomIDs[i];
+                std::cout << unavailableRoomIDs[i];
                 if (i < unavailableRoomIDs.size() - 1)
                 {
-                    cout << ", ";
+                    std::cout << ", ";
                 }
             }
-            cout << " are unavailable. Please choose another room." << endl;
+            std::cout << " are unavailable. Please choose another room." << endl;
             continue;
         }
 
         if (!availableRoomIDs.empty())
         {
-            cout << "Rooms ";
+            std::cout << "Rooms ";
             for (size_t i = 0; i < availableRoomIDs.size(); ++i)
             {
-                cout << availableRoomIDs[i];
+                std::cout << availableRoomIDs[i];
                 if (i < availableRoomIDs.size() - 1)
                 {
-                    cout << ", ";
+                    std::cout << ", ";
                 }
             }
-            cout << " are available. Proceeding with booking." << endl;
+            std::cout << " are available. Proceeding with booking." << endl;
             break; 
         }
         else
         {
-            cout << "No available rooms selected. Please try again." << endl;
+            std::cout << "No available rooms selected. Please try again." << endl;
         }
     }
 
     string fullName, CCCD, phone, add, gender, DOBstr, arrivalDateStr;
     Date DOB, arrivalDate;
 
-    cout << "Enter your full name: ";
+    std::cout << "Enter your full name: ";
     getline(cin, fullName);
 
-    cout << "Enter your CCCD: ";
+    std::cout << "Enter your CCCD: ";
     getline(cin, CCCD);
 
-    cout << "Enter your phone number: ";
+    std::cout << "Enter your phone number: ";
     getline(cin, phone);
 
-    cout << "Enter your address: ";
+    std::cout << "Enter your address: ";
     getline(cin, add);
 
-    cout << "Enter your gender: ";
+    std::cout << "Enter your gender: ";
     getline(cin, gender);
 
-    cout << "Enter your date of birth (DD/MM/YYYY): ";
+    std::cout << "Enter your date of birth (DD/MM/YYYY): ";
     getline(cin, DOBstr);
     DOB = Date(DOBstr);
 
-    cout << "Enter your arrival date (DD/MM/YYYY): ";
+    std::cout << "Enter your arrival date (DD/MM/YYYY): ";
     getline(cin, arrivalDateStr);
     arrivalDate = Date(arrivalDateStr);
 
@@ -354,14 +354,14 @@ void Customer::bookedRoom()
     }
 
     room.updateRoomFile(rooms, fileRoom); 
-    cout << "Booking successful for rooms: ";
+    std::cout << "Booking successful for rooms: ";
     for (const auto &bookedID : availableRoomIDs)
     {
-        cout << bookedID << " ";
+        std::cout << bookedID << " ";
     }
-    cout << endl;
-    cout << "You have an account to login to check your information." << endl;
-    cout << "Please login with your username (Your full name without diacritics) and password (your phone number) to see your information." << endl;
+    std::cout << endl;
+    std::cout << "You have an account to login to check your information." << endl;
+    std::cout << "Please login with your username (Your full name without diacritics) and password (your phone number) to see your information." << endl;
 }
 
 void Customer::checkInfor(const string &inputUserName, const vector<Customer> &customers, const vector<Service> &services)
@@ -375,7 +375,7 @@ void Customer::checkInfor(const string &inputUserName, const vector<Customer> &c
             return;
         }
     }
-    cout << "No customer found with the username: " << inputUserName << endl;
+    std::cout << "No customer found with the username: " << inputUserName << endl;
 }
 // Chuc nang khi login customer
 void Customer::bookServices()
@@ -390,28 +390,28 @@ void Customer::bookServices()
     loadingBarAnimation(5);
     string border = "*===================================================*";
     changeConsoleColor(1);
-    cout << "\n"
+    std::cout << "\n"
          << border << endl;
-    cout << "*" << right << setw(38);
+    std::cout << "*" << right << setw(38);
     changeConsoleColor(4);
-    cout << "WELCOME TO HOTEL DEL LUNA" << setw(14);
+    std::cout << "WELCOME TO HOTEL DEL LUNA" << setw(14);
     changeConsoleColor(1);
-    cout << "*" << endl;
-    cout << border << endl;
+    std::cout << "*" << endl;
+    std::cout << border << endl;
     changeConsoleColor(3);
-    cout << "\n"
+    std::cout << "\n"
          << setw(42) << "HERE ARE THE SERVICES WE OFFER" << endl;
-    cout << setw(37) << "--------------------" << endl;
+    std::cout << setw(37) << "--------------------" << endl;
     changeConsoleColor(7);
 
     displayService(services);
-    cout << setw(37) << "--------------------" << endl;
+    std::cout << setw(37) << "--------------------" << endl;
 
     string roomID;
     bool roomFound = false;
     do
     {
-        cout << "Enter the Room ID (eg., S101, D201, T301) to book services: ";
+        std::cout << "Enter the Room ID (eg., S101, D201, T301) to book services: ";
         getline(cin, roomID);
         for (const auto &room : rooms)
         {
@@ -424,7 +424,7 @@ void Customer::bookServices()
         if (!roomFound)
         {
             changeConsoleColor(4);
-            cout << "\nRoom ID not found. Please check and try again." << endl;
+            std::cout << "\nRoom ID not found. Please check and try again." << endl;
             changeConsoleColor(7);
         }
     } while (!roomFound);
@@ -434,7 +434,7 @@ void Customer::bookServices()
     char c;
     do
     {
-        cout << "Enter ServiceID (eg.,F01,S01,D01,L01) you want to book:";
+        std::cout << "Enter ServiceID (eg.,F01,S01,D01,L01) you want to book:";
         getline(cin, serviceID);
 
         bool serviceFound = false;
@@ -450,14 +450,14 @@ void Customer::bookServices()
 
         if (serviceFound)
         {
-            cout << "Would you like to enjoy more of our services? Press (Y/N)" << endl;
+            std::cout << "Would you like to enjoy more of our services? Press (Y/N)" << endl;
             cin >> c;
             cin.ignore();
             c = toupper(c);
 
             while (c != 'Y' && c != 'N')
             {
-                cout << "Press (Y/N)" << endl;
+                std::cout << "Press (Y/N)" << endl;
                 cin >> c;
                 cin.ignore();
                 c = toupper(c);
@@ -466,9 +466,9 @@ void Customer::bookServices()
         else
         {
             changeConsoleColor(4);
-            cout << "ServiceID not found. Please check and try again." << endl;
+            std::cout << "ServiceID not found. Please check and try again." << endl;
             changeConsoleColor(7);
-            cout << "Try another ServiceID? Press (Y/N)" << endl;
+            std::cout << "Try another ServiceID? Press (Y/N)" << endl;
             cin >> c;
             cin.ignore();
             c = toupper(c);
@@ -479,14 +479,14 @@ void Customer::bookServices()
     room.addServiceByRoomID(roomID, serviceIDs);
 
     if (serviceIDs.empty())
-        cout << "No services booked." << endl;
+        std::cout << "No services booked." << endl;
     else
-        cout << "Service booked successfully for Room ID: " << roomID << endl;
+        std::cout << "Service booked successfully for Room ID: " << roomID << endl;
 }
 
 void Customer::checkout(const string &inputUserName, const vector<Customer> &customers)
 {
-    cout << "You want to checkout? Are you sure? (y/n): ";
+    std::cout << "You want to checkout? Are you sure? (y/n): ";
     string choice;
     cin >> choice;
     if (choice == "y" || choice == "Y")
@@ -497,14 +497,14 @@ void Customer::checkout(const string &inputUserName, const vector<Customer> &cus
             {
                 setCheckedOut(true);
                 vector<Customer> loggedInCustomer = {customer};
-                cout << "Thank you for confirming your checkout!" << endl;
+                std::cout << "Thank you for confirming your checkout!" << endl;
                 return;
             }
         }
     }
     else if (choice == "n" || choice == "N")
     {
-        cout << "Checkout cancelled" << endl;
+        std::cout << "Checkout cancelled" << endl;
     }
 }
 Customer::~Customer() {}
