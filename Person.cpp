@@ -2,7 +2,8 @@
 using namespace std;
 
 bool Person::setFullName (const string& fullName) {
-     for (int i = 0; i < fullName.length(); i++) {
+     for (size_t i = 0; i < fullName.length(); i++) 
+ {
           if (!isalpha(fullName[i]) || fullName[i] != ' ') {
                cout << "\nInvalid value! Full name must have only letters!" << endl;
                return false; // Nhap ten khong hop le
@@ -22,7 +23,7 @@ bool Person::setCCCD (const string& CCCD) {
           cout << "\nInvalid value! CCCD must have exactly 12 digits!" << endl;
           return false; //CCCD khong du 12
      }
-     for (int i = 0; i < CCCD.length(); i++) {
+     for (size_t i = 0; i < CCCD.length(); i++) {
           if (!isdigit(CCCD[i])) {
                cout << "\nInvalid value! CCCD must have only digits!" << endl;
                return false; //CCCD co ki tu khong phai la so
@@ -46,7 +47,7 @@ bool Person::setPhone (const string& phone) {
           cout << "\nInvalid value! First number must be 0!" << endl;
           return false;
      }
-     for (int i = 1; i < phone.length(); i++) {
+     for (size_t i = 1; i < phone.length(); i++) {
           if (!isdigit(phone[i])) {
                cout << "\nInvalid value! Phone must have only digits!" << endl;
                return false;
