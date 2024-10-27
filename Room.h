@@ -1,7 +1,8 @@
 #ifndef ROOM_H
 #define ROOM_H
 #include "Function.h"
-
+#include "Vector.h"
+#include "Service.h"
 class Room
 {
 private:

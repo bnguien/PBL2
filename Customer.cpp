@@ -1,7 +1,6 @@
-#include "Function.h"
+#include "Customer.h"
 
 using namespace std;
-
 void Customer::setArrivalDate(const Date &arrivalDate)
 {
     this->arrivalDate = arrivalDate;
@@ -113,7 +112,7 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         cout << border << endl;
 
         cout << "| Arrival Date  | " << left << setw(39);
-        customer.arrivalDate.display();
+        customer.getArrivalDate().display();
         cout << "|" << endl;
         cout << border << endl;
         cout << "| Services      | " << left << setw(39);
@@ -184,58 +183,95 @@ void Customer::bookedRoom()
     string fileRoom = "Room.txt";
     vector<Room> rooms = room.readFileRoom(fileRoom);
 
-    cout << "List of hotel rooms:" << endl;
-    room.printRoom(rooms);
-    cout << "-------------------------------------" << endl;
+    string roomType;
+    cout << "Enter the type of room you want to book (single, double, triple): ";
+    cin >> roomType;
+    cin.ignore();
+
+    vector<Room> filteredRooms;
+
+    for (const auto &room : rooms)
+    {
+        if ((roomType == "single" && room.getID().front() == 'S') ||
+            (roomType == "double" && room.getID().front() == 'D') ||
+            (roomType == "triple" && room.getID().front() == 'T'))
+        {
+            filteredRooms.push_back(room);
+        }
+    }
+
+    if (filteredRooms.empty())
+    {
+        cout << "No rooms available for the selected type: " << roomType << endl;
+        return;
+    }
+
+    cout << "Available rooms of type " << roomType << ":" << endl;
+    for (const auto &filteredRoom : filteredRooms)
+    {
+        cout << "ID: " << filteredRoom.getID() << endl;
+        cout << "Type: " << filteredRoom.getType() << endl;
+        cout << "Price (VND/night): " << filteredRoom.getPrice() << "/night" << endl;
+        cout << "Status: " << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << endl;
+        cout << "-----------------------------" << endl;
+    }
 
     vector<string> availableRoomIDs;
     while (true)
     {
         cout << "Enter the room IDs you want to book (separated by commas): ";
         string roomIDsInput;
-        cin.ignore();
         getline(cin, roomIDsInput);
 
         vector<string> roomIDs;
-        stringstream ss(roomIDsInput);
-        string roomID;
+        string currentRoomID = "";
 
-        while (getline(ss, roomID, ','))
+        for (char ch : roomIDsInput)
         {
-            roomID.erase(remove_if(roomID.begin(), roomID.end(), [](unsigned char c)
-                                   { return ::isspace(c); }),
-                         roomID.end());
-            if (!roomID.empty())
+            if (ch == ',')
             {
-                roomIDs.push_back(roomID);
+  
+                if (!currentRoomID.empty())
+                {
+                    roomIDs.push_back(currentRoomID);
+                    currentRoomID.clear();
+                }
             }
+            else
+            {
+                currentRoomID += ch;
+            }
+        }
+ 
+        if (!currentRoomID.empty())
+        {
+            roomIDs.push_back(currentRoomID);
         }
 
         availableRoomIDs.clear();
         vector<string> unavailableRoomIDs;
-
-        for (const auto &roomID : roomIDs)
+        for (const string &inputRoomID : roomIDs)
         {
             bool roomFound = false;
-            for (auto &room : rooms)
+            for (const Room &room : filteredRooms)
             {
-                if (room.getID() == roomID)
+                if (room.getID() == inputRoomID) 
                 {
                     roomFound = true;
                     if (room.checkAvailable())
                     {
-                        availableRoomIDs.push_back(roomID);
+                        availableRoomIDs.push_back(inputRoomID);
                     }
                     else
                     {
-                        unavailableRoomIDs.push_back(roomID);
+                        unavailableRoomIDs.push_back(inputRoomID);
                     }
                     break;
                 }
-                else
-                {
-                    cout << "Room ID " << roomID << " not found. Please check and try again." << endl;
-                }
+            }
+            if (!roomFound)
+            {
+                unavailableRoomIDs.push_back(inputRoomID);
             }
         }
 
@@ -262,11 +298,11 @@ void Customer::bookedRoom()
                 cout << availableRoomIDs[i];
                 if (i < availableRoomIDs.size() - 1)
                 {
-                    cout << " and ";
+                    cout << ", ";
                 }
             }
             cout << " are available. Proceeding with booking." << endl;
-            break;
+            break; 
         }
         else
         {
@@ -311,14 +347,13 @@ void Customer::bookedRoom()
 
     for (auto &roomRef : rooms)
     {
-        Room room = roomRef;
-        if (find(availableRoomIDs.begin(), availableRoomIDs.end(), room.getID()) != availableRoomIDs.end())
+        if (find(availableRoomIDs.begin(), availableRoomIDs.end(), roomRef.getID()) != availableRoomIDs.end())
         {
-            room.setStatus("Unavailable");
+            roomRef.setStatus("Unavailable");
         }
     }
 
-    room.updateRoomFile(rooms, fileRoom);
+    room.updateRoomFile(rooms, fileRoom); 
     cout << "Booking successful for rooms: ";
     for (const auto &bookedID : availableRoomIDs)
     {
@@ -326,7 +361,7 @@ void Customer::bookedRoom()
     }
     cout << endl;
     cout << "You have an account to login to check your information." << endl;
-    cout << "Please login with your username (Your full name is written without diacritics) and password (your phone number) to see your information." << endl;
+    cout << "Please login with your username (Your full name without diacritics) and password (your phone number) to see your information." << endl;
 }
 
 void Customer::checkInfor(const string &inputUserName, const vector<Customer> &customers, const vector<Service> &services)

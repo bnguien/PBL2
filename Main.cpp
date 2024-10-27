@@ -1,18 +1,12 @@
-#include "Login.h" 
-#include "Person.h"
-#include "Room.h"
-#include "Date.h"
-#include "Customer.h"
-#include "Staff.h"
-#include "Service.h"
+#include "Person.cpp"
+#include "Customer.cpp" 
+#include "Room.cpp"
+#include "Service.cpp"
+#include "Vector.cpp"
+#include "Staff.cpp"
+#include "Date.cpp"
 #include "Function.h"
-#include "Vector.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <iomanip>
-#include <windows.h>
+#include "Login.h"
 
 using namespace std;
 
@@ -79,7 +73,7 @@ int main() {
                 inputPasswordStr = inputPassword();
                 changeConsoleColor(6);
                 cout << "|---------------------------------------------------------------------------------------------|" << endl;
-                loadingBarAnimation();
+                loadingBarAnimation(6);
                 bool loginResult = login(accounts, inputUsername, inputPasswordStr);
                 if (loginResult) {
                     changeConsoleColor(4);
@@ -126,7 +120,7 @@ int main() {
                     changeConsoleColor(4);
                     cout << "LOGIN SUCCESSFULLY" << endl;
                     changeConsoleColor(6);
-                    loadingBarAnimation();
+                    loadingBarAnimation(7);
                     system("pause");
                     loggedIn = true;
                     changeConsoleColor(7);

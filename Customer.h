@@ -1,20 +1,31 @@
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
+
+#include "Person.h"
+#include "Room.h"
+#include "Service.h"
+#include "Login.h"
+#include "Staff.h"
+#include "Vector.h"
+#include "Date.h"
 #include "Function.h"
+
 using namespace std;
 
 class Customer : public Person
 {
 private:
-    vector<string> roomIDs;    // Danh sách ID phòng
-    vector<string> serviceIDs; // Danh sách dịch vụ
-    Date arrivalDate;          // Ngày đến
-    bool checkedOut;
+    vector<string> roomIDs;    
+    vector<string> serviceIDs; 
+    Date arrivalDate;  
+    bool checkedOut; 
 
 public:
-    Customer() : Person() {} // Default constructor
-    Customer(const Customer &g) : Person(g), roomIDs(g.roomIDs),
-                                  arrivalDate(g.arrivalDate), checkedOut(g.checkedOut) {}
+    Customer() : Person(), checkedOut(false) {} 
+    Customer(const Customer &g) 
+        : Person(g), roomIDs(g.roomIDs), 
+          serviceIDs(g.serviceIDs), arrivalDate(g.arrivalDate), 
+          checkedOut(g.checkedOut) {}
     Customer(const Person &person, const vector<string> &roomIDs, const Date &arrivalDate)
         : Person(person), roomIDs(roomIDs), arrivalDate(arrivalDate), checkedOut(false) {}
 
@@ -31,6 +42,8 @@ public:
     void bookServices();
     void checkInfor(const string &inputUserName, const vector<Customer> &customers, const vector<Service> &services);
     void checkout(const string &inputUserName, const vector<Customer> &customers);
+
     ~Customer();
 };
+
 #endif

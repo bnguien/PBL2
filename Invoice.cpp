@@ -1,4 +1,5 @@
-#include "Function.h"
+#include "Invoice.h"
+#include "Customer.h"
 using namespace std;
 
 string Invoice::createID(const Customer& customer)
@@ -46,13 +47,13 @@ string Invoice::createID(const Customer& customer)
     totalPrice = roomTotal + serviceTotal;
 }*/
 
-void Invoice::printInvoice() {
-    cout << "Invoice ID: " << InvoiceID << endl;
+void Invoice::printInvoice() const {
+    cout << "Invoice ID: " << invoiceID << endl;
     cout << "Customer: " << customer.getFullName() << endl;
     cout << "Check-in Date: " << checkinDate.toString() << endl;
     cout << "Check-out Date: " << checkoutDate.toString() << endl;
     cout << "Total Price: " << totalPrice << endl;
-    cout << "Payment Method: " << PayMentMethod << endl;
+    cout << "Payment Method: " << paymentMethod << endl;
 }
 
 Invoice::~Invoice() {}

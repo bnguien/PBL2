@@ -1,7 +1,8 @@
 #ifndef PERSON_H
 #define PERSON_H
 #include "Function.h" 
-
+#include "Date.h"
+#include "Vector.h"
 using namespace std; 
 
 class Person {

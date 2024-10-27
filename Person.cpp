@@ -1,4 +1,4 @@
-#include "Function.h"
+#include "Person.h"
 using namespace std;
 
 bool Person::setFullName (const string& fullName) {

@@ -1,4 +1,4 @@
-#include "Function.h"
+#include "Staff.h"
 
 void Staff::setID (const string& ID)
 {
