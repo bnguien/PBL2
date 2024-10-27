@@ -1,8 +1,25 @@
 #ifndef PERSON_H
 #define PERSON_H
-#include "Function.h" 
-#include "Date.h"
+#include <math.h>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <windows.h>
+#include <algorithm>
+#include <iomanip>
+#include <ctype.h>
+#include <utility>
+#include <cstdlib>
+#include <string.h>
+#include <conio.h>
+#include <unordered_set>
+#include <cctype>
+#include <initializer_list>
+#include <stdexcept>
 #include "Vector.h"
+#include "Date.h"
+#include "Login.h"
 using namespace std; 
 
 class Person {
