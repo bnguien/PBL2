@@ -19,7 +19,7 @@ private:
     vector<string> serviceIDs; 
     Date arrivalDate;  
     bool checkedOut; 
-
+    string currentFullName;//lưu tên khách hàng đã đăng nhập
 public:
     Customer() : Person(), checkedOut(false) {} 
     Customer(const Customer &g) 
@@ -39,7 +39,8 @@ public:
 
     static vector<Customer> readFileCustomer(const string &fileName);
     void bookedRoom();
-    void bookServices();
+    void bookServices(const string &inputUserName);
+    void addServicesToCustomerFile(const string &inputUserName, const vector<Service> &services);
     void checkInfor(const string &inputUserName, const vector<Customer> &customers, const vector<Service> &services);
     void checkout(const string &inputUserName, const vector<Customer> &customers);
 
