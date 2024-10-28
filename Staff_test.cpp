@@ -1,9 +1,9 @@
 #include "Staff.cpp"
 
-int main ()
+/*int main ()
 {
      string fileStaff = "Staff.txt";
      vector<Staff> staffs = readFileStaff (fileStaff);
      Staff staff;
      staff.displayStaff (staffs);
-}
+}*/
