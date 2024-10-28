@@ -47,7 +47,7 @@ string Invoice::createID(const Customer& customer)
     totalPrice = roomTotal + serviceTotal;
 }*/
 
-void Invoice::printInvoice() const {
+void Invoice::displayInvoice() const {
     cout << "Invoice ID: " << invoiceID << endl;
     cout << "Customer: " << customer.getFullName() << endl;
     cout << "Check-in Date: " << checkinDate.toString() << endl;

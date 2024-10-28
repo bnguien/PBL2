@@ -10,7 +10,7 @@ Service::Service(const vector<string> &service_info)
      description = service_info[3];
      price = service_info[4];
 }
-Service::~Service () {}
+Service::~Service() {}
 
 string Service::getID() const
 {
@@ -51,13 +51,13 @@ void displayService(const vector<Service> &services)
           else if (service.name == "Laundary")
                changeConsoleColor(5);
           cout << border << endl;
-          
+
           cout << "| Service Name  | " << left << setw(34) << service.name << "|" << endl;
           cout << border << endl;
-          changeConsoleColor (12);
+          changeConsoleColor(12);
           cout << "| Service Type  | " << left << setw(34) << service.type << "|" << endl;
           cout << border << endl;
-          changeConsoleColor (8);
+          changeConsoleColor(8);
           cout << "| Service Desc  | " << left << setw(34) << service.description << "|" << endl;
           cout << border << endl;
           changeConsoleColor(7);
@@ -104,11 +104,14 @@ vector<Service> readFileService(const string &fileName)
      return services;
 }
 
-string Service::getServiceName(const string& id, const vector<Service>& services) {
-   for (const auto& service : services) {
-    if (service.ID == id) {
-        return service.name; 
-    }
-}
-return "Unknown Service"; 
+string Service::getServiceName(const string &id, const vector<Service> &services)
+{
+     for (const auto &service : services)
+     {
+          if (service.ID == id)
+          {
+               return service.name;
+          }
+     }
+     return "Unknown Service";
 }

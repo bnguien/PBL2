@@ -81,7 +81,7 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
 void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
 {
     std::cout << "\n"
-         << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
+              << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
 
     for (const auto &customer : customers)
     {
@@ -230,7 +230,7 @@ void Customer::bookedRoom()
         {
             if (ch == ',')
             {
-  
+
                 if (!currentRoomID.empty())
                 {
                     roomIDs.push_back(currentRoomID);
@@ -242,7 +242,7 @@ void Customer::bookedRoom()
                 currentRoomID += ch;
             }
         }
- 
+
         if (!currentRoomID.empty())
         {
             roomIDs.push_back(currentRoomID);
@@ -255,7 +255,7 @@ void Customer::bookedRoom()
             bool roomFound = false;
             for (const Room &room : filteredRooms)
             {
-                if (room.getID() == inputRoomID) 
+                if (room.getID() == inputRoomID)
                 {
                     roomFound = true;
                     if (room.checkAvailable())
@@ -302,7 +302,7 @@ void Customer::bookedRoom()
                 }
             }
             std::cout << " are available. Proceeding with booking." << endl;
-            break; 
+            break;
         }
         else
         {
@@ -353,7 +353,7 @@ void Customer::bookedRoom()
         }
     }
 
-    room.updateRoomFile(rooms, fileRoom); 
+    room.updateRoomFile(rooms, fileRoom);
     std::cout << "Booking successful for rooms: ";
     for (const auto &bookedID : availableRoomIDs)
     {
@@ -372,13 +372,15 @@ void Customer::checkInfor(const string &inputUserName, const vector<Customer> &c
         {
             vector<Customer> loggedInCustomer = {customer};
             displayCustomer(loggedInCustomer, services);
+            currentFullName = customer.getFullName();
             return;
         }
     }
     std::cout << "No customer found with the username: " << inputUserName << endl;
 }
+
 // Chuc nang khi login customer
-void Customer::bookServices()
+void Customer::bookServices(const string &inputUserName)
 {
     string fileService = "Service.txt";
     vector<Service> services = readFileService(fileService);
@@ -391,7 +393,7 @@ void Customer::bookServices()
     string border = "*===================================================*";
     changeConsoleColor(1);
     std::cout << "\n"
-         << border << endl;
+              << border << endl;
     std::cout << "*" << right << setw(38);
     changeConsoleColor(4);
     std::cout << "WELCOME TO HOTEL DEL LUNA" << setw(14);
@@ -400,7 +402,7 @@ void Customer::bookServices()
     std::cout << border << endl;
     changeConsoleColor(3);
     std::cout << "\n"
-         << setw(42) << "HERE ARE THE SERVICES WE OFFER" << endl;
+              << setw(42) << "HERE ARE THE SERVICES WE OFFER" << endl;
     std::cout << setw(37) << "--------------------" << endl;
     changeConsoleColor(7);
 
@@ -409,15 +411,27 @@ void Customer::bookServices()
 
     string roomID;
     bool roomFound = false;
-    do
+
+    while (true)
     {
         std::cout << "Enter the Room ID (eg., S101, D201, T301) to book services: ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         getline(cin, roomID);
+        if (roomID.empty())
+        {
+            changeConsoleColor(4);
+            std::cout << "Room ID cannot be empty. Please enter a valid Room ID." << endl;
+            changeConsoleColor(7);
+            continue; 
+        }
+
+        roomFound = false;
         for (const auto &room : rooms)
         {
             if (room.getID() == roomID)
             {
-                roomFound = true;
+                roomFound = true; 
                 break;
             }
         }
@@ -427,18 +441,22 @@ void Customer::bookServices()
             std::cout << "\nRoom ID not found. Please check and try again." << endl;
             changeConsoleColor(7);
         }
-    } while (!roomFound);
+        else
+        {
+            break;
+        }
+    }
 
     vector<string> serviceIDs;
     string serviceID;
     char c;
     do
     {
-        std::cout << "Enter ServiceID (eg.,F01,S01,D01,L01) you want to book:";
+        std::cout << "Enter ServiceID (eg., F01, S01, D01, L01) you want to book: ";
         getline(cin, serviceID);
 
         bool serviceFound = false;
-        for (auto &service : services)
+        for (const auto &service : services)
         {
             if (service.getID() == serviceID)
             {
@@ -477,12 +495,61 @@ void Customer::bookServices()
     } while (c == 'Y');
 
     room.addServiceByRoomID(roomID, serviceIDs);
+    
 
     if (serviceIDs.empty())
         std::cout << "No services booked." << endl;
-    else
-        std::cout << "Service booked successfully for Room ID: " << roomID << endl;
+    else {
+        std::cout << "Services booked successfully for Room ID: " << roomID << endl;
+        addServicesToCustomerFile(inputUserName, services);
+    }
 }
+
+void Customer::addServicesToCustomerFile(const string &inputUserName, const vector<Service> &services) {
+    string fileName = "Customer.txt";
+    ifstream inputFile(fileName);
+    if (!inputFile.is_open()) {
+        cerr << "Cannot open file!" << endl;
+        return;
+    }
+
+    vector<string> customerLines;
+    string line;
+
+    while (getline(inputFile, line)) {
+        customerLines.push_back(line);
+    }
+    inputFile.close();
+
+    ofstream outputFile(fileName);
+    if (!outputFile.is_open()) {
+        cerr << "Could not open the file for writing." << endl;
+        return;
+    }
+
+    for (auto &customerLine : customerLines) {
+        string customerName = customerLine.substr(0, customerLine.find('|'));
+        
+        if (createUsername(customerName) == inputUserName) {
+            string servicesList = customerLine.substr(customerLine.find_last_of('|') + 1);
+            for (const auto &serviceID : serviceIDs) {
+                string serviceName = Service::getServiceName(serviceID, services);
+                if (!servicesList.empty() && servicesList != " ") {
+                    servicesList += ", ";
+                }
+                servicesList += serviceName;
+            }
+
+            customerLine = customerLine.substr(0, customerLine.find_last_of('|') + 1) + servicesList;
+        }
+        
+        outputFile << customerLine << endl; 
+    }
+
+    outputFile.close();
+}
+
+
 
 void Customer::checkout(const string &inputUserName, const vector<Customer> &customers)
 {

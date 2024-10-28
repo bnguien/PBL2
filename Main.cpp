@@ -166,11 +166,10 @@ int main() {
                             }
                             case 2: {
                                 Customer cus;
-                                cus.bookServices(); 
+                                cus.bookServices(inputUsername); 
                                 break;
                             }
                             case 3: {
-                                // Xử lý checkout
                                 break;
                             }
                             case 4: {

@@ -3,7 +3,6 @@
 
 #include "Function.h"
 #include "Vector.h"
-#include "Customer.h"
 #include "Room.h"
 #include "Service.h"
 #include "Date.h"
@@ -33,7 +32,7 @@ public:
     string createID(const Customer& customer);
     void calculateTotalPrice(const string& roomFile, const string& serviceFile);
     void setPaymentMethod(const string& method);
-    void printInvoice() const;
+    void displayInvoice() const;
     ~Invoice() {}
 };
 

@@ -29,7 +29,7 @@ public:
 
      bool checkAvailable () const;
      static vector<Room> readFileRoom(const string& fileName);
-     static void printRoom(const vector<Room>& rooms);
+     static void printRoom(const vector<Room> &rooms, const vector<Service> &services);
      static void updateRoomFile(const vector<Room> &rooms, const string &fileRoom);
      void addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs);
      ~Room() {}

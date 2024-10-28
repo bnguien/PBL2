@@ -1,6 +1,5 @@
 #include "Vector.h"
 
-// Constructors
 template <typename T>
 vector<T>::vector() : data_(nullptr), size_(0), capacity_(0) {}
 
@@ -80,7 +79,6 @@ vector<T>& vector<T>::operator=(std::initializer_list<T> list) {
     return *this;
 }
 
-// Element access
 template <typename T>
 T& vector<T>::at(size_t pos) {
     if (pos >= size_) {
@@ -244,7 +242,6 @@ void vector<T>::resize(size_t count, const T& value) {
     size_ = count;
 }
 
-// Print function
 template <typename T>
 void vector<T>::print() const {
     for (size_t i = 0; i < size_; ++i) {
