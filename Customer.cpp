@@ -20,15 +20,14 @@ void Customer::setRoomIDs(const vector<string> &roomIDs)
 {
     this->roomIDs = roomIDs;
 }
-
-bool Customer::getCheckedOut() const
+vector<string> Customer::getServiceIDs() const
 {
-    return checkedOut;
+    return serviceIDs;
 }
 
-void Customer::setCheckedOut(bool status)
+vector<string> Customer::getServiceNames() const
 {
-    this->checkedOut = status;
+    return serviceNames;
 }
 vector<Customer> Customer::readFileCustomer(const string &fileName)
 {
@@ -45,7 +44,7 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
     while (getline(file, line))
     {
         stringstream ss(line);
-        string fullName, CCCD, phone, add, gender, DOBstr, roomIDStr, arrivalDateStr;
+        string fullName, CCCD, phone, add, gender, DOBstr, roomIDStr, arrivalDateStr, serviceIDStr, serviceNameStr;
         Date DOB, arrivalDate;
 
         getline(ss, fullName, '|');
@@ -56,38 +55,57 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
         DOB = Date(DOBstr);
         getline(ss, gender, '|');
 
-        vector<string> roomIDs;
         getline(ss, roomIDStr, '|');
+        getline(ss, arrivalDateStr, '|');
+        arrivalDate = Date(arrivalDateStr);
 
+        getline(ss, serviceIDStr, '|');
+        getline(ss, serviceNameStr);
+
+        vector<string> roomIDs;
         stringstream roomIDStream(roomIDStr);
         string roomID;
         while (getline(roomIDStream, roomID, ','))
         {
             roomIDs.push_back(roomID);
         }
-        getline(ss, arrivalDateStr);
-        arrivalDate = Date(arrivalDateStr);
+
+        vector<string> serviceIDs;
+        stringstream serviceIDStream(serviceIDStr);
+        string serviceID;
+        while (getline(serviceIDStream, serviceID, ','))
+        {
+            serviceIDs.push_back(serviceID);
+        }
+
+        vector<string> serviceNames;
+        stringstream serviceNameStream(serviceNameStr);
+        string serviceName;
+        while (getline(serviceNameStream, serviceName, ','))
+        {
+            serviceNames.push_back(serviceName);
+        }
 
         Person person(fullName, CCCD, phone, add, gender, DOB);
         fullName = person.standardizeString(fullName);
-        Customer customer(person, roomIDs, arrivalDate);
+        add = person.standardizeString(add);
+        gender = person.standardizeString(gender);
+
+        Customer customer(person, roomIDs, arrivalDate, serviceIDs, serviceNames);
         customers.push_back(customer);
     }
-
-    file.close();
-    return customers;
 }
 
-void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
-{
+void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services) {
     std::cout << "\n"
               << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
 
-    for (const auto &customer : customers)
-    {
-        Sleep(1000);
+    for (const auto &customer : customers) {
+        Sleep(1000); 
         string border = "+---------------+----------------------------------------+";
         std::cout << border << endl;
+
+        // Hiển thị thông tin khách hàng
         std::cout << "| Full Name     | " << left << setw(39) << customer.getFullName() << "|" << endl;
         std::cout << border << endl;
         std::cout << "| CCCD          | " << left << setw(39) << customer.getCCCD() << "|" << endl;
@@ -102,10 +120,9 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         customer.getDOB().display();
         std::cout << "|" << endl;
         std::cout << border << endl;
-        std::cout << "| Room IDs                                               |" << endl;
 
-        for (const auto &room : customer.roomIDs)
-        {
+        std::cout << "| Room IDs                                               |" << endl;
+        for (const auto &room : customer.getRoomIDs()) {
             std::cout << room << " ";
         }
         std::cout << endl;
@@ -115,30 +132,26 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         customer.getArrivalDate().display();
         std::cout << "|" << endl;
         std::cout << border << endl;
-        std::cout << "| Services      | " << left << setw(39);
 
-        if (customer.serviceIDs.empty())
-        {
+        if (customer.getServiceIDs().empty()) {
+            std::cout << "| Service      | " << left << setw(39);
             std::cout << "No services booked";
-        }
-        else
-        {
-            bool first = true;
-            for (const auto &serviceID : customer.serviceIDs)
-            {
-                if (!first)
-                {
-                    std::cout << ",";
-                }
-                string serviceName = Service::getServiceName(serviceID, services);
-                std::cout << serviceName << " (" << serviceID << ")";
-                first = false;
+            std::cout << "|" << endl;
+            std::cout << border << endl;
+        } else {
+             std::cout << "| ServiceIDS      | ";
+            for(const auto &serviceID : customer.getServiceIDs()){
+                std::cout << serviceID << ",";
             }
+            std::cout << left << setw(39)<<"|" << endl;
+            std::cout << border << endl;
+             std::cout << "| ServiceNames      | ";
+             for(const auto &serviceID : customer.getServiceNames()){
+                std::cout << serviceID << ",";
+            }
+            std::cout << left << setw(39)<<"|" << endl;
         }
-        std::cout << "|" << endl;
-        std::cout << border << endl;
-
-        std::cout << endl;
+        std::cout << endl;  
     }
 }
 
@@ -341,7 +354,7 @@ void Customer::bookedRoom()
     gender = Person::standardizeString(gender);
     Person person(fullName, CCCD, phone, add, gender, DOB);
 
-    Customer newCustomer(person, availableRoomIDs, arrivalDate);
+    Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
     string customerFile = "Customer.txt";
     saveCustomerToFile(newCustomer, customerFile);
 
@@ -582,7 +595,7 @@ string Customer::join(const vector<string> &elements, const string &delimiter)
     return result;
 }
 
-void Customer::checkout(const string &inputUserName, const vector<Customer> &customers)
+/*void Customer::checkout(const string &inputUserName, const vector<Customer> &customers)
 {
     std::cout << "You want to checkout? Are you sure? (y/n): ";
     string choice;
@@ -604,5 +617,5 @@ void Customer::checkout(const string &inputUserName, const vector<Customer> &cus
     {
         std::cout << "Checkout cancelled" << endl;
     }
-}
+}*/
 Customer::~Customer() {}
