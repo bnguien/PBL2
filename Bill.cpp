@@ -2,6 +2,13 @@
 #include "Customer.h"
 using namespace std;
 
+Date Bill::getCheckoutDate() const {
+    return checkoutDate;
+}
+
+void Bill::setCheckoutDate(const Date& date) {
+    checkoutDate = date;
+}
 string Bill::createID(const Customer& customer)
 {
     string customerID = customer.getCCCD().substr(0, 4);
@@ -46,6 +53,45 @@ int Bill::convert(const string& input)
         result.erase(pos);
     }
     return stoi(result);
+}
+void Bill::inputCheckoutDate() {
+    int day, month, year;
+
+    while (true) {
+        cout << "Enter check-out date (DD MM YYYY): ";
+        cin >> day >> month >> year;
+        Date checkoutDate(day, month, year);
+        if (checkoutDate.isValid()) {  
+            setCheckoutDate(checkoutDate);
+            break;
+        } else {
+            cout << "Invalid date, please enter again." << endl;
+        }
+    }
+}
+void Bill::checkBillInfo(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers) {
+    for (const auto &customer : customers) {
+        if (createUsername(customer.getFullName()) == inputUserName && customer.getPhone() == inputPassword) {
+            cout << "Invoice information for customer: " << customer.getFullName() << endl;
+            cout << "Bill ID: " << BillID << endl;
+            cout << "Payment Status: " << paymentStatus << endl;
+            cout << "Payment Method: " << paymentMethod << endl;
+            cout << "Check-in Date: " << checkinDate.toString() << endl;
+            cout << "Check-out Date: " << checkoutDate.toString() << endl;
+            cout << "Total Bill: " << totalPrice << endl;
+            cout << "List of booked rooms:" << endl;
+            for (const auto& roomID : roomIDs) {
+                cout << roomID << endl; 
+            }
+            cout << "List of used services:" << endl;
+            for (const auto& serviceID : services) {
+                cout << serviceID << endl;
+            }
+
+            return; 
+        }
+    }
+    std::cout << "No customer found with the given username and password." << std::endl;
 }
 void Bill::displayBill() const {
     cout << "Bill ID: " << BillID << endl;
