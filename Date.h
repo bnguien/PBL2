@@ -26,7 +26,8 @@ public:
     static string getCurrentDate();
     int daysInMonth(int month, int year) const;
     static int daysBetween(const Date &start, const Date &end);
-    
+    bool isValid() const;
+
     friend ostream& operator << (ostream& os, const Date& date);
 };
 #endif
