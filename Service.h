@@ -6,13 +6,15 @@
 #include "Vector.h"
 #include "Login.h"
 using namespace std;
-class Service {
+class Service
+{
 private:
      string ID, name, type, description, price;
+
 public:
-     Service ();
-     Service (const Service &s);
-     Service (const vector<string> &service_info);
+     Service();
+     Service(const Service &s);
+     Service(const vector<string> &service_info);
 
      string getID() const;
      string getName() const;
@@ -20,13 +22,11 @@ public:
      string getDesc() const;
      string getPrice() const;
 
-     
-     
-     static string getServiceName(const string& id, const vector<Service>& services);
-     friend void displayService (const vector<Service> &services);
+     static string getServiceName(const string &id, const vector<Service> &services);
+     friend void displayService(const vector<Service> &services);
 
-     ~Service ();
-     //friend class Admin;
+     ~Service();
+     // friend class Admin;
 };
 vector<Service> readFileService(const string &fileName);
 #endif
