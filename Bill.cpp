@@ -10,14 +10,31 @@ string Bill::createID(const Customer& customer)
     return BillID;
 }
 
-/*void Bill::calculateTotalPrice() {
-    Customer customer;
-    string fileCustomer = "Customer.txt";
-    vector<Customer> customers = customer.readFileCustomer(fileCustomer);
+void Bill::calculateTotalPrice(const vector<Customer>& customers, const vector<Room>& rooms, const vector<Service>& services) {
+    totalPrice = 0.0;
+    int daysBetween = Date::daysBetween(checkinDate, checkoutDate); 
 
-    
-    
-}*/
+    for (const auto& roomID : customer.getRoomIDs()) {
+        for (const auto& room : rooms) {
+            if (room.getID() == roomID) {
+                double roomPrice = convert(room.getPrice());
+                totalPrice += roomPrice * daysBetween; 
+                break;
+            }
+        }
+    }
+
+    for (const auto& serviceID : customer.getServiceIDs()) {
+        for (const auto& service : services) {
+            if (service.getID() == serviceID) { 
+                double servicePrice = convert(service.getPrice()); 
+                totalPrice += servicePrice; 
+                break;
+            }
+        }
+    }
+}
+
 int Bill::convert(const string& input)
 {
     string result = input;
