@@ -30,12 +30,16 @@ public:
     BillID = createID(customer);
 }
 
+    Date getCheckoutDate() const;
+    void setCheckoutDate(const Date& date) ;
     virtual int convert(const string& input);
     string createID(const Customer& customer);
     void calculateTotalPrice(const vector<Customer> &customers,const vector<Room> &rooms, const vector<Service> &services) ;
     void setPaymentMethod(const string& method);
     virtual void displayBill() const;
 
+    void inputCheckoutDate();
+    void checkBillInfo(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers);
     virtual ~Bill() {}
 };
 
