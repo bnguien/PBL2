@@ -161,12 +161,12 @@ int main() {
                             case 1: {
                                 Customer cus;
                                 vector<Service> services;
-                                cus.checkInfor(inputUsername, customers, services); 
+                                cus.checkInfor(inputUsername,inputPasswordStr, customers, services); 
                                 break;
                             }
                             case 2: {
                                 Customer cus;
-                                cus.bookServices(inputUsername); 
+                                cus.bookServices(inputUsername,inputPasswordStr); 
                                 break;
                             }
                             case 3: {
