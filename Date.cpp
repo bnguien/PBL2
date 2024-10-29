@@ -58,6 +58,21 @@ bool Date::isLeapYear(int year) const
     return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
+bool Date::isValid() const
+{
+    if (year <= 0)
+        return false;
+    if (month < 1 || month > 12)
+        return false;
+
+    int daysInMonth[] = {31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    if (day < 1 || day > daysInMonth[month - 1])
+        return false;
+
+    return true;
+}
+
 bool Date::setDay(const int &day)
 {
     int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
