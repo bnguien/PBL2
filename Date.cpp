@@ -148,17 +148,76 @@ string Date::toString() const
     ss << setw(2) << setfill('0') << day << "/"
        << setw(2) << setfill('0') << month << "/"
        << year;
-    return ss.str();   
+    return ss.str();
 }
 
-string Date::getCurrentDate() {
+string Date::getCurrentDate()
+{
     time_t now = time(nullptr);
     char buffer[80];
     strftime(buffer, sizeof(buffer), "%d-%m-%Y", localtime(&now));
     return string(buffer);
 }
+int Date::daysInMonth(int month, int year) const
+{
+    switch (month)
+    {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+        return 31;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        return 30;
+    case 2:
+        return isLeapYear(year) ? 29 : 28;
+    default:
+        return 0;
+    }
+}
 
-ostream& operator << (ostream& os, const Date& date)
+int Date::daysBetween(const Date &start, const Date &end)
+{
+    if (start.year > end.year ||
+        (start.year == end.year && start.month > end.month) ||
+        (start.year == end.year && start.month == end.month && start.day > end.day))
+    {
+        return -daysBetween(end, start);
+    }
+
+    int days = 0;
+    for (int m = start.month; m <= 12; ++m)
+    {
+        if (m == start.month)
+        {
+            days += start.daysInMonth(m, start.year) - start.day;
+        }
+        else
+        {
+            days += start.daysInMonth(m, start.year);
+        }
+    }
+
+    for (int y = start.year + 1; y < end.year; ++y)
+    {
+        days += start.isLeapYear(y) ? 366 : 365;
+    }
+
+    for (int m = 1; m < end.month; ++m)
+    {
+        days += end.daysInMonth(m, end.year);
+    }
+    days += end.day;
+
+    return days;
+}
+ostream &operator<<(ostream &os, const Date &date)
 {
     os << setw(2) << setfill('0') << date.getDay() << "/"
        << setw(2) << setfill('0') << date.getMonth() << "/"
