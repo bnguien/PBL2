@@ -23,7 +23,7 @@ public:
     bool setYear(const int& year);
     int getYear() const;
     string toString() const;
-    string getCurrentDate();
+    static string getCurrentDate();
     int daysInMonth(int month, int year) const;
     static int daysBetween(const Date &start, const Date &end);
     
