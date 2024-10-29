@@ -24,6 +24,8 @@ public:
     int getYear() const;
     string toString() const;
     string getCurrentDate();
+    int daysInMonth(int month, int year) const;
+    static int daysBetween(const Date &start, const Date &end);
     
     friend ostream& operator << (ostream& os, const Date& date);
 };
