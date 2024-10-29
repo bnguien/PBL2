@@ -39,9 +39,10 @@ public:
 
     static vector<Customer> readFileCustomer(const string &fileName);
     void bookedRoom();
-    void bookServices(const string &inputUserName);
-    void addServicesToCustomerFile(const string &inputUserName, const vector<Service> &services);
-    void checkInfor(const string &inputUserName, const vector<Customer> &customers, const vector<Service> &services);
+    void bookServices(const string &inputUserName, const string &inputPassword);
+    void addServicesToCustomerFile(const string &inputUserName, const string &inputPassword, const vector<Service> &services, const vector<string> &serviceIDs);
+    string join(const vector<string> &elements, const string &delimiter);
+    void checkInfor(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers, const vector<Service> &services);
     void checkout(const string &inputUserName, const vector<Customer> &customers);
 
     ~Customer();
