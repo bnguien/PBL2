@@ -10,10 +10,10 @@ private:
     int day, month, year;
 
 public:
-    Date(); 
+    Date() : day(1), month(1), year(1) {}
     Date(int day, int month, int year);
     Date(const string& dateStr);
-    ~Date();
+    ~Date() {}
 
     void display() const;
     bool isLeapYear(int year) const;
@@ -29,6 +29,7 @@ public:
     static int daysBetween(const Date &start, const Date &end);
     bool isValid() const;
 
+    bool operator==(const Date& other) const; 
     friend ostream& operator << (ostream& os, const Date& date);
 };
 #endif
