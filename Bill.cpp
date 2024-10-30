@@ -1,5 +1,8 @@
 #include "Bill.h"
-#include "Customer.h"
+
+#include "Date.h"
+#include "Login.h"
+
 using namespace std;
 
 Date Bill::getCheckoutDate() const {
