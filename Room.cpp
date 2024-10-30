@@ -1,4 +1,7 @@
 #include "Room.h"
+
+#include "Service.h"
+
 using namespace std;
 
 void Room::setID(const string &ID)

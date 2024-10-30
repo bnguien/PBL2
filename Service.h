@@ -1,10 +1,8 @@
 #ifndef SERVICE_H
 #define SERVICE_H
-#include "Person.h"
+
 #include "Customer.h"
-#include "Function.h"
-#include "Vector.h"
-#include "Login.h"
+
 using namespace std;
 class Service
 {

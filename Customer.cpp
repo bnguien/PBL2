@@ -1,5 +1,10 @@
 #include "Customer.h"
 
+#include "Date.h"
+#include "Room.h"
+#include "Service.h"
+#include "Login.h"
+
 using namespace std;
 void Customer::setArrivalDate(const Date &arrivalDate)
 {

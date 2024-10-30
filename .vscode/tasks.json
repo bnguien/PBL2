@@ -1,0 +1,33 @@
+{
+     "version": "2.0.0",
+     "tasks": [
+       {
+         "label": "Run in External Console",
+         "type": "shell",
+         "command": "cmd",
+         "args": ["/c", "start", "cmd", "/k", "${workspaceFolder}\\${fileBasenameNoExtension}.exe"],
+         "group": {
+           "kind": "build",
+           "isDefault": true
+         },
+         "problemMatcher": [],
+         "dependsOn": "build"
+       },
+       {
+         "label": "build",
+         "type": "shell",
+         "command": "g++",
+         "args": [
+           "${file}",
+           "-o",
+           "${workspaceFolder}\\${fileBasenameNoExtension}.exe"
+         ],
+         "group": {
+           "kind": "build",
+           "isDefault": true
+         },
+         "problemMatcher": ["$gcc"]
+       }
+     ]
+   }
+   

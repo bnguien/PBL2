@@ -18,4 +18,12 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <ctime>
+
+
+void changeConsoleColor(int colorCode)
+{
+     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+     SetConsoleTextAttribute(hConsole, colorCode);
+}
+
 #endif 
