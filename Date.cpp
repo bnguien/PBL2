@@ -2,8 +2,6 @@
 
 using namespace std;
 
-Date::Date() : day(1), month(1), year(1) {}
-
 Date::Date(int day, int month, int year)
 {
     setYear(year);
@@ -50,8 +48,6 @@ Date::Date(const string &dateStr)
         cout << "Invalid date: " << dateStr << endl;
     }
 }
-
-Date::~Date() {}
 
 bool Date::isLeapYear(int year) const
 {
@@ -232,6 +228,11 @@ int Date::daysBetween(const Date &start, const Date &end)
 
     return days;
 }
+
+bool Date::operator==(const Date& other) const {
+    return (day == other.day && month == other.month && year == other.year);
+}
+
 ostream &operator<<(ostream &os, const Date &date)
 {
     os << setw(2) << setfill('0') << date.getDay() << "/"
