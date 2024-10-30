@@ -1,14 +1,11 @@
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
 
-#include "Person.h"
-#include "Room.h"
-#include "Service.h"
-#include "Login.h"
 #include "Staff.h"
-#include "Vector.h"
-#include "Date.h"
-#include "Function.h"
+class Date;
+class Room;
+class Service;
+class Login;
 
 using namespace std;
 
