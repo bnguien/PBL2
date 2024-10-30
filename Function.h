@@ -20,7 +20,7 @@
 #include <ctime>
 
 
-void changeConsoleColor(int colorCode)
+void inline changeConsoleColor(int colorCode)
 {
      HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
      SetConsoleTextAttribute(hConsole, colorCode);
