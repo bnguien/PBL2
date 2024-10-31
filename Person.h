@@ -21,12 +21,15 @@ public:
     Person(const Person &P) : fullName(P.fullName), CCCD(P.CCCD), phone(P.phone), add(P.add), gender(P.gender), DOB(P.DOB) {}
     Person(string fullName, string CCCD, string phone, string add, string gender, Date DOB)
     {
-        this->fullName = fullName;
-        this->CCCD = CCCD;
-        this->phone = phone;
-        this->add = add;
-        this->gender = gender;
-        this->DOB = DOB;
+        if (gender == "Female" || gender == "Male")
+        {
+            this->fullName = fullName;
+            this->CCCD = CCCD;
+            this->phone = phone;
+            this->add = add;
+            this->gender = gender;
+            this->DOB = DOB;
+        }
     }
 
     bool setFullName(const string &fullName);
@@ -37,7 +40,7 @@ public:
     string getPhone() const;
     void setAdd(const string &add);
     string getAdd() const;
-    void setGender(const string &gender);
+    bool setGender(const string &gender);
     string getGender() const;
     bool setDOB(const Date &DOB);
     Date getDOB() const;

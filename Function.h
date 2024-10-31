@@ -13,7 +13,6 @@
 #include <cstdlib>
 #include <string.h>
 #include <conio.h>
-#include <unordered_set>
 #include <cctype>
 #include <initializer_list>
 #include <stdexcept>
