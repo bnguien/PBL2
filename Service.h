@@ -20,6 +20,7 @@ public:
      string getDesc() const;
      string getPrice() const;
 
+     static string generateSerID(const vector<Service> &services, const string &name);
      static string getServiceName(const string &id, const vector<Service> &services);
      friend void displayService(const vector<Service> &services);
 

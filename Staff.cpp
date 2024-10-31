@@ -1,4 +1,7 @@
 #include "Staff.h"
+#include "Customer.h"
+#include "Room.h"
+#include "Service.h"
 
 void Staff::setID(const string &ID)
 {
@@ -11,8 +14,6 @@ string Staff::getID() const
 
 bool Staff::setPosition(const string &position)
 {
-     static const unordered_set<string> validPositions = {"Manager", "Receptionist", "Housekeeping", "Laundry", "Server"};
-
      if (position.empty())
      {
           changeConsoleColor(12);
@@ -20,7 +21,7 @@ bool Staff::setPosition(const string &position)
           return false;
      }
 
-     if (validPositions.find(position) != validPositions.end())
+     if (position == "Manager" || position == "Receptionist" || position == "Housekeeping" || position == "Laundry" || position == "Server")
      {
           this->position = position;
           return true;
@@ -193,7 +194,38 @@ void Staff::updateStaffFile(const vector<Staff> &staffs, const string &fileName)
 }
 
 // Function danh cho Manager (=admin)
-void Staff::addNewStaff(const Staff &newStaff)
+string Staff::generateStaffID(const vector<Staff> &staffs, const string &position)
+{
+     if (position.empty())
+     {
+          cout << "Invalid position information!" << endl;
+          return "";
+     }
+
+     vector<Staff> temp;
+     for (const auto &staff : staffs)
+     {
+          if (staff.getPosition() == position)
+               temp.push_back(staff);
+     }
+     if (temp.empty())
+     {
+          return string(1, position[0]) + "01";
+     }
+     else
+     {
+          string lastID = temp[temp.size() - 1].getID();
+
+          int lastNumber = stoi(lastID.substr(1));
+          lastNumber++;
+
+          stringstream newID;
+          newID << position[0] << setw(2) << setfill('0') << lastNumber;
+          return newID.str();
+     }
+}
+
+void Staff::addNewStaff(Staff &newStaff)
 {
      string staffFile = "Staff.txt";
      if (this->position != "Manager")
@@ -223,6 +255,14 @@ void Staff::addNewStaff(const Staff &newStaff)
           {
                positionChanged = (staff.getPosition() != newStaff.getPosition());
           }
+
+          if (staff.getID() == newStaff.getID())
+          {
+               string newID = generateStaffID(staffs, newStaff.getPosition());
+               newStaff.setID(newID);
+               cout << "Duplicate ID detected. \nAutomatically generated new ID: "
+                    << newID << "for the new staff member." << endl;
+          }
      }
 
      if (exists && !positionChanged)
@@ -232,8 +272,7 @@ void Staff::addNewStaff(const Staff &newStaff)
           return;
      }
 
-     vector<Staff> temp;
-     temp.push_back(newStaff);
+     vector<Staff> temp = {newStaff};
      temp[0].updateStaffFile(temp, staffFile);
 
      if (exists && positionChanged)
@@ -243,13 +282,24 @@ void Staff::addNewStaff(const Staff &newStaff)
           return;
      }
 
-     cout << "Successfully added new staff member with CCCD " 
+     cout << "Successfully added new staff member with CCCD "
           << newStaff.getCCCD() << "!\n";
+     cout << "Review the new staff's information: " << endl;
+     newStaff.displayStaff(temp);
 }
 
 void Staff::removeStaff(Staff &staffToRemove)
 {
      string staffFile = "Staff.txt";
+
+     if (this->position != "Manager")
+     {
+          changeConsoleColor(4);
+          cout << "\nAccess Denied: Only Managers can add new staff members!" << endl;
+          changeConsoleColor(7);
+          return;
+     }
+
      vector<Staff> staffs = readFileStaff(staffFile);
 
      if (staffs.empty())
@@ -259,16 +309,16 @@ void Staff::removeStaff(Staff &staffToRemove)
           changeConsoleColor(7);
           return;
      }
-     
+
      vector<Staff> updatedStaffs;
      bool found = false;
 
-     for (const auto& staff : staffs)
+     for (const auto &staff : staffs)
      {
           if (staff == staffToRemove)
           {
                found = true;
-               cout << "Removing staff member with CCCD (" 
+               cout << "Removing staff member with CCCD ("
                     << staffToRemove.getCCCD() << ") and position ("
                     << staffToRemove.getPosition() << ")\n";
                continue;
@@ -284,7 +334,28 @@ void Staff::removeStaff(Staff &staffToRemove)
           return;
      }
 
-     updateStaffFile(updatedStaffs,staffFile);
+     ofstream file(staffFile, ios::trunc);
+     if (!file.is_open())
+     {
+          cout << "Cannot open staff file!" << endl;
+          return;
+     }
+
+     for (const auto &staff : updatedStaffs)
+     {
+          file << staff.getFullName() << "|"
+               << staff.getCCCD() << "|"
+               << staff.getPhone() << "|"
+               << staff.getAdd() << "|"
+               << staff.getGender() << "|"
+               << staff.getDOB().toString() << "|"
+               << staff.getID() << "|"
+               << staff.getPosition() << "|"
+               << staff.getSalary() << endl;
+     }
+
+     file.close();
+
      changeConsoleColor(2);
      cout << "Successfully removed staff member with these details!" << endl;
      changeConsoleColor(7);
@@ -293,6 +364,15 @@ void Staff::removeStaff(Staff &staffToRemove)
 void Staff::removeStaffByCCCD(const string &CCCDToRemove)
 {
      string staffFile = "Staff.txt";
+
+     if (this->position != "Manager")
+     {
+          changeConsoleColor(4);
+          cout << "\nAccess Denied: Only Managers can add new staff members!" << endl;
+          changeConsoleColor(7);
+          return;
+     }
+
      vector<Staff> staffs = readFileStaff(staffFile);
 
      if (staffs.empty())
@@ -306,7 +386,7 @@ void Staff::removeStaffByCCCD(const string &CCCDToRemove)
      vector<Staff> updatedStaffs;
      bool found = false;
 
-     for (const auto& staff : staffs)
+     for (const auto &staff : staffs)
      {
           if (staff.getCCCD() == CCCDToRemove)
           {
@@ -320,13 +400,83 @@ void Staff::removeStaffByCCCD(const string &CCCDToRemove)
      if (!found)
      {
           changeConsoleColor(4);
-          cout << "No staff member found with CCCD: "  << CCCDToRemove << endl;
+          cout << "No staff member found with CCCD: " << CCCDToRemove << endl;
           changeConsoleColor(7);
           return;
      }
 
-     updateStaffFile(updatedStaffs,staffFile);
+     ofstream file(staffFile, ios::trunc);
+     if (!file.is_open())
+     {
+          cout << "Cannot open staff file!" << endl;
+          return;
+     }
+
+     for (const auto &staff : updatedStaffs)
+     {
+          file << staff.getFullName() << "|"
+               << staff.getCCCD() << "|"
+               << staff.getPhone() << "|"
+               << staff.getAdd() << "|"
+               << staff.getGender() << "|"
+               << staff.getDOB().toString() << "|"
+               << staff.getID() << "|"
+               << staff.getPosition() << "|"
+               << staff.getSalary() << endl;
+     }
+
+     file.close();
+
      changeConsoleColor(2);
-     cout << "Successfully removed staff member with CCCD: "  << CCCDToRemove << endl;
+     cout << "Successfully removed staff member with CCCD: " << CCCDToRemove << endl;
      changeConsoleColor(7);
+}
+
+bool Staff::changeRoomStatus(const string &roomID)
+{
+     if (!(this->position == "Manager" || this->position == "Receptionist"))
+     {
+          changeConsoleColor(4);
+          cout << "\nAccess Denied: Only Managers and Receptionists can change room status!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     string roomFile = "Room.txt";
+     vector<Room> rooms = Room::readFileRoom(roomFile);
+     bool exists = false;
+
+     for (auto &room : rooms)
+     {
+          if (room.getID() == roomID)
+          {
+               exists = true;
+               if (room.checkAvailable())
+               {
+                    if (room.setStatus("Unavailable"))
+                    {
+                         changeConsoleColor(2);
+                         cout << "Successfully changed room status from AVAILABLE to UNAVAILABLE." << endl;
+                         changeConsoleColor(7);
+                    }
+               }
+               else
+               {
+                    if (room.setStatus("Available"))
+                    {
+                         changeConsoleColor(2);
+                         cout << "Successfully changed room status from UNAVAILABLE to AVAILABLE" << endl;
+                         changeConsoleColor(7);
+                    }
+               }
+               break;
+          }
+     }
+
+     if (!exists)
+     {
+          cout << "Failed to find room with ID: " << roomID << ". Please try adding a new one." << endl;
+          return false;
+     }
+     return true;
 }

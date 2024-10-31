@@ -6,85 +6,91 @@ using namespace std;
 
 void Room::setID(const string &ID)
 {
-     this->ID = ID;
+    this->ID = ID;
 }
 string Room::getID() const
 {
-     return ID;
+    return ID;
 }
 
 bool Room::setType(const string &type)
 {
-     if (type == "Single" || type == "Double" || type == "Triple")
-     {
-          this->type = type;
-          return 1; // Nhap dung loai phong
-     }
-     else
-          return 0; // Nhap sai loai phong, can nhap lai
+    if (type == "Single" || type == "Double" || type == "Triple")
+    {
+        this->type = type;
+        return true; // Nhap dung loai phong
+    }
+    else
+        return false; // Nhap sai loai phong, can nhap lai
 }
 string Room::getType() const
 {
-     return type;
+    return type;
 }
 
 void Room::setPrice(const string &price)
 {
-     this->price = price;
+    this->price = price;
 }
 string Room::getPrice() const
 {
-     return price;
+    return price;
 }
 
 bool Room::setStatus(const string &status)
 {
-     if (status == "Unavailable" || status == "Available")
-     {
-          this->status = status;
-          return 1; // thiet lap trang thai thanh cong
-     }
-     else
-          return 0; // sai dinh dang trang thai, can nhap lai
+    if (this->status == status)
+        return true;
+
+    if (status == "Unavailable" || status == "Available")
+    {
+        this->status = status;
+        return true; // thiet lap trang thai thanh cong
+    }
+    else
+    {
+        cout << "Invalid status format. Please enter 'Available' or 'Unavailable'." << endl;
+        return false;
+    } // sai dinh dang trang thai, can nhap lai
 }
 
 string Room::getStatus() const
 {
-     return status;
+    return status;
 }
 
-void Room::setServiceIDs (const vector<string> serviceIDs)
+void Room::setServiceIDs(const vector<string> serviceIDs)
 {
-     this->serviceIDs = vector<string>();
-     if (serviceIDs.size() == 0)
-     {
-          this->serviceIDs.push_back("None");
-     }
-     else
-     {
-          for (size_t i = 0; i < serviceIDs.size(); ++i)
-          {
-               this->serviceIDs.push_back(serviceIDs[i]);
-          }
-     }
+    this->serviceIDs = vector<string>();
+    if (serviceIDs.size() == 0)
+    {
+        this->serviceIDs.push_back("None");
+    }
+    else
+    {
+        for (size_t i = 0; i < serviceIDs.size(); ++i)
+        {
+            this->serviceIDs.push_back(serviceIDs[i]);
+        }
+    }
 }
 
 vector<string> Room::getServiceIDs() const
 {
-     return this->serviceIDs;
+    return this->serviceIDs;
 }
 
 bool Room::checkAvailable() const
 {
-     if (this->status == "Available")
-          return true;
-     else if (this->status == "Unavailable")
-          return false;
-     else
-     {
-          cout << "\nInvalid information" << endl;
-          return false;
-     }
+    if (this->status == "Available")
+        return true;
+    else if (this->status == "Unavailable")
+        return false;
+    else
+    {
+        cout << "\nInvalid information" << endl;
+        return false;
+    }
 }
 
 vector<Room> Room::readFileRoom(const string &fileName)
@@ -147,7 +153,8 @@ void Room::printRoom(const vector<Room> &rooms, const vector<Service> &services)
         {
             for (size_t j = 0; j < serviceIDs.size(); ++j)
             {
-                if (j > 0) cout << ", ";
+                if (j > 0)
+                    cout << ", ";
                 cout << Service::getServiceName(serviceIDs[j], services);
             }
         }
@@ -183,7 +190,6 @@ void Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
 
     file.close();
 }
-
 
 void Room::addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs)
 {
@@ -233,7 +239,3 @@ void Room::addServiceByRoomID(const string &roomID, const vector<string> &servic
         cout << "Room ID not found." << endl;
     }
 }
-
-
-
-
