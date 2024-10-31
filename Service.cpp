@@ -115,3 +115,35 @@ string Service::getServiceName(const string &id, const vector<Service> &services
      }
      return "Unknown Service";
 }
+
+string Service::generateSerID(const vector<Service> &services, const string &name)
+{
+     if (name.empty())
+     {
+          cout << "Invalid position information!" << endl;
+          return "";
+     }
+
+     vector<Service> temp;
+     for (const auto &service : services)
+     {
+          if(service.getName() == name)
+               temp.push_back(service);
+     }
+
+     if(temp.empty())
+     {
+          return string(1, name[0]) + "01";
+     }
+     else
+     {
+          string lastID = temp[temp.size() - 1].getID();
+
+          int lastNumber = stoi (lastID.substr(1));
+          lastNumber++;
+
+          stringstream newID;
+          newID << name[0] << setw(2) << setfill('0') << lastNumber;
+          return newID.str();
+     }
+}
