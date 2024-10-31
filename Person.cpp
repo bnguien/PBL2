@@ -70,8 +70,13 @@ string Person::getAdd () const{
      return add;
 }
 
-void Person::setGender (const string& gender){
-     this->gender=gender;
+bool Person::setGender (const string& gender){
+     if (gender == "Female" || gender == "Male")
+     {
+          this->gender = gender;
+          return true;
+     }
+     return false;
 }
 
 string Person::getGender () const{
