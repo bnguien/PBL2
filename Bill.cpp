@@ -60,7 +60,7 @@ void Bill::calculateTotalPrice(const Customer &customer, const vector<Room> &roo
         }
         if (!roomFound)
         {
-            cout << "Room with ID " << roomID << " not found in rooms list." << endl;
+            std::cout << "Room with ID " << roomID << " not found in rooms list." << endl;
         }
     }
 
@@ -79,7 +79,7 @@ void Bill::calculateTotalPrice(const Customer &customer, const vector<Room> &roo
         }
         if (!serviceFound)
         {
-            cout << "Service with ID " << serviceID << " not found in services list." << endl;
+            std::cout << "Service with ID " << serviceID << " not found in services list." << endl;
         }
     }
 }
@@ -100,7 +100,7 @@ int Bill::convert(const string &input)
     }
     catch (const std::invalid_argument &)
     {
-        cout << "Error: Invalid price format in input: " << input << endl;
+        std::cout << "Error: Invalid price format in input: " << input << endl;
         return 0;
     }
 }
@@ -115,14 +115,13 @@ Date Bill::inputCheckoutDate(const Date &checkInDate)
         cin >> day >> month >> year;
 
         Date checkoutDate(day, month, year);
-
         if (!checkoutDate.isValid())
         {
             cout << "Invalid date, please enter again." << endl;
             continue;
         }
 
-        if (checkoutDate < checkInDate)
+        if (checkInDate > checkoutDate)
         {
             cout << "Check-out date must be after check-in date. Please enter again." << endl;
             continue;
@@ -134,62 +133,67 @@ Date Bill::inputCheckoutDate(const Date &checkInDate)
 
 void Bill::checkBillInfo(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services)
 {
-    // Nhập ngày check-out từ người dùng
-    checkoutDate = inputCheckoutDate(customer.getArrivalDate());
-
     for (const auto &customer : customers)
     {
-        // Kiểm tra tên đăng nhập và mật khẩu
         if (createUsername(customer.getFullName()) == inputUserName && customer.getPhone() == inputPassword)
         {
-            // Tạo mã hóa đơn cho khách hàng này
+            checkoutDate = inputCheckoutDate(customer.getArrivalDate());
+            system("cls");
             string generatedBillID = createID(customer);
             calculateTotalPrice(customer, rooms, services, checkoutDate);
+            changeConsoleColor(10);
+            std::cout << "+---------------------------------------------------------------+" << std::endl;
+            std::cout << "|                       INVOICE INFORMATION                     |" << std::endl;
+            std::cout << "+---------------------------------------------------------------+" << std::endl;
+            changeConsoleColor(7);
 
-            // In thông tin hóa đơn
-            cout << "Invoice information for customer: " << customer.getFullName() << endl;
-            cout << "Bill ID: " << generatedBillID << endl;
-            cout << "Payment Status: " << paymentStatus << endl;
-            cout << "Payment Method: " << paymentMethod << endl;
-            cout << "Check-in Date: " << customer.getArrivalDate().toString() << endl;
-            cout << "Check-out Date: " << checkoutDate.toString() << endl;
-            cout << scientific << setprecision(3);
-            cout << "Total Bill: " << formatCurrency(static_cast<int>(totalPrice)) << " VND" << endl;
+            std::cout << "| Customer Name: " << left << setw(47) << customer.getFullName() << "|" << std::endl;
+            std::cout << "| Bill ID: " << left << setw(53) << generatedBillID << "|" << std::endl;
+            std::cout << "| Payment Status: " << left << setw(46) << paymentStatus << "|" << std::endl;
+            std::cout << "| Payment Method: " << left << setw(46) << paymentMethod << "|" << std::endl;
+            std::cout << "| Check-in Date: " << left << setw(47);
+            customer.getArrivalDate().display();
+            std::cout << "|" << std::endl;
+            std::cout << "| Check-out Date: " << left << setw(46);
+            checkoutDate.display();
+            std::cout << "|" << std::endl;
+            std::cout << "| Total Bill: " << left << setw(12) << formatCurrency(static_cast<int>(totalPrice)) << " VND" << right << setw(35) << "|" << std::endl;
+            std::cout << "+---------------------------------------------------------------+" << std::endl;
 
-            cout << "List of booked rooms:" << endl;
+            std::cout << "| List of booked rooms                                          |" << std::endl;
+            std::cout << "| ";
+            std::cout << "Room IDs: ";
             for (const auto &roomID : customer.getRoomIDs())
             {
-                cout << roomID << endl;
+                std::cout << roomID << " ";
             }
+            std::cout << right << setw(48) << "|" << std::endl;
+            std::cout << "+---------------------------------------------------------------+" << std::endl;
 
-            cout << "List of used services:" << endl;
-            for (const auto &serviceID : customer.getServiceIDs())
+            std::cout << "| List of used services                                         |" << std::endl;
+            if (customer.getServiceIDs().empty())
             {
-                cout << serviceID << endl;
+                std::cout << "| No services booked                                            |" << std::endl;
             }
+            else
+            {
+                std::cout << "| Service IDs: ";
+                for (const auto &serviceID : customer.getServiceIDs())
+                {
+                    std::cout << serviceID << " ";
+                }
+                std::cout << right << setw(42) << "|" << std::endl;
+            }
+            std::cout << "+---------------------------------------------------------------+" << std::endl;
+
+            changeConsoleColor(10);
+            std::cout << "| Thank you for your business!                                  |" << std::endl;
+            std::cout << "+---------------------------------------------------------------+" << std::endl;
+            changeConsoleColor(7);
 
             return;
         }
     }
-    cout << "No customer found with the given username and password." << endl;
+    std::cout << "No customer found with the given username and password." << std::endl;
 }
-
-/*void Bill::displayBill() const {
-    cout << "Bill ID: " << BillID << endl;
-    cout << "Customer: " << customer.getFullName() << endl; // Use getter method to retrieve full name
-    cout << "Check-in Date: " << checkinDate.toString() << endl;
-    cout << "Check-out Date: " << checkoutDate.toString() << endl;
-    cout << "Rooms: ";
-    for (const auto& room : roomIDs) {
-        cout << room << " ";
-    }
-    cout << "\nServices: ";
-    for (const auto& service : services) {
-        cout << service << " ";
-    }
-    cout << "\nTotal Price: " << totalPrice << " VND" << endl;
-    cout << "Payment Method: " << paymentMethod << endl;
-    cout << "Payment Status: " << paymentStatus << endl;
-}*/
-
 Bill::~Bill() {}
