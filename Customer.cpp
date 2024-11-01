@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "Service.h"
 #include "Login.h"
+#include "Bill.h"
 
 using namespace std;
 void Customer::setArrivalDate(const Date &arrivalDate)

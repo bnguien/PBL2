@@ -16,29 +16,32 @@ protected:
     string paymentMethod;
     vector<string> roomIDs;
     vector<string> services;
-    Date checkinDate;
     Date checkoutDate;
-    double totalPrice;
+    long double totalPrice;
 
 public:
-    Bill();
-    Bill::Bill(const Customer &cust, const vector<string> &roomIDs, const Date &checkout)
-        : customer(cust), roomIDs(roomIDs), checkinDate(cust.getArrivalDate()), checkoutDate(checkout), totalPrice(0.0)
+    Bill() : totalPrice(0.0), paymentStatus("Unpaid"), paymentMethod("Cash")
+    {
+        BillID = "";
+    }
+
+    Bill(const Customer &cust, const vector<string> &roomIDs, const Date &checkout)
+        : customer(cust), roomIDs(roomIDs),  checkoutDate(checkout), totalPrice(0.0)
     {
         BillID = createID(customer);
     }
-
     Date getCheckoutDate() const;
     void setCheckoutDate(const Date &date);
     virtual int convert(const string &input);
-    string createID(const Customer &customer);
-    void calculateTotalPrice(const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services);
+    static string createID(const Customer &customer);
+    void calculateTotalPrice(const Customer &customer, const vector<Room> &rooms, const vector<Service> &services, Date checkoutDate);
+    std::string formatCurrency(int amount);
     void setPaymentMethod(const string &method);
-    virtual void displayBill() const;
+    /*virtual void displayBill() const;*/
 
-    void inputCheckoutDate();
-    void checkBillInfo(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers);
-    virtual ~Bill() {}
+    Date inputCheckoutDate(const Date &checkInDate);
+    void checkBillInfo(const string& inputUserName, const string& inputPassword, const vector<Customer>& customers, const vector<Room>& rooms, const vector<Service>& services);
+    ~Bill();
 };
 
 #endif
