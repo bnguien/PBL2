@@ -3,6 +3,7 @@
 
 #include "Service.h"
 #include "Room.h"
+#include "Function.h"
 class Date;
 
 using namespace std;
@@ -17,7 +18,7 @@ protected:
     vector<string> roomIDs;
     vector<string> services;
     Date checkoutDate;
-    long double totalPrice;
+    double totalPrice;
 
 public:
     Bill() : totalPrice(0.0), paymentStatus("Unpaid"), paymentMethod("Cash")
@@ -37,7 +38,6 @@ public:
     void calculateTotalPrice(const Customer &customer, const vector<Room> &rooms, const vector<Service> &services, Date checkoutDate);
     std::string formatCurrency(int amount);
     void setPaymentMethod(const string &method);
-    /*virtual void displayBill() const;*/
 
     Date inputCheckoutDate(const Date &checkInDate);
     void checkBillInfo(const string& inputUserName, const string& inputPassword, const vector<Customer>& customers, const vector<Room>& rooms, const vector<Service>& services);
