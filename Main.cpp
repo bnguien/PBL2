@@ -103,6 +103,8 @@ int main()
         else if (option == 'c')
         {
             vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+            vector<Service> services = readFileService("Service.txt");
+            vector<Room> rooms = Room::readFileRoom("Room.txt");
             vector<pair<string, string>> accounts;
 
             for (const auto &customer : customers)
@@ -188,17 +190,13 @@ int main()
                         {
                             Customer cus;
                             cus.bookServices(inputUsername, inputPasswordStr);
-                            break;
+
                             break;
                         }
                         case 4:
                         {
-                            Bill tempBill; 
-                            vector<Service> services = readFileService ("Service.txt");
-                            vector<Room> rooms = Room::readFileRoom("Room.txt");
+                            Bill tempBill;
                             tempBill.checkBillInfo(inputUsername, inputPasswordStr, customers, rooms, services);
-
-                            system("pause"); 
                             break;
                         }
                         case 0:
