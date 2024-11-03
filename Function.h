@@ -17,7 +17,7 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <ctime>
-
+#include <limits>
 
 void inline changeConsoleColor(int colorCode)
 {
