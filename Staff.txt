@@ -1,5 +1,5 @@
 Nguyen Thi Bao Ngan|046305001210|0375317270|Thua Thien Hue|Female|12/10/2005|M01|Manager|20.500.000/month
-Nguyen Dang Bao Nguyen|049305002562|0521345690|Quang Nam|Female|02/04/2005|M02|Manager|20.500.000/month
+Nguyen Dang Bao Nguyen|049305002562|0392663097|Quang Nam|Female|02/04/2005|M02|Manager|20.500.000/month
 Nguyen Thuy Trang|079199045672|0346725617|TP Ho Chi Minh|Female|13/10/1999|R01|Receptionist|9.700.000/month
 Tran Nguyen Kim Ngan|046305011670|0521247810|Thua Thien Hue|Female|17/09/2005|R02|Receptionist|8.350.000/month
 Ha Thuc Minh Quan|046201004549|0371048964|Thua Thien Hue|Male|30/03/2001|R03|Receptionist|8.350.000/month
