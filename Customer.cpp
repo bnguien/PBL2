@@ -102,12 +102,14 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
     }
 }
 
-void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services) {
+void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
+{
     std::cout << "\n"
               << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
 
-    for (const auto &customer : customers) {
-        Sleep(1000); 
+    for (const auto &customer : customers)
+    {
+        Sleep(1000);
         string border = "+---------------+----------------------------------------+";
         std::cout << border << endl;
 
@@ -128,7 +130,8 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         std::cout << border << endl;
 
         std::cout << "| Room IDs                                               |" << endl;
-        for (const auto &room : customer.getRoomIDs()) {
+        for (const auto &room : customer.getRoomIDs())
+        {
             std::cout << room << " ";
         }
         std::cout << endl;
@@ -139,25 +142,30 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         std::cout << "|" << endl;
         std::cout << border << endl;
 
-        if (customer.getServiceIDs().empty()) {
+        if (customer.getServiceIDs().empty())
+        {
             std::cout << "| Service      | " << left << setw(39);
             std::cout << "No services booked";
             std::cout << "|" << endl;
             std::cout << border << endl;
-        } else {
-             std::cout << "| ServiceIDS      | ";
-            for(const auto &serviceID : customer.getServiceIDs()){
-                std::cout << serviceID << ",";
-            }
-            std::cout << left << setw(39)<<"|" << endl;
-            std::cout << border << endl;
-             std::cout << "| ServiceNames      | ";
-             for(const auto &serviceID : customer.getServiceNames()){
-                std::cout << serviceID << ",";
-            }
-            std::cout << left << setw(39)<<"|" << endl;
         }
-        std::cout << endl;  
+        else
+        {
+            std::cout << "| ServiceIDS      | ";
+            for (const auto &serviceID : customer.getServiceIDs())
+            {
+                std::cout << serviceID << ",";
+            }
+            std::cout << left << setw(39) << "|" << endl;
+            std::cout << border << endl;
+            std::cout << "| ServiceNames      | ";
+            for (const auto &serviceID : customer.getServiceNames())
+            {
+                std::cout << serviceID << ",";
+            }
+            std::cout << left << setw(39) << "|" << endl;
+        }
+        std::cout << endl;
     }
 }
 
@@ -600,28 +608,4 @@ string Customer::join(const vector<string> &elements, const string &delimiter)
     }
     return result;
 }
-
-/*void Customer::checkout(const string &inputUserName, const vector<Customer> &customers)
-{
-    std::cout << "You want to checkout? Are you sure? (y/n): ";
-    string choice;
-    cin >> choice;
-    if (choice == "y" || choice == "Y")
-    {
-        for (const auto &customer : customers)
-        {
-            if (createUsername(customer.getFullName()) == inputUserName)
-            {
-                setCheckedOut(true);
-                vector<Customer> loggedInCustomer = {customer};
-                std::cout << "Thank you for confirming your checkout!" << endl;
-                return;
-            }
-        }
-    }
-    else if (choice == "n" || choice == "N")
-    {
-        std::cout << "Checkout cancelled" << endl;
-    }
-}*/
 Customer::~Customer() {}

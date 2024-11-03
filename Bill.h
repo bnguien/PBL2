@@ -40,7 +40,7 @@ public:
     void setPaymentMethod(const string &method);
 
     Date inputCheckoutDate(const Date &checkInDate);
-    void checkBillInfo(const string& inputUserName, const string& inputPassword, const vector<Customer>& customers, const vector<Room>& rooms, const vector<Service>& services);
+    void virtual checkBillInfo(const string& inputUserName, const string& inputPassword, const vector<Customer>& customers, const vector<Room>& rooms, const vector<Service>& services);
     ~Bill();
 };
 

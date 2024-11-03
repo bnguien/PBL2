@@ -137,6 +137,9 @@ void Bill::checkBillInfo(const string &inputUserName, const string &inputPasswor
     {
         if (createUsername(customer.getFullName()) == inputUserName && customer.getPhone() == inputPassword)
         {
+            std::cout << "Check-in Date: ";
+            customer.getArrivalDate().display();
+            std::cout<<endl;
             checkoutDate = inputCheckoutDate(customer.getArrivalDate());
             system("cls");
             string generatedBillID = createID(customer);
