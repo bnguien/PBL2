@@ -101,7 +101,6 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
         customers.push_back(customer);
     }
 }
-
 void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
 {
     std::cout << "\n"
@@ -112,8 +111,6 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         Sleep(1000);
         string border = "+---------------+----------------------------------------+";
         std::cout << border << endl;
-
-        // Hiển thị thông tin khách hàng
         std::cout << "| Full Name     | " << left << setw(39) << customer.getFullName() << "|" << endl;
         std::cout << border << endl;
         std::cout << "| CCCD          | " << left << setw(39) << customer.getCCCD() << "|" << endl;
@@ -144,26 +141,27 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
 
         if (customer.getServiceIDs().empty())
         {
-            std::cout << "| Service      | " << left << setw(39);
-            std::cout << "No services booked";
-            std::cout << "|" << endl;
+            std::cout << "| Service       | " << left << setw(39) << "No services booked" << "|" << endl;
             std::cout << border << endl;
         }
         else
         {
-            std::cout << "| ServiceIDS      | ";
+            std::cout << "| ServiceIDs    | ";
             for (const auto &serviceID : customer.getServiceIDs())
             {
                 std::cout << serviceID << ",";
             }
-            std::cout << left << setw(39) << "|" << endl;
+            std::cout << endl;
             std::cout << border << endl;
-            std::cout << "| ServiceNames      | ";
-            for (const auto &serviceID : customer.getServiceNames())
+
+            std::cout << "| ServiceNames  | ";
+            for (const auto &serviceID : customer.getServiceIDs())
             {
-                std::cout << serviceID << ",";
+                std::string serviceName = Service::getServiceName(serviceID, services);
+                std::cout << serviceName << ", ";
             }
             std::cout << left << setw(39) << "|" << endl;
+            std::cout << border << endl;
         }
         std::cout << endl;
     }
@@ -409,8 +407,9 @@ void Customer::checkInfor(const string &inputUserName, const string &inputPasswo
 // Chuc nang khi login customer
 void Customer::bookServices(const string &inputUserName, const string &inputPassword)
 {
+    Service service;
     string fileService = "Service.txt";
-    vector<Service> services = readFileService(fileService);
+    vector<Service> services = service.readFileService(fileService);
 
     Room room;
     string fileRoom = "Room.txt";
@@ -544,20 +543,17 @@ void Customer::addServicesToCustomerFile(const string &inputUserName, const stri
 
     vector<string> customerLines;
     string line;
-
     while (getline(inputFile, line))
     {
         customerLines.push_back(line);
     }
     inputFile.close();
-
     ofstream outputFile(fileName, ios::out | ios::trunc);
     if (!outputFile.is_open())
     {
         cerr << "Could not open the file for writing." << endl;
         return;
     }
-
     for (auto &customerLine : customerLines)
     {
         size_t firstPipePos = customerLine.find('|');
@@ -568,44 +564,28 @@ void Customer::addServicesToCustomerFile(const string &inputUserName, const stri
         if (createUsername(customerName) == inputUserName && customerPhone == inputPassword)
         {
             size_t lastPipePos = customerLine.find_last_of('|');
-            string existingServiceIDs, existingServiceNames;
+            string existingServiceIDs;
 
             if (lastPipePos != string::npos)
             {
-                existingServiceIDs = customerLine.substr(lastPipePos + 1, customerLine.find('|', lastPipePos + 1) - lastPipePos - 1);
-                existingServiceNames = customerLine.substr(customerLine.find('|', lastPipePos + 1) + 1);
+                existingServiceIDs = customerLine.substr(lastPipePos + 1);
             }
-            string newServiceIDs, newServiceNames;
+
+            string newServiceIDs = existingServiceIDs;
             for (const auto &serviceID : serviceIDs)
             {
-                string serviceName = Service::getServiceName(serviceID, services);
                 if (!newServiceIDs.empty())
                 {
                     newServiceIDs += ",";
-                    newServiceNames += ", ";
                 }
                 newServiceIDs += serviceID;
-                newServiceNames += serviceName;
             }
-            customerLine += "|" + newServiceIDs + "|" + newServiceNames;
+            customerLine = customerLine.substr(0, lastPipePos + 1) + newServiceIDs;
         }
-
         outputFile << customerLine << endl;
     }
 
     outputFile.close();
 }
 
-// nối chuỗi
-string Customer::join(const vector<string> &elements, const string &delimiter)
-{
-    string result;
-    for (size_t i = 0; i < elements.size(); ++i)
-    {
-        result += elements[i];
-        if (i < elements.size() - 1)
-            result += delimiter;
-    }
-    return result;
-}
 Customer::~Customer() {}
