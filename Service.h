@@ -23,9 +23,9 @@ public:
      static string generateSerID(const vector<Service> &services, const string &name);
      static string getServiceName(const string &id, const vector<Service> &services);
      friend void displayService(const vector<Service> &services);
-
+     static vector<Service> readFileService(const string &fileName);
      ~Service();
      // friend class Admin;
 };
-vector<Service> readFileService(const string &fileName);
+
 #endif

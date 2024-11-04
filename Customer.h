@@ -59,7 +59,6 @@ public:
     void bookedRoom();
     void bookServices(const string &inputUserName, const string &inputPassword);
     void addServicesToCustomerFile(const string &inputUserName, const string &inputPassword, const vector<Service> &services, const vector<string> &serviceIDs);
-    string join(const vector<string> &elements, const string &delimiter);
     void checkInfor(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers, const vector<Service> &services);
 
     ~Customer();
