@@ -53,7 +53,7 @@ int main()
         if (option == 'a')
         {
             vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
-            vector<Service> services = readFileService("Service.txt");
+            vector<Service> services = Service::readFileService("Service.txt");
             vector<Room> rooms = Room::readFileRoom("Room.txt");
             vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
             vector<pair<string, string>> accounts;
@@ -189,7 +189,7 @@ int main()
         else if (option == 'c')
         {
             vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
-            vector<Service> services = readFileService("Service.txt");
+            vector<Service> services = Service::readFileService("Service.txt");
             vector<Room> rooms = Room::readFileRoom("Room.txt");
             vector<pair<string, string>> accounts;
 
