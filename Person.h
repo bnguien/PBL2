@@ -45,7 +45,10 @@ public:
     bool setDOB(const Date &DOB);
     Date getDOB() const;
 
-    void splitName(const string &fullName, string &name);
+    bool operator == (const Person &person) const;
+
+    string getFirstName();
+    string getLastName();
     void toLowerCase(string &str);
     string standardizeString(const string &input);
     static vector<Person> readFilePerson(const string &fileName);

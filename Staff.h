@@ -24,28 +24,31 @@ public:
      void setSalary(const string &salary);
      string getSalary() const;
 
-     bool operator ==(const Staff& staff) const; 
+     bool operator==(const Staff &staff) const;
      static vector<Staff> readFileStaff(const string &fileName);
      static string generateStaffID(const vector<Staff> &staffs, const string &position);
      void displayStaff(const vector<Staff> &staffs);
+     bool findCustomerByAttribute(const string &attributeName, const string &attributeValue);
+     bool hasAccess() const;
 
      void updateStaffFile(const vector<Staff> &staffs, const string &fileName);
      void addNewStaff(Staff &newStaff);
      void removeStaff(Staff &staffToRemove);
      void removeStaffByCCCD(const string &CCCDToRemove);
+
+     int cusExists(const vector<Customer> &customers, const Customer &newCus);
+     bool writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName);
+     bool addNewCustomer(Customer &newCus);
+     bool removeCustomer(Customer &CusToRemove);
+     bool removeCustomerByCCCD(const string &CCCDToRemove);
+     bool findCustomerByCCCD(const string &CCCD);
+     bool findCustomerByFirstName(const string &firstName);
+     bool findCustomerByLastName(const string &lastName);
+     bool findCustomerByLetter(const char &letter);
+
+     bool changeRoomStatus(const string &roomID); 
      
-     void updateCustomerFile(const vector<Staff> &staffs, const string &fileName);
-     void addNewCustomer(Customer &newCus);
-     void removeCustomer(Customer &CusToRemove);
-     void removeCustomerByCCCD(const string &CCCDToRemove);
-
-     bool changeRoomStatus(const string &roomID); //true: doi thanh cong, false: gap loi
-
-     void updateServiceFile(const vector<Service> &services, const string &fileName);
-     void addNewService(Service &newService);
-     void removeService(const string ID);
      ~Staff() {}
 };
-
 
 #endif

@@ -59,6 +59,8 @@ public:
     void resize(size_t count);
     void resize(size_t count, const T& value);
 
+    bool operator==(const vector<T>& other) const;
+
     void print() const;
 };
 

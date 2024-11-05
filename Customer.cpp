@@ -35,6 +35,17 @@ vector<string> Customer::getServiceNames() const
 {
     return serviceNames;
 }
+
+bool Customer::operator==(const Customer &customer) const
+{
+    return (static_cast<const Person&>(*this) == static_cast<const Person&>(customer)) && // So sánh các thành phần từ lớp cha Person
+           (roomIDs == customer.roomIDs) &&
+           (serviceIDs == customer.serviceIDs) &&
+           (serviceNames == customer.serviceNames) &&
+           (arrivalDate == customer.arrivalDate) &&
+           (currentFullName == customer.currentFullName);
+}
+
 vector<Customer> Customer::readFileCustomer(const string &fileName)
 {
     ifstream file(fileName);
@@ -101,6 +112,7 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
         customers.push_back(customer);
     }
 }
+
 void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
 {
     std::cout << "\n"
@@ -141,7 +153,9 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
 
         if (customer.getServiceIDs().empty())
         {
-            std::cout << "| Service       | " << left << setw(39) << "No services booked" << "|" << endl;
+            std::cout << "| Service      | " << left << setw(39);
+            std::cout << "No services booked";
+            std::cout << "|" << endl;
             std::cout << border << endl;
         }
         else
@@ -151,6 +165,7 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
             {
                 std::cout << serviceID << ",";
             }
+
             std::cout << endl;
             std::cout << border << endl;
 
@@ -167,19 +182,34 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
     }
 }
 
-void saveCustomerToFile(const Customer &customer, const string &fileName)
+bool Customer::saveCustomerToFile(const Customer &customer, const string &fileName)
 {
+    ifstream readfile(fileName, ios::binary);
+    bool addNewLine = false;
+
+    if (readfile.is_open())
+    {
+        readfile.seekg(0, ios::end);
+        if (readfile.tellg() > 0)
+        {
+            readfile.seekg(-1, ios::end);
+            char ch;
+            readfile.get(ch);
+            if (ch != '\n')
+                addNewLine = true;
+        }
+        readfile.close();
+    }
+
     ofstream file(fileName, ios::app);
     if (!file.is_open())
     {
         std::cout << "Cannot open customer file!" << endl;
-        return;
+        return false;
     }
-    file.seekp(0, ios::end);
-    if (file.tellp() > 0)
-    {
-        file << endl;
-    }
+    
+    if (addNewLine)
+        file << std::endl;
 
     file << customer.getFullName() << "|"
          << customer.getCCCD() << "|"
@@ -198,8 +228,10 @@ void saveCustomerToFile(const Customer &customer, const string &fileName)
         }
     }
     file << "|" << customer.getArrivalDate().toString() << "|" << endl;
+
     file.seekp(0, ios::end);
     file.close();
+    return true;
 }
 
 void Customer::bookedRoom()
@@ -368,7 +400,14 @@ void Customer::bookedRoom()
 
     Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
     string customerFile = "Customer.txt";
-    saveCustomerToFile(newCustomer, customerFile);
+    if (!saveCustomerToFile(newCustomer, customerFile)) 
+    {
+        changeConsoleColor(4);
+        cout << "\nFailed to save to our hotel's customer file!" << endl;
+        changeConsoleColor(7);
+        system("pause");
+        return;
+    }
 
     for (auto &roomRef : rooms)
     {

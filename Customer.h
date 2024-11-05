@@ -55,6 +55,9 @@ public:
     vector<string> getServiceNames() const;
     void setRoomIDs(const vector<string> &roomIDs);
 
+    bool operator == (const Customer &customer) const;
+
+    static bool saveCustomerToFile(const Customer &customer, const string &fileName);
     static vector<Customer> readFileCustomer(const string &fileName);
     void bookedRoom();
     void bookServices(const string &inputUserName, const string &inputPassword);
