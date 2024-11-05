@@ -30,6 +30,7 @@ public:
     bool isValid() const;
 
     bool operator==(const Date& other) const; 
+    bool operator>(const Date& other) const;
     friend ostream& operator << (ostream& os, const Date& date);
 };
 #endif

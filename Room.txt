@@ -8,7 +8,7 @@ S107|Single|400.000/night|Unavailable|None
 S108|Single|400.000/night|Available|None
 S109|Single|400.000/night|Available|None
 S110|Single|400.000/night|Available|None
-D101|Double|500.000/night|Unavailable|None
+D101|Double|500.000/night|Unavailable|F01,S01
 D102|Double|500.000/night|Unavailable|None
 D103|Double|500.000/night|Available|None
 D104|Double|500.000/night|Available|None

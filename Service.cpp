@@ -67,7 +67,7 @@ void displayService(const vector<Service> &services)
      }
 }
 
-vector<Service> readFileService(const string &fileName)
+vector<Service> Service::readFileService(const string &fileName)
 {
      ifstream file(fileName);
      vector<Service> services;
@@ -103,17 +103,17 @@ vector<Service> readFileService(const string &fileName)
      file.close();
      return services;
 }
-
 string Service::getServiceName(const string &id, const vector<Service> &services)
 {
      for (const auto &service : services)
      {
-          if (service.ID == id)
+          if (service.getID() == id)
           {
-               return service.name;
+               return service.getName();
           }
      }
-     return "Unknown Service";
+      return "Unknown Service";
+    
 }
 
 string Service::generateSerID(const vector<Service> &services, const string &name)
@@ -127,11 +127,11 @@ string Service::generateSerID(const vector<Service> &services, const string &nam
      vector<Service> temp;
      for (const auto &service : services)
      {
-          if(service.getName() == name)
+          if (service.getName() == name)
                temp.push_back(service);
      }
 
-     if(temp.empty())
+     if (temp.empty())
      {
           return string(1, name[0]) + "01";
      }
@@ -139,7 +139,7 @@ string Service::generateSerID(const vector<Service> &services, const string &nam
      {
           string lastID = temp[temp.size() - 1].getID();
 
-          int lastNumber = stoi (lastID.substr(1));
+          int lastNumber = stoi(lastID.substr(1));
           lastNumber++;
 
           stringstream newID;

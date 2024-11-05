@@ -6,6 +6,7 @@ class Date;
 class Room;
 class Service;
 class Login;
+class Bill;
 
 using namespace std;
 
@@ -15,6 +16,7 @@ private:
     vector<string> roomIDs;
     vector<string> serviceIDs;
     vector<string> serviceNames;
+    vector<Bill> bills;
     Date arrivalDate;
     string currentFullName; // lưu tên khách hàng đã đăng nhập
 public:
@@ -38,6 +40,13 @@ public:
           serviceIDs(serviceIDs),
           serviceNames(serviceNames) {}
 
+    void addBill(const Bill &bill) {
+        bills.push_back(bill);
+    }
+
+    const vector<Bill>& getBills() const {
+        return bills;
+    }
     void displayCustomer(const vector<Customer> &customers, const vector<Service> &services);
     void setArrivalDate(const Date &arrivalDate);
     Date getArrivalDate() const;
@@ -53,7 +62,6 @@ public:
     void bookedRoom();
     void bookServices(const string &inputUserName, const string &inputPassword);
     void addServicesToCustomerFile(const string &inputUserName, const string &inputPassword, const vector<Service> &services, const vector<string> &serviceIDs);
-    string join(const vector<string> &elements, const string &delimiter);
     void checkInfor(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers, const vector<Service> &services);
 
     ~Customer();

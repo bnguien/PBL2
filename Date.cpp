@@ -203,23 +203,29 @@ int Date::daysBetween(const Date &start, const Date &end)
     }
 
     int days = 0;
-    for (int m = start.month; m <= 12; ++m)
+    if (start.year == end.year && start.month == end.month)
     {
-        if (m == start.month)
-        {
-            days += start.daysInMonth(m, start.year) - start.day;
-        }
-        else
+        return end.day - start.day;
+    }
+    if (start.year == end.year)
+    {
+        days += start.daysInMonth(start.month, start.year) - start.day;
+        for (int m = start.month + 1; m < end.month; ++m)
         {
             days += start.daysInMonth(m, start.year);
         }
+        days += end.day;
+        return days;
     }
-
+    days += start.daysInMonth(start.month, start.year) - start.day;
+    for (int m = start.month + 1; m <= 12; ++m)
+    {
+        days += start.daysInMonth(m, start.year);
+    }
     for (int y = start.year + 1; y < end.year; ++y)
     {
         days += start.isLeapYear(y) ? 366 : 365;
     }
-
     for (int m = 1; m < end.month; ++m)
     {
         days += end.daysInMonth(m, end.year);
@@ -229,8 +235,15 @@ int Date::daysBetween(const Date &start, const Date &end)
     return days;
 }
 
-bool Date::operator==(const Date& other) const {
+bool Date::operator==(const Date &other) const
+{
     return (day == other.day && month == other.month && year == other.year);
+}
+bool Date::operator>(const Date &other) const
+{
+        if (year != other.year) return year > other.year;
+        if (month != other.month) return month > other.month;
+        return day > other.day;
 }
 
 ostream &operator<<(ostream &os, const Date &date)
