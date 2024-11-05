@@ -169,6 +169,7 @@ void Staff::updateStaffFile(const vector<Staff> &staffs, const string &fileName)
      if (!file.is_open())
      {
           cout << "Cannot open staff file!" << endl;
+          system("pause");
           return;
      }
      if (addNewLine)
@@ -439,6 +440,7 @@ bool Staff::changeRoomStatus(const string &roomID)
           changeConsoleColor(4);
           cout << "\nAccess Denied: Only Managers and Receptionists can change room status!" << endl;
           changeConsoleColor(7);
+          system("pause");
           return false;
      }
 
@@ -479,4 +481,257 @@ bool Staff::changeRoomStatus(const string &roomID)
           return false;
      }
      return true;
+}
+
+int Staff::cusExists(const vector<Customer> &customers, const Customer &newCus)
+{
+     for (size_t i = 0; i < customers.size(); i++)
+     {
+          if (customers[i] == newCus || customers[i].getCCCD() == newCus.getCCCD())
+               return i;
+     }
+     return -1;
+}
+
+bool Staff::hasAccess() const
+{
+     if (this->position == "Manager" || this->position == "Receptionist")
+     {
+          return true;
+     }
+     changeConsoleColor(4);
+     cout << "\nAccess Denied: Only Managers and Receptionists can change room status!" << endl;
+     changeConsoleColor(7);
+     system("pause");
+     return false;
+}
+
+bool Staff::addNewCustomer(Customer &newCus)
+{
+     string customerFile = "Customer.txt";
+     if (!hasAccess())
+          return false;
+
+     vector<Customer> customers = Customer::readFileCustomer(customerFile);
+
+     if (cusExists(customers, newCus) >= 0)
+     {
+          changeConsoleColor(4);
+          cout << "This customer's information is already recorded in our hotel's customer file!" << endl;
+          changeConsoleColor(7);
+          system("pause");
+          return false;
+     }
+
+     if (!Customer::saveCustomerToFile(newCus, customerFile))
+     {
+          changeConsoleColor(4);
+          cout << "\nFailed to save to our hotel's customer file!" << endl;
+          changeConsoleColor(7);
+          system("pause");
+          return false;
+     }
+     cout << "Successfully added new customer with CCCD: " << newCus.getCCCD()
+          << " and full name: " << newCus.getFullName() << endl;
+     return true;
+}
+
+bool Staff::writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName)
+{
+     ofstream file(fileName, ios::trunc);
+     if (!file.is_open())
+     {
+          changeConsoleColor(4);
+          cout << "Cannot open customer file for writing!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     for (const auto &customer : remainingCustomers)
+     {
+          file << customer.getFullName() << "|"
+               << customer.getCCCD() << "|"
+               << customer.getPhone() << "|"
+               << customer.getAdd() << "|"
+               << customer.getDOB().toString() << "|"
+               << customer.getGender() << "|";
+
+          const vector<string> roomIDs = customer.getRoomIDs();
+          for (size_t j = 0; j < roomIDs.size(); j++)
+          {
+               file << roomIDs[j];
+               if (j < roomIDs.size() - 1)
+                    file << ",";
+          }
+          file << "|" << customer.getArrivalDate().toString() << "|" << endl;
+     }
+
+     file.close();
+     return true;
+}
+
+bool Staff::removeCustomer(Customer &CusToRemove)
+{
+     string customerFile = "Customer.txt";
+     if (!hasAccess())
+          return false;
+
+     vector<Customer> customers = Customer::readFileCustomer(customerFile);
+
+     int index = cusExists(customers, CusToRemove);
+     if (index < 0)
+     {
+          changeConsoleColor(4);
+          cout << "Cannot find this customer's information to remove!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     vector<Customer> remainingCustomers;
+     for (size_t i = 0; i < customers.size(); i++)
+          if (i != index)
+               remainingCustomers.push_back(customers[i]);
+
+     if (writeRemainingCus(remainingCustomers, customerFile))
+     {
+          changeConsoleColor(2);
+          cout << "Successfully removed customer with CCCD: " << CusToRemove.getCCCD()
+               << " and full name: " << CusToRemove.getFullName() << endl;
+
+          return true;
+     }
+     return false;
+}
+
+bool Staff::removeCustomerByCCCD(const string &CCCDToRemove)
+{
+     string customerFile = "Customer.txt";
+     if (!hasAccess())
+          return false;
+
+     vector<Customer> customers = Customer::readFileCustomer(customerFile);
+     Customer tempCustomer;
+     tempCustomer.setCCCD(CCCDToRemove);
+     int index = cusExists(customers, tempCustomer);
+     if (index < 0)
+     {
+          changeConsoleColor(4);
+          cout << "Cannot find this customer's information to remove!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     vector<Customer> remainingCustomers;
+     for (size_t i = 0; i < customers.size(); i++)
+          if (i != index)
+               remainingCustomers.push_back(customers[i]);
+
+     if (writeRemainingCus(remainingCustomers, customerFile))
+     {
+          changeConsoleColor(2);
+          cout << "Successfully removed customer with CCCD: " << CCCDToRemove << endl;
+
+          return true;
+     }
+     return false;
+}
+
+bool Staff::findCustomerByCCCD(const string &CCCD)
+{
+     string customerFile = "Customer.txt";
+     if (!hasAccess())
+          return false;
+
+     vector<Customer> customers = Customer::readFileCustomer(customerFile);
+     Customer tempCustomer;
+     tempCustomer.setCCCD(CCCD);
+     int index = cusExists(customers, tempCustomer);
+
+     if (index < 0)
+     {
+          changeConsoleColor(4);
+          cout << "Cannot find this customer's information!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     vector<Customer> tempCustomers;
+     tempCustomers.push_back(tempCustomer);
+     vector<Service> services = readFileService("Service.txt");
+     tempCustomer.displayCustomer(tempCustomers, services);
+
+     return true;
+}
+
+bool Staff::findCustomerByAttribute(const string &attributeName, const string &attributeValue)
+{
+     if (!hasAccess())
+          return false;
+
+     vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+     vector<Customer> customerList;
+
+     for (auto &customer : customers)
+     {
+          if ((attributeName == "firstName" && customer.getFirstName() == attributeValue) ||
+              (attributeName == "lastName" && customer.getLastName() == attributeValue))
+          {
+               customerList.push_back(customer);
+          }
+     }
+
+     if (!customerList.empty())
+     {
+          vector<Service> services = readFileService("Service.txt");
+          customers[0].displayCustomer(customerList, services);
+          return true;
+     }
+     else
+     {
+          changeConsoleColor(4);
+          cout << "No customer found with the " << attributeName << ": " << attributeValue << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+}
+
+bool Staff::findCustomerByFirstName(const string &firstName)
+{
+     return findCustomerByAttribute("firstName", firstName);
+}
+
+bool Staff::findCustomerByLastName(const string &lastName)
+{
+     return findCustomerByAttribute("lastName", lastName);
+}
+
+bool Staff::findCustomerByLetter(const char &letter)
+{
+     string customerFile = "Customer.txt";
+     if (!hasAccess())
+          return false;
+
+     vector<Customer> customers = Customer::readFileCustomer(customerFile);
+     vector<Customer> customerList;
+
+     for (const auto &customer : customers)
+     {
+          if   (tolower(customer.getFullName().find(tolower(letter)) != string::npos) || 
+                toupper(customer.getFullName().find(toupper(letter)) != string::npos))
+               customerList.push_back(customer);
+     }
+
+     if (!customerList.empty())
+     {
+          vector<Service> services = readFileService("Service.txt");
+          customers[0].displayCustomer(customerList, services);
+          return true;
+     }
+     else
+     {
+          changeConsoleColor(4);
+          cout << "No customer found with the character '" << toupper(letter) << "' in their name." << endl;
+          changeConsoleColor(7);
+          return false;
+     }
 }
