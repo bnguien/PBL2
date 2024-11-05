@@ -92,6 +92,15 @@ Date Person::getDOB() const {
     return DOB;
 }
 
+bool Person::operator == (const Person &person) const
+{
+     return    (this->fullName == person.fullName
+               && this->CCCD == person.CCCD
+               && this->phone == person.phone
+               && this->gender == person.gender
+               && this->add == person.add
+               && this->DOB == person.DOB);
+}
 
 string Person::standardizeString (const string& input) {
      string res = "";
@@ -149,4 +158,25 @@ void Person::displayPerson(const vector<Person>& people) {
         cout<<"Gender: "<<person.getGender()<<endl;
         cout << "-----------------------------" << endl;
     }
+}
+
+string Person::getFirstName()
+{
+     std::istringstream iss(fullName);
+     std::string firstName;
+     iss >> firstName;
+     return firstName;
+}
+
+string Person::getLastName()
+{
+     std::istringstream iss(fullName);
+     vector<std::string> nameParts;
+     std::string part;
+     while (iss >> part)
+          nameParts.push_back(part);
+
+     if (!nameParts.empty())
+          return nameParts.back();
+     return "";
 }
