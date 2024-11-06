@@ -657,7 +657,7 @@ bool Staff::findCustomerByCCCD(const string &CCCD)
 
      vector<Customer> tempCustomers;
      tempCustomers.push_back(tempCustomer);
-     vector<Service> services = readFileService("Service.txt");
+     vector<Service> services = Service::readFileService("Service.txt");
      tempCustomer.displayCustomer(tempCustomers, services);
 
      return true;
@@ -682,7 +682,7 @@ bool Staff::findCustomerByAttribute(const string &attributeName, const string &a
 
      if (!customerList.empty())
      {
-          vector<Service> services = readFileService("Service.txt");
+          vector<Service> services = Service::readFileService("Service.txt");
           customers[0].displayCustomer(customerList, services);
           return true;
      }
@@ -723,7 +723,7 @@ bool Staff::findCustomerByLetter(const char &letter)
 
      if (!customerList.empty())
      {
-          vector<Service> services = readFileService("Service.txt");
+          vector<Service> services = Service::readFileService("Service.txt");
           customers[0].displayCustomer(customerList, services);
           return true;
      }
