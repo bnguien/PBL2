@@ -30,15 +30,21 @@ vector<string> Customer::getServiceIDs() const
 {
     return serviceIDs;
 }
-
+void Customer::setServiceIDs(const vector<string> &ids)
+{
+    serviceIDs = ids;
+}
 vector<string> Customer::getServiceNames() const
 {
     return serviceNames;
 }
-
+void Customer::setServiceNames(const vector<string> &names)
+{
+    serviceNames = names;
+}
 bool Customer::operator==(const Customer &customer) const
 {
-    return (static_cast<const Person&>(*this) == static_cast<const Person&>(customer)) && // So sánh các thành phần từ lớp cha Person
+    return (static_cast<const Person &>(*this) == static_cast<const Person &>(customer)) && // So sánh các thành phần từ lớp cha Person
            (roomIDs == customer.roomIDs) &&
            (serviceIDs == customer.serviceIDs) &&
            (serviceNames == customer.serviceNames) &&
@@ -207,7 +213,7 @@ bool Customer::saveCustomerToFile(const Customer &customer, const string &fileNa
         std::cout << "Cannot open customer file!" << endl;
         return false;
     }
-    
+
     if (addNewLine)
         file << std::endl;
 
@@ -400,7 +406,7 @@ void Customer::bookedRoom()
 
     Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
     string customerFile = "Customer.txt";
-    if (!saveCustomerToFile(newCustomer, customerFile)) 
+    if (!saveCustomerToFile(newCustomer, customerFile))
     {
         changeConsoleColor(4);
         cout << "\nFailed to save to our hotel's customer file!" << endl;
