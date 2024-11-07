@@ -12,7 +12,7 @@ private:
 public:
      Service();
      Service(const Service &s);
-     Service(const vector<string> &service_info);
+     Service(const string &ID, const string &name, const string &type, const string &description, const string &price);
 
      string getID() const;
      string getName() const;
@@ -21,7 +21,7 @@ public:
      string getPrice() const;
 
      static string generateSerID(const vector<Service> &services, const string &name);
-     static string getServiceName(const string &id, const vector<Service> &services);
+     static string getServiceName(const string &serviceID, const vector<Service> &services);
      friend void displayService(const vector<Service> &services);
      static vector<Service> readFileService(const string &fileName);
      ~Service();

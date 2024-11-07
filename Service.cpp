@@ -2,14 +2,8 @@
 
 Service::Service() {}
 Service::Service(const Service &s) : ID(s.ID), name(s.name), type(s.type), description(s.description), price(s.price) {}
-Service::Service(const vector<string> &service_info)
-{
-     ID = service_info[0];
-     name = service_info[1];
-     type = service_info[2];
-     description = service_info[3];
-     price = service_info[4];
-}
+Service::Service(const string &ID, const string &name, const string &type, const string &description, const string &price)
+        : ID(ID), name(name), type(type), description(description), price(price) {}
 Service::~Service() {}
 
 string Service::getID() const
@@ -67,54 +61,43 @@ void displayService(const vector<Service> &services)
      }
 }
 
-vector<Service> Service::readFileService(const string &fileName)
-{
-     ifstream file(fileName);
-     vector<Service> services;
-     string line;
+vector<Service> Service::readFileService(const string &fileName) {
+    ifstream file(fileName);
+    vector<Service> services;
+    string line;
 
-     if (!file.is_open())
-     {
-          cout << "Cannot open file!" << endl;
-          return services;
-     }
+    if (!file.is_open()) {
+        cout << "Cannot open file!" << endl;
+        return services;
+    }
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string ID, name, type, description, price;
+        getline(ss, ID, '|');
+        getline(ss, name, '|');
+        getline(ss, type, '|');
+        getline(ss, description, '|');
+        getline(ss, price, '|');
+        Service service(ID, name, type, description, price);
+        services.push_back(service);
+    }
 
-     while (getline(file, line))
-     {
-          stringstream ss(line);
-          vector<string> service_info;
-          string temp;
-
-          getline(ss, temp, '|');
-          service_info.push_back(temp);
-          getline(ss, temp, '|');
-          service_info.push_back(temp);
-          getline(ss, temp, '|');
-          service_info.push_back(temp);
-          getline(ss, temp, '|');
-          service_info.push_back(temp);
-          getline(ss, temp, '|');
-          service_info.push_back(temp);
-
-          Service S(service_info);
-          services.push_back(S);
-     }
-
-     file.close();
-     return services;
+    file.close();
+    return services;
 }
-string Service::getServiceName(const string &id, const vector<Service> &services)
+
+string Service::getServiceName(const string &serviceID, const vector<Service> &services)
 {
-     for (const auto &service : services)
-     {
-          if (service.getID() == id)
-          {
-               return service.getName();
-          }
-     }
-      return "Unknown Service";
-    
+    for (const auto &service : services)
+    {
+        if (service.getID() == serviceID)
+        {
+            return service.getName();
+        }
+    }
+    return "Unknown Service";
 }
+
 
 string Service::generateSerID(const vector<Service> &services, const string &name)
 {
