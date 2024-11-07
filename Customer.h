@@ -52,7 +52,9 @@ public:
     Date getArrivalDate() const;
     vector<string> getRoomIDs() const;
     vector<string> getServiceIDs() const;
+    void setServiceIDs(const vector<string>& ids);
     vector<string> getServiceNames() const;
+    void setServiceNames(const vector<string>& names);
     void setRoomIDs(const vector<string> &roomIDs);
 
     bool operator == (const Customer &customer) const;
