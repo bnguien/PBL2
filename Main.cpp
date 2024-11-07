@@ -39,7 +39,7 @@ int main()
         char option;
         std::cout << "******************************************************************" << std::endl;
         changeConsoleColor(9);
-        std::cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << std::endl;
+        std::cout << "\t\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
         changeConsoleColor(14);
         std::cout << "Login as" << std::endl;
         std::cout << "ADMIN LOGIN - press a" << std::endl;
@@ -68,7 +68,7 @@ int main()
             while (!loggedIn)
             {
                 changeConsoleColor(9);
-                std::cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << std::endl;
+                std::cout << "\t\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
                 changeConsoleColor(3);
                 std::cout << "Login as admin" << std::endl;
                 changeConsoleColor(6);
@@ -133,7 +133,7 @@ int main()
                         {
                         case 1:
                         {
-                            // Logic for option 1
+                            
                             break;
                         }
                         case 2:
@@ -268,7 +268,6 @@ int main()
                         case 1:
                         {
                             Customer cus;
-                            vector<Service> services;
                             cus.checkInfor(inputUsername, inputPasswordStr, customers, services);
                             break;
                         }
