@@ -172,7 +172,7 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
                 std::cout << serviceID << ",";
             }
 
-            std::cout << endl;
+            std::cout << right << setw(32) << "|" << endl;
             std::cout << border << endl;
 
             std::cout << "| ServiceNames  | ";
@@ -181,7 +181,7 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
                 std::string serviceName = Service::getServiceName(serviceID, services);
                 std::cout << serviceName << ", ";
             }
-            std::cout << left << setw(39) << "|" << endl;
+            std::cout << right << setw(27) << "|" << endl;
             std::cout << border << endl;
         }
         std::cout << endl;
@@ -566,14 +566,13 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
     } while (c == 'Y');
 
     room.addServiceByRoomID(roomID, serviceIDs);
-
+    addServicesToCustomerFile(inputUserName, inputPassword, services, serviceIDs);
     if (serviceIDs.empty())
         std::cout << "No services booked." << endl;
     else
     {
         std::cout << "Services booked successfully for Room ID: " << roomID << endl;
-        addServicesToCustomerFile(inputUserName, inputPassword, services, serviceIDs);
-    }
+        }
 }
 
 void Customer::addServicesToCustomerFile(const string &inputUserName, const string &inputPassword, const vector<Service> &services, const vector<string> &serviceIDs)
