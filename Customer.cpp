@@ -572,7 +572,7 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
     else
     {
         std::cout << "Services booked successfully for Room ID: " << roomID << endl;
-        }
+    }
 }
 
 void Customer::addServicesToCustomerFile(const string &inputUserName, const string &inputPassword, const vector<Service> &services, const vector<string> &serviceIDs)
@@ -630,6 +630,94 @@ void Customer::addServicesToCustomerFile(const string &inputUserName, const stri
     }
 
     outputFile.close();
+}
+/*hàm update đang lỗi*/
+void Customer::updateCustomerInfo(const string &inputUserName, const string &inputPassword, vector<Customer> &customers, const string &fileName)
+{
+    bool customerFound = false;
+
+    for (Customer &customer : customers)
+    {
+        if (customer.getFullName() == inputUserName && customer.getPhone() == inputPassword)
+        {
+            customerFound = true;
+
+            int choice;
+            cout << "Select the information you want to update:\n";
+            cout << "1. Change phone number\n";
+            cout << "2. Change address\n";
+            cout << "3. Change Date of Birth (DOB)\n";
+            cout << "Choice: ";
+            cin >> choice;
+            cin.ignore();
+
+            if (choice == 1)
+            {
+                string newPhone;
+                cout << "Enter the new phone number: ";
+                getline(cin, newPhone);
+                customer.setPhone(newPhone);
+                cout << "Phone number updated successfully.\n";
+            }
+            else if (choice == 2)
+            {
+                string newAddress;
+                cout << "Enter the new address: ";
+                getline(cin, newAddress);
+                customer.setAdd(newAddress);
+                cout << "Address updated successfully.\n";
+            }
+            else if (choice == 3)
+            {
+                string newDOB;
+                cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
+                getline(cin, newDOB);
+                customer.setDOB(Date(newDOB));
+                cout << "Date of Birth updated successfully.\n";
+            }
+            else
+            {
+                cout << "Invalid choice!\n";
+                return;
+            }
+
+            break;
+        }
+    }
+
+    if (!customerFound)
+    {
+        cout << "Customer not found.\n";
+        return;
+    }
+    ofstream file(fileName, ios::trunc);
+    if (!file.is_open())
+    {
+        cout << "Cannot open file!" << endl;
+        return;
+    }
+    for (const Customer &customer : customers)
+    {
+        file << customer.getFullName() << "|"
+             << customer.getCCCD() << "|"
+             << customer.getPhone() << "|"
+             << customer.getAdd() << "|"
+             << customer.getDOB().toString() << "|"
+             << customer.getGender() << "|";
+
+        vector<string> roomIDs = customer.getRoomIDs();
+        for (size_t i = 0; i < roomIDs.size(); ++i)
+        {
+            file << roomIDs[i];
+            if (i < roomIDs.size() - 1)
+            {
+                file << ",";
+            }
+        }
+        file << "|" << customer.getArrivalDate().toString() << "|" << endl;
+    }
+
+    file.close();
 }
 
 Customer::~Customer() {}

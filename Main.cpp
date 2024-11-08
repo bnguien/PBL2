@@ -259,7 +259,7 @@ int main()
                                 changeConsoleColor(10);
                                 std::cout << border << std::endl;
                                 changeConsoleColor(3);
-                                std::cout << "|3. Checkout" << std::right << std::setw(46) << "|" << std::endl;
+                                std::cout << "|3. Update information" << std::right << std::setw(36) << "|" << std::endl;
                                 changeConsoleColor(10);
                                 std::cout << border << std::endl;
                                 changeConsoleColor(3);
@@ -287,6 +287,12 @@ int main()
                                 case 2:
                                 {
                                     cus.bookServices(inputUsername, inputPasswordStr);
+                                    break;
+                                }
+                                case 3:
+                                {
+                                    string fileName = "Customer.txt";
+                                    cus.updateCustomerInfo(inputUsername, inputPasswordStr, customers, fileName);
                                     break;
                                 }
                                 case 4:
