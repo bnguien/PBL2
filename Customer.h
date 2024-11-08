@@ -64,7 +64,7 @@ public:
     void bookedRoom();
     void bookServices(const string &inputUserName, const string &inputPassword);
     void addServicesToCustomerFile(const string &inputUserName, const string &inputPassword, const vector<Service> &services, const vector<string> &serviceIDs);
-    void checkInfor(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers, const vector<Service> &services);
+    void checkInfor(const string &inputUserName, const string &inputPassword,const vector<Customer> &customers,const vector<Service> &services);
 
     ~Customer();
 };

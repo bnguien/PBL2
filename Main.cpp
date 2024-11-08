@@ -13,312 +13,328 @@
 
 int main()
 {
-    string choice;
-    changeConsoleColor(9);
-    std::cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << std::endl;
-    changeConsoleColor(3);
-    std::cout << "Do you already have an account? (yes/no)" << std::endl;
-    changeConsoleColor(7);
-    std::cin >> choice;
-
-    if (choice == "no")
+    bool programRunning = true;
+    while (programRunning)
     {
-        system("cls");
-        changeConsoleColor(9);
-        std::cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << std::endl;
-        changeConsoleColor(11);
-        std::cout << "Don't miss out! Let's get your room booked right now!" << std::endl;
-        system("pause");
-        changeConsoleColor(7);
-        Customer customer;
-        customer.bookedRoom();
-    }
-    else if (choice == "yes")
-    {
-        system("cls");
-        char option;
-        std::cout << "******************************************************************" << std::endl;
+        string choice;
         changeConsoleColor(9);
         std::cout << "\t\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
-        changeConsoleColor(14);
-        std::cout << "Login as" << std::endl;
-        std::cout << "ADMIN LOGIN - press a" << std::endl;
-        std::cout << "CUSTOMER LOGIN - press c" << std::endl;
-        std::cout << "EXIT PROGRAM - press e" << std::endl;
+        changeConsoleColor(3);
+        std::cout << "Do you already have an account? (yes/no)" << std::endl;
         changeConsoleColor(7);
-        option = _getch();
-        system("cls");
-        string inputUsername, inputPasswordStr;
+        std::cin >> choice;
 
-        if (option == 'a')
+        if (choice == "no")
         {
-            vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
-            vector<Service> services = Service::readFileService("Service.txt");
-            vector<Room> rooms = Room::readFileRoom("Room.txt");
-            vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
-            vector<pair<string, string>> accounts;
+            system("cls");
+            changeConsoleColor(9);
+            std::cout << "\t\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
+            changeConsoleColor(11);
+            std::cout << "Don't miss out! Let's get your room booked right now!" << std::endl;
+            system("pause");
+            changeConsoleColor(7);
+            Customer customer;
+            customer.bookedRoom();
+        }
+        else if (choice == "yes")
+        {
+            system("cls");
+            bool userLoggedIn = false;
 
-            for (const auto& staff : staffs)
+            while (!userLoggedIn)
             {
-                string username = createUsername(staff.getFullName());
-                accounts.push_back(make_pair(trim(username), trim(staff.getPhone())));
-            }
-
-            bool loggedIn = false;
-            while (!loggedIn)
-            {
+                char option;
+                std::cout << "******************************************************************" << std::endl;
                 changeConsoleColor(9);
                 std::cout << "\t\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
-                changeConsoleColor(3);
-                std::cout << "Login as admin" << std::endl;
-                changeConsoleColor(6);
-                std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
-                changeConsoleColor(10);
-                std::cout << "USER NAME (Your full name is written without diacritics): ";
+                changeConsoleColor(14);
+                std::cout << "Login as" << std::endl;
+                std::cout << "ADMIN LOGIN - press a" << std::endl;
+                std::cout << "CUSTOMER LOGIN - press c" << std::endl;
+                std::cout << "EXIT PROGRAM - press e" << std::endl;
                 changeConsoleColor(7);
-                std::cin >> inputUsername;
-                inputUsername = toLower(inputUsername);
-                changeConsoleColor(10);
-                std::cout << "PASSWORD (Your phone number): ";
-                changeConsoleColor(7);
-                inputPasswordStr = inputPassword();
-                changeConsoleColor(6);
-                std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
-                loadingBarAnimation(6);
-                if (login(accounts, inputUsername, inputPasswordStr))
+                option = _getch();
+                system("cls");
+                string inputUsername, inputPasswordStr;
+
+                if (option == 'e')
                 {
-                    changeConsoleColor(4);
-                    std::cout << "LOGIN SUCCESSFULLY" << std::endl;
-                    changeConsoleColor(6);
-                    loadingBarAnimation(7);
-                    system("pause");
-                    loggedIn = true;
-                    changeConsoleColor(7);
-                    system("cls");
-                    bool continueUsing = true;
-                    while (continueUsing)
+                    programRunning = false;
+                    break;
+                }
+                else if (option == 'a')
+                {
+                    vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+                    vector<Service> services = Service::readFileService("Service.txt");
+                    vector<Room> rooms = Room::readFileRoom("Room.txt");
+                    vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
+                    vector<pair<string, string>> accounts;
+
+                    for (const auto &staff : staffs)
+                    {
+                        string username = createUsername(staff.getFullName());
+                        accounts.push_back(make_pair(trim(username), trim(staff.getPhone())));
+                    }
+
+                    bool loggedIn = false;
+                    while (!loggedIn)
                     {
                         changeConsoleColor(9);
-                        std::cout << "\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << std::endl;
-                        changeConsoleColor(10);
-                        string border = "+---------------+----------------------------------------+";
-                        std::cout << border << std::endl;
+                        std::cout << "\t\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
                         changeConsoleColor(3);
-                        std::cout << "|1. Check customer information" << std::right << std::setw(32) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
-                        changeConsoleColor(3);
-                        std::cout << "|2. Check customer bill" << std::right << std::setw(42) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
-                        changeConsoleColor(3);
-                        std::cout << "|3. Search customer" << std::right << std::setw(46) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
-                        changeConsoleColor(3);
-                        std::cout << "|4. Remove customer" << std::right << std::setw(44) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
-                        changeConsoleColor(3);
-                        std::cout << "|0. Exit" << std::right << std::setw(50) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
+                        std::cout << "Login as admin" << std::endl;
                         changeConsoleColor(6);
-                        std::cout << "Please enter your option: ";
+                        std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
+                        changeConsoleColor(10);
+                        std::cout << "USER NAME (Your full name is written without diacritics): ";
                         changeConsoleColor(7);
-                        int choice;
-                        std::cin >> choice;
-
-                        switch (choice)
+                        std::cin >> inputUsername;
+                        inputUsername = toLower(inputUsername);
+                        changeConsoleColor(10);
+                        std::cout << "PASSWORD (Your phone number): ";
+                        changeConsoleColor(7);
+                        inputPasswordStr = inputPassword();
+                        changeConsoleColor(6);
+                        std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
+                        loadingBarAnimation(6);
+                        if (login(accounts, inputUsername, inputPasswordStr))
                         {
-                        case 1:
-                        {
-                            
-                            break;
-                        }
-                        case 2:
-                        {
-                            BillStaff billTemp;
-                            billTemp.checkBillByNameAndPhone(customers, rooms, services);
-                            break;
-                        }
-                        case 4:
-                        {
-                            // Logic for option 4
-                            break;
-                        }
-                        case 0:
-                        {
-                            changeConsoleColor(3);
-                            std::cout << "Hope to see you again~~~" << std::endl;
-                            changeConsoleColor(7);
-                            continueUsing = false;
-                            break;
-                        }
-                        default:
-                        {
-                            std::cout << "Invalid option, please try again." << std::endl;
-                            break;
-                        }
-                        }
-                        if (continueUsing)
-                        {
-                            char continueChoice;
+                            changeConsoleColor(4);
+                            std::cout << "LOGIN SUCCESSFULLY" << std::endl;
                             changeConsoleColor(6);
-                            std::cout << "Do you want to continue? (y/n): ";
+                            loadingBarAnimation(7);
+                            system("pause");
+                            loggedIn = true;
+                            userLoggedIn = true;
                             changeConsoleColor(7);
-                            std::cin >> continueChoice;
                             system("cls");
-                            if (tolower(continueChoice) != 'y')
+                            bool continueUsing = true;
+                            while (continueUsing)
                             {
-                                continueUsing = false;
+                                changeConsoleColor(9);
+                                std::cout << "\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
+                                changeConsoleColor(10);
+                                string border = "+---------------+----------------------------------------+";
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|1. Check customer information" << std::right << std::setw(32) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|2. Check customer bill" << std::right << std::setw(42) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|3. Search customer" << std::right << std::setw(46) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|4. Remove customer" << std::right << std::setw(44) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|0. Exit" << std::right << std::setw(50) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(6);
+                                std::cout << "Please enter your option: ";
+                                changeConsoleColor(7);
+                                int choice;
+                                std::cin >> choice;
+
+                                switch (choice)
+                                {
+                                case 1:
+                                {
+
+                                    break;
+                                }
+                                case 2:
+                                {
+                                    BillStaff billTemp;
+                                    billTemp.checkBillByNameAndPhone(customers, rooms, services);
+                                    break;
+                                }
+                                case 4:
+                                {
+
+                                    break;
+                                }
+                                case 0:
+                                {
+                                    changeConsoleColor(3);
+                                    std::cout << "Hope to see you again~~~" << std::endl;
+                                    changeConsoleColor(7);
+                                    continueUsing = false;
+                                    break;
+                                }
+                                default:
+                                {
+                                    std::cout << "Invalid option, please try again." << std::endl;
+                                    break;
+                                }
+                                }
+                                if (continueUsing)
+                                {
+                                    char continueChoice;
+                                    changeConsoleColor(6);
+                                    std::cout << "Do you want to continue? (y/n): ";
+                                    changeConsoleColor(7);
+                                    std::cin >> continueChoice;
+                                    system("cls");
+                                    if (tolower(continueChoice) != 'y')
+                                    {
+                                        continueUsing = false;
+                                    }
+                                }
                             }
+                        }
+                        else
+                        {
+                            changeConsoleColor(4);
+                            std::cout << "PLEASE LOGIN AGAIN (Username or password is incorrect)!!!!" << std::endl;
+                            changeConsoleColor(7);
+                            system("pause");
+                            system("cls");
                         }
                     }
                 }
-                else
+                else if (option == 'c')
                 {
-                    changeConsoleColor(4);
-                    std::cout << "PLEASE LOGIN AGAIN (Username or password is incorrect)!!!!" << std::endl;
-                    changeConsoleColor(7);
-                    system("pause");
-                    system("cls");
-                }
-            }
-        }
-        else if (option == 'c')
-        {
-            vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
-            vector<Service> services = Service::readFileService("Service.txt");
-            vector<Room> rooms = Room::readFileRoom("Room.txt");
-            vector<pair<string, string>> accounts;
+                    vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+                    vector<Service> services = Service::readFileService("Service.txt");
+                    vector<Room> rooms = Room::readFileRoom("Room.txt");
+                    vector<pair<string, string>> accounts;
 
-            for (const auto& customer : customers)
-            {
-                string username = createUsername(customer.getFullName());
-                accounts.push_back(make_pair(trim(username), trim(customer.getPhone())));
-            }
-            bool loggedIn = false;
-            while (!loggedIn)
-            {
-                changeConsoleColor(9);
-                std::cout << "\t\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << std::endl;
-                changeConsoleColor(3);
-                std::cout << "Login as customer" << std::endl;
-                changeConsoleColor(6);
-                std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
-                changeConsoleColor(10);
-                std::cout << "USER NAME (Your full name is written without diacritics): ";
-                changeConsoleColor(7);
-                std::cin >> inputUsername;
-                inputUsername = toLower(inputUsername);
-                changeConsoleColor(10);
-                std::cout << "PASSWORD (Your phone number): ";
-                changeConsoleColor(7);
-                inputPasswordStr = inputPassword();
-                changeConsoleColor(6);
-                std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
-
-                if (login(accounts, inputUsername, inputPasswordStr))
-                {
-                    changeConsoleColor(4);
-                    std::cout << "LOGIN SUCCESSFULLY" << std::endl;
-                    changeConsoleColor(6);
-                    loadingBarAnimation(7);
-                    system("pause");
-                    loggedIn = true;
-                    changeConsoleColor(7);
-                    system("cls");
-                    bool continueUsing = true;
-                    while (continueUsing)
+                    for (const auto &customer : customers)
+                    {
+                        string username = createUsername(customer.getFullName());
+                        accounts.push_back(make_pair(trim(username), trim(customer.getPhone())));
+                    }
+                    bool loggedIn = false;
+                    while (!loggedIn)
                     {
                         changeConsoleColor(9);
-                        std::cout << "\t\tWELCOME TO HOTEL DE LUNA\t\t\t" << std::endl;
-                        changeConsoleColor(10);
-                        string border = "+---------------+----------------------------------------+";
-                        std::cout << border << std::endl;
+                        std::cout << "\t\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
                         changeConsoleColor(3);
-                        std::cout << "|1. Check your information" << std::right << std::setw(32) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
-                        changeConsoleColor(3);
-                        std::cout << "|2. Book service" << std::right << std::setw(42) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
-                        changeConsoleColor(3);
-                        std::cout << "|3. Checkout" << std::right << std::setw(46) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
-                        changeConsoleColor(3);
-                        std::cout << "|4. Check bill" << std::right << std::setw(44) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
-                        changeConsoleColor(3);
-                        std::cout << "|0. Exit" << std::right << std::setw(50) << "|" << std::endl;
-                        changeConsoleColor(10);
-                        std::cout << border << std::endl;
+                        std::cout << "Login as customer" << std::endl;
                         changeConsoleColor(6);
-                        std::cout << "Please enter your option: ";
+                        std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
+                        changeConsoleColor(10);
+                        std::cout << "USER NAME (Your full name is written without diacritics): ";
                         changeConsoleColor(7);
-                        int choice;
-                        std::cin >> choice;
+                        std::cin >> inputUsername;
+                        inputUsername = toLower(inputUsername);
+                        changeConsoleColor(10);
+                        std::cout << "PASSWORD (Your phone number): ";
+                        changeConsoleColor(7);
+                        inputPasswordStr = inputPassword();
+                        changeConsoleColor(6);
+                        std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
 
-                        switch (choice)
+                        if (login(accounts, inputUsername, inputPasswordStr))
                         {
-                        case 1:
-                        {
-                            Customer cus;
-                            cus.checkInfor(inputUsername, inputPasswordStr, customers, services);
-                            break;
-                        }
-                        case 2:
-                        {
-                            Customer cus;
-                            cus.bookServices(inputUsername, inputPasswordStr);
-                            break;
-                        }
-                        case 4:
-                        {
-                            Bill tempBill;
-                            tempBill.checkBillInfo(inputUsername, inputPasswordStr, customers, rooms, services);
-                            break;
-                        }
-                        case 0:
-                        {
-                            changeConsoleColor(3);
-                            std::cout << "Hope to see you again~~~" << std::endl;
-                            changeConsoleColor(7);
-                            continueUsing = false;
-                            break;
-                        }
-                        default:
-                        {
-                            std::cout << "Invalid option, please try again." << std::endl;
-                            break;
-                        }
-                        }
-                        if (continueUsing)
-                        {
-                            char continueChoice;
+                            changeConsoleColor(4);
+                            std::cout << "LOGIN SUCCESSFULLY" << std::endl;
                             changeConsoleColor(6);
-                            std::cout << "Do you want to continue? (y/n): ";
+                            loadingBarAnimation(7);
+                            system("pause");
+                            loggedIn = true;
                             changeConsoleColor(7);
-                            std::cin >> continueChoice;
                             system("cls");
-                            if (tolower(continueChoice) != 'y')
+                            bool continueUsing = true;
+                            while (continueUsing)
                             {
-                                continueUsing = false;
+                                changeConsoleColor(9);
+                                std::cout << "\t\tWELCOME TO HOTEL DEL LUNA\t\t\t" << std::endl;
+                                changeConsoleColor(10);
+                                string border = "+---------------+----------------------------------------+";
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|1. Check your information" << std::right << std::setw(32) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|2. Book service" << std::right << std::setw(42) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|3. Checkout" << std::right << std::setw(46) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|4. Check bill" << std::right << std::setw(44) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(3);
+                                std::cout << "|0. Exit" << std::right << std::setw(50) << "|" << std::endl;
+                                changeConsoleColor(10);
+                                std::cout << border << std::endl;
+                                changeConsoleColor(6);
+                                std::cout << "Please enter your option: ";
+                                changeConsoleColor(7);
+                                int choice;
+                                std::cin >> choice;
+                                Customer cus;
+                                switch (choice)
+                                {
+                                case 1:
+                                {
+                                    vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+                                    cus.checkInfor(inputUsername, inputPasswordStr, customers, services);
+                                    break;
+                                }
+                                case 2:
+                                {
+                                    cus.bookServices(inputUsername, inputPasswordStr);
+                                    break;
+                                }
+                                case 4:
+                                {
+                                    vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+                                    Bill tempBill;
+                                    tempBill.checkBillInfo(inputUsername, inputPasswordStr, customers, rooms, services);
+                                    break;
+                                }
+                                case 0:
+                                {
+                                    changeConsoleColor(3);
+                                    std::cout << "Hope to see you again~~~" << std::endl;
+                                    changeConsoleColor(7);
+                                    system("cls");
+                                    continueUsing = false;
+                                    break;
+                                }
+                                default:
+                                {
+                                    std::cout << "Invalid option, please try again." << std::endl;
+                                    break;
+                                }
+                                }
+                                if (continueUsing)
+                                {
+                                    char continueChoice;
+                                    changeConsoleColor(6);
+                                    std::cout << "Do you want to continue? (y/n): ";
+                                    changeConsoleColor(7);
+                                    std::cin >> continueChoice;
+                                    system("cls");
+                                    if (tolower(continueChoice) != 'y')
+                                    {
+                                        continueUsing = false;
+                                    }
+                                }
                             }
                         }
+                        else
+                        {
+                            changeConsoleColor(4);
+                            std::cout << "PLEASE LOGIN AGAIN (Username or password is incorrect)!!!!" << std::endl;
+                            changeConsoleColor(7);
+                            system("pause");
+                            system("cls");
+                        }
                     }
-                }
-                else
-                {
-                    changeConsoleColor(4);
-                    std::cout << "PLEASE LOGIN AGAIN (Username or password is incorrect)!!!!" << std::endl;
-                    changeConsoleColor(7);
-                    system("pause");
-                    system("cls");
                 }
             }
         }
