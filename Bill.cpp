@@ -135,7 +135,7 @@ void Bill::checkBillInfo(const string &inputUserName, const string &inputPasswor
 {
     for (const auto &customer : customers)
     {
-        if (createUsername(customer.getFullName()) == inputUserName && customer.getPhone() == inputPassword)
+        if (createUsername(customer.getFullName()) == inputUserName && customer.getCCCD() == inputPassword)
         {
             std::cout << "Check-in Date: ";
             customer.getArrivalDate().display();

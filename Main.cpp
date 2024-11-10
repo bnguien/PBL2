@@ -73,7 +73,7 @@ int main()
                     for (const auto &staff : staffs)
                     {
                         string username = createUsername(staff.getFullName());
-                        accounts.push_back(make_pair(trim(username), trim(staff.getPhone())));
+                        accounts.push_back(make_pair(trim(username), trim(staff.getCCCD())));
                     }
 
                     bool loggedIn = false;
@@ -91,7 +91,7 @@ int main()
                         std::cin >> inputUsername;
                         inputUsername = toLower(inputUsername);
                         changeConsoleColor(10);
-                        std::cout << "PASSWORD (Your phone number): ";
+                        std::cout << "PASSWORD (Your CIC *Citizen Identification Card*): ";
                         changeConsoleColor(7);
                         inputPasswordStr = inputPassword();
                         changeConsoleColor(6);
@@ -209,7 +209,7 @@ int main()
                     for (const auto &customer : customers)
                     {
                         string username = createUsername(customer.getFullName());
-                        accounts.push_back(make_pair(trim(username), trim(customer.getPhone())));
+                        accounts.push_back(make_pair(trim(username), trim(customer.getCCCD())));
                     }
                     bool loggedIn = false;
                     while (!loggedIn)
@@ -226,7 +226,7 @@ int main()
                         std::cin >> inputUsername;
                         inputUsername = toLower(inputUsername);
                         changeConsoleColor(10);
-                        std::cout << "PASSWORD (Your phone number): ";
+                        std::cout << "PASSWORD (Your CIC *Citizen Identification Card*): ";
                         changeConsoleColor(7);
                         inputPasswordStr = inputPassword();
                         changeConsoleColor(6);

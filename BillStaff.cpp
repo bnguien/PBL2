@@ -87,10 +87,6 @@ void BillStaff::checkBillByNameAndPhone(const vector<Customer> &customers, const
 
             if (paymentConfirmation == "yes" || paymentConfirmation == "Yes")
             {
-                // Xử lý trạng thái thanh toán đã hoàn thành
-                // Ví dụ: Xóa thông tin khách hàng
-                // Giả sử có một phương thức removeCustomer()
-                /*removeCustomer(customer);*/
                 std::cout << "Customer information has been removed successfully." << std::endl;
             }
             else if (paymentConfirmation == "no" || paymentConfirmation == "No")
