@@ -438,7 +438,7 @@ void Customer::checkInfor(const string &inputUserName, const string &inputPasswo
 {
     for (const auto &customer : customers)
     {
-        if (createUsername(customer.getFullName()) == inputUserName && customer.getPhone() == inputPassword)
+        if (createUsername(customer.getFullName()) == inputUserName && customer.getCCCD() == inputPassword)
         {
             vector<Customer> loggedInCustomer = {customer};
             displayCustomer(loggedInCustomer, services);
@@ -592,29 +592,30 @@ void Customer::addServicesToCustomerFile(const string &inputUserName, const stri
         customerLines.push_back(line);
     }
     inputFile.close();
+
     ofstream outputFile(fileName, ios::out | ios::trunc);
     if (!outputFile.is_open())
     {
         cerr << "Could not open the file for writing." << endl;
         return;
     }
+
     for (auto &customerLine : customerLines)
     {
         size_t firstPipePos = customerLine.find('|');
         size_t secondPipePos = customerLine.find('|', firstPipePos + 1);
-        string customerName = customerLine.substr(0, firstPipePos);
-        string customerPhone = customerLine.substr(secondPipePos + 1, customerLine.find('|', secondPipePos + 1) - secondPipePos - 1);
 
-        if (createUsername(customerName) == inputUserName && customerPhone == inputPassword)
+        string customerName = customerLine.substr(0, firstPipePos);
+        string customerCCCD = customerLine.substr(firstPipePos + 1, secondPipePos - firstPipePos - 1);
+
+        if (createUsername(customerName) == inputUserName && customerCCCD == inputPassword)
         {
             size_t lastPipePos = customerLine.find_last_of('|');
             string existingServiceIDs;
-
             if (lastPipePos != string::npos)
             {
                 existingServiceIDs = customerLine.substr(lastPipePos + 1);
             }
-
             string newServiceIDs = existingServiceIDs;
             for (const auto &serviceID : serviceIDs)
             {
@@ -631,14 +632,14 @@ void Customer::addServicesToCustomerFile(const string &inputUserName, const stri
 
     outputFile.close();
 }
-/*hàm update đang lỗi*/
+
 void Customer::updateCustomerInfo(const string &inputUserName, const string &inputPassword, vector<Customer> &customers, const string &fileName)
 {
     bool customerFound = false;
 
     for (Customer &customer : customers)
     {
-        if (customer.getFullName() == inputUserName && customer.getPhone() == inputPassword)
+        if (createUsername(customer.getFullName()) == inputUserName && customer.getCCCD() == inputPassword)
         {
             customerFound = true;
 
@@ -664,7 +665,10 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                 string newAddress;
                 cout << "Enter the new address: ";
                 getline(cin, newAddress);
+
+                newAddress = Person::standardizeString(newAddress);
                 customer.setAdd(newAddress);
+
                 cout << "Address updated successfully.\n";
             }
             else if (choice == 3)
@@ -672,7 +676,10 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                 string newDOB;
                 cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
                 getline(cin, newDOB);
-                customer.setDOB(Date(newDOB));
+
+                Date dobDate(newDOB);
+                customer.setDOB(dobDate);
+
                 cout << "Date of Birth updated successfully.\n";
             }
             else
@@ -690,6 +697,7 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
         cout << "Customer not found.\n";
         return;
     }
+
     ofstream file(fileName, ios::trunc);
     if (!file.is_open())
     {
