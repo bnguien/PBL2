@@ -1,78 +1,10 @@
-#include "Graphics.h"
-#define MAX 100
-using namespace std;
-
-string welcomeMessage = R"(
-                 _____      _____   _______________   ______________   _____________   _____               
-                |     |    |     | |               | |              | |             | |     |        
-                |     |    |     | |     _____     | |____      ____| |      _______| |     |         
-                |     |____|     | |    |     |    |      |    |      |     |_______  |     |          
-                |                | |    |     |    |      |    |      |             | |     |          
-                |                | |    |     |    |      |    |      |      _______| |     |        
-                |      ____      | |    |     |    |      |    |      |     |         |     |        
-                |     |    |     | |    |_____|    |      |    |      |     |_______  |     |_______     
-                |     |    |     | |               |      |    |      |             | |             |
-                |_____|    |_____| |_______________|      |____|      |_____________| |_____________|
-
-         ________     __________   __                __           __        __   _____     __       ____
-        |   ___  \   |   _______| |  |              |  |         |  |      |  | |     \   |  |     /    \
-        |  |   \  \  |  |_______  |  |              |  |         |  |      |  | |  |\  \  |  |    /  /\  \
-        |  |    |  | |   _______| |  |              |  |         |  |      |  | |  | \  \ |  |   /  /__\  \
-        |  |___/  /  |  |_______  |  |_______       |  |_______  |  |______|  | |  |  \  \|  |  /   _____  \
-        |________/   |__________| |__________|      |__________| |____________| |__|   \_____| /__/      \__\
-
-    )";
-
-string hotel = R"(                 
-                     _____      _____   _______________   ______________   _____________   _____               
-                    |     |    |     | |               | |              | |             | |     |              
-                    |     |    |     | |     _____     | |____      ____| |      _______| |     |              
-                    |     |____|     | |    |     |    |      |    |      |     |_______  |     |              
-                    |                | |    |     |    |      |    |      |             | |     |              
-                    |                | |    |     |    |      |    |      |      _______| |     |              
-                    |      ____      | |    |     |    |      |    |      |     |         |     |              
-                    |     |    |     | |    |_____|    |      |    |      |     |_______  |     |_______       
-                    |     |    |     | |               |      |    |      |             | |             |      
-                    |_____|    |_____| |_______________|      |____|      |_____________| |_____________|     
-   
-)";
-
-string delLuna = R"(
-         ________     __________   __                __           __        __   _____     __       ____
-        |   ___  \   |   _______| |  |              |  |         |  |      |  | |     \   |  |     /    \
-        |  |   \  \  |  |_______  |  |              |  |         |  |      |  | |  |\  \  |  |    /  /\  \
-        |  |    |  | |   _______| |  |              |  |         |  |      |  | |  | \  \ |  |   /  /__\  \
-        |  |___/  /  |  |_______  |  |_______       |  |_______  |  |______|  | |  |  \  \|  |  /   _____  \
-        |________/   |__________| |__________|      |__________| |____________| |__|   \_____| /__/      \__\
-)";
-
-string welcome = R"(
-     ***               ***   **************   ***              **************   **************   *** ***     *** ***   **************
-     ***               ***   **************   ***              **************   **************   *** ***     *** ***   **************
-      ***             ***    ***              ***              ***              ***        ***   *** ***     *** ***   ***
-      ***             ***    **************   ***              ***              ***        ***   ***   *** ***   ***   **************
-       ***           ***     **************   ***              ***              ***        ***   ***     ***     ***   **************
-       ***    ***    ***     ***              ***              ***              ***        ***   ***             ***   ***
-        ***   ***   ***      **************   **************   **************   **************   ***             ***   **************
-           ***   ***         **************   **************   **************   **************   ***             ***   **************
-     )"; 
-
-void welcomTo();
-void continueScreen();
-void exitScreen();
-void introScreen();
-void inputPassword(string &password);
-void logInBar(int x, int y, int textColor, int backgroundColor);
-void introduceUs();
-void noAccountScreen();
-void adminScreen();
-void customerScreen();
-
+#include "Menu.h"
 int main()
 {
-     //resizeConsole(1500, 1500);
-     //SetWindowSize(1500, 1500);
      introScreen();
+     /* ShowCur(0);
+     loadingBarAnimation(7);
+     adminScreen(); */
 }
 
 void welcomeTo()
@@ -225,6 +157,7 @@ void logInBar(int x, int y, int textColor, int backgroundColor, string &username
      getline(cin, username);
      gotoXY(x + 21, y + 8);
      inputPassword(password);
+     ShowCur(0);
 }
 
 void introduceUs()
@@ -294,7 +227,7 @@ void introduceUs()
 
                Sleep(500);
                system("cls");
-               customerScreen();
+               customerScreen(username);
           }
      }
      else if (yN == 2)
@@ -308,15 +241,47 @@ void introduceUs()
 void noAccountScreen()
 {
      cout << delLuna << endl;
-     cout << "\n------------------ NO ACCOUNT ------------------" << endl;
-     cout << "\t1. Show Room List" << endl;
-     cout << "\t2. Show Service List" << endl;
-     cout << "\t3. Show Book Room";
+     gotoXY(29, 9);
+     changeColor(2);
+     cout << "------------------ NO ACCOUNT ------------------";
+     changeColor(12);
+     gotoXY(35, 10);
+     cout << "Please choose the function you want!";
+     gotoXY(28, 12);
+     cout << "\"Book Rooms\" will help you create your own account!";
+     changeColor(7);
+
+     vector<string> function = {
+          "1. Show Rooms",
+          "2. Show Services",
+          "3. Book Rooms",
+     };
+
+     switch(buttonList(38, 15, 31, 2, 2, function, "column"))
+     {
+          case 1:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[0] << " ----------\n";
+               break;
+          case 2:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[1] << " ----------\n";
+               break;
+          case 3:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[2] << " ----------\n";
+               break;
+     }
+     Sleep(1000);
+     clearFromPosition(1, 1);
+     introduceUs();
 }
 
 void adminScreen()
 {
      cout << delLuna << endl;
+     /* gotoXY(30, 9);
+     cout << "Your username: " << username; */
      gotoXY(29, 9);
      changeColor(2);
      cout << "------------------ ADMINISTRATOR ------------------";
@@ -328,72 +293,356 @@ void adminScreen()
      vector<string> staffFunc = {
           "1. Add New",
           "2. Update Information",
-          "3. Remove By CCCD",
-          "4. Remove",
-          "5. Show All"
+          "3. Remove",
+          "4. Show All"
      };
      for (int i = 0; i < staffFunc.size(); i++)
      {
-          gotoXY(1, 15 + i);
+          gotoXY(3, 16 + i);
           cout << staffFunc[i];
      }
      vector<string> customerFunc = {
           "1. Add New",
           "2. Update Information",
-          "3. Find By First Name",
-          "4. Find By Last Name",
-          "5. Find By Letter",
-          "6. Find By CCCD",
-          "7. Remove By CCCD",
-          "8. Remove",
-          "9. Show All"   
+          "3. Find",
+          "4. Book",
+          "5. Remove",
+          "6. Show All"   
      };
      for (int i = 0; i < customerFunc.size(); i++)
      {
-          gotoXY(31, 15 + i);
+          gotoXY(36, 16 + i);
           cout << customerFunc[i];
      }
 
      vector<string> roomFunc = {
-          "1. Change Room Status",
+          "1. Change Status",
           "2. Show All",
      };
      for (int i = 0; i < roomFunc.size(); i++)
      {
-          gotoXY(61, 15 + i);
+          gotoXY(69, 16 + i);
           cout << roomFunc[i];
      }
 
      vector<string> serviceFunc = {
-          "1. Show All",
+          "1. Change Price",
+          "2. Show All",
      };
      for (int i = 0; i < serviceFunc.size(); i++)
      {
-          gotoXY(91, 15 + i);
+          gotoXY(102, 16 + i);
           cout << serviceFunc[i];
      }
 
      vector<string> billFunc = {
-          "1. Add New Bill",
-          "2. Check By Name & Phone number"
+          "1. Add New",
+          "2. Check",
+          "3. Remove"
      };
      for (int i = 0; i < billFunc.size(); i++)
      {
-          gotoXY(121, 15 + i);
+          gotoXY(135, 16 + i);
           cout << billFunc[i];
      }
 
      vector<string> groupFunc = {"Staff", "Customer", "Room", "Service", "Bill"};
-     int choice = buttonList (6, 12, 15, 2, 14, groupFunc, "row");
-     gotoXY (25, 30);
-     cout << "You have chosen function group:\t" << groupFunc[choice - 1];
+     string account = "Administrator";
+     //int choice = buttonList (6, 12, 15, 2, 14, groupFunc, "row");
+     switch (buttonList(6, 12, 15, 2, 18, groupFunc, "row"))
+     {
+          case 1:
+               staffFunction(account, staffFunc);
+               break;
+          case 2:
+               customerFunction(account, customerFunc);
+               break;
+          case 3:
+               roomFunction(account, roomFunc);
+               break;
+          case 4: 
+               serviceFunction(account, serviceFunc);
+               break;
+          case 5:
+               billFunction(account, billFunc);  
+               break;
+     }
 }
 
-void customerScreen()
+void staffFunction(string account, vector<string> function)
+{
+     clearFromPosition(30, 10);
+     changeColor(12);
+     cout << "STAFF FUNCTIONS: Choose the function you want!";
+     changeColor(7);
+     
+     function.push_back("RETURN");
+     int choice = buttonList(40, 12, 28, 2, 2, function, "column");
+     switch(choice)
+     {
+          case 1: 
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 2:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 3:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 4:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 5:
+          {
+               clearFromPosition(1,1);
+               adminScreen();
+               break;
+          }
+     }
+
+     Sleep(1000);
+     clearFromPosition(1,1);
+     adminScreen();
+}
+
+void customerFunction(string account, vector<string> function)
+{
+     clearFromPosition(30, 10);
+     changeColor(12);
+     cout << "CUSTOMER FUNCTIONS: Choose the function you want!";
+     changeColor(7);
+
+     function.push_back("RETURN");
+     int choice = buttonList(40, 12, 28, 2, 2, function, "column");
+     switch(choice)
+     {
+          case 1: 
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 2:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 3:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 4:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 5:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 6:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 7:
+          {
+               clearFromPosition(1,1);
+               adminScreen();
+               break;
+          }
+     }
+
+     Sleep(1000);
+     clearFromPosition(1,1);
+     adminScreen();
+}
+
+void roomFunction(string account, vector<string> function)
+{
+     clearFromPosition(30, 10);
+     changeColor(12);
+     cout << "ROOM FUNCTIONS: Choose the function you want!";
+     changeColor(7);
+
+     function.push_back("RETURN");
+     int choice = buttonList(40, 12, 28, 2, 2, function, "column");
+     switch(choice)
+     {
+          case 1: 
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 2:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 3:
+          {
+               clearFromPosition(1,1);
+               adminScreen();
+               break;
+          }
+     }
+
+     Sleep(1000);
+     clearFromPosition(1,1);
+     adminScreen();
+     
+}
+
+void serviceFunction(string account, vector<string> function)
+{
+     clearFromPosition(30, 10);
+     changeColor(12);
+     cout << "SERVICE FUNCTIONS: Choose the function you want!";
+     changeColor(7);
+
+     function.push_back("RETURN");
+     int choice = buttonList(40, 12, 28, 2, 2, function, "column");
+     switch(choice)
+     {
+          case 1: 
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 2: 
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 3:
+          {
+               clearFromPosition(1,1);
+               adminScreen();
+               break;
+          }
+     }
+
+     Sleep(1000);
+     clearFromPosition(1,1);
+     adminScreen();
+}
+
+void billFunction(string account, vector<string> function)
+{
+     clearFromPosition(30, 10);
+     changeColor(12);
+     cout << "BILL FUNCTIONS: Choose the function you want!";
+     changeColor(7);
+
+     function.push_back("RETURN");
+     int choice = buttonList(40, 12, 28, 2, 2, function, "column");
+     switch(choice)
+     {
+          case 1: 
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 2:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 3:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 4:
+          {
+               clearFromPosition(1,1);
+               adminScreen();
+               break;
+          }
+     }
+
+     Sleep(1000);
+               clearFromPosition(1,1);
+               adminScreen();
+}
+
+void customerScreen(const string &username)
 {
      cout << delLuna << endl;
-     cout << "\n------------------ CUSTOMER ------------------" << endl;
-     cout << "\t1. Show Room List" << endl;
-     cout << "\t2. Show Service List" << endl;
-     cout << "\t3. Show Book Room";
+     gotoXY(30, 9);
+     cout << "Your username: " << username << endl;
+     gotoXY(29, 10);
+     changeColor(2);
+     cout << "------------------ CUSTOMER ------------------";
+     changeColor(12);
+     gotoXY(35, 11);
+     cout << "Please choose the function you want!";
+     changeColor(7);
+
+     vector<string> function = {
+          "1. Show Rooms",
+          "2. Show Services",
+          "3. Book Services",
+          "4. Check Information",
+          "5. Change Information",
+          "6. Check Bill"
+     };
+
+     switch(buttonList(35, 13, 36, 2, 2, function, "column"))
+     {
+          case 1:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[0] << " ----------\n";
+               break;
+          case 2:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[1] << " ----------\n";
+               break;
+          case 3:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[2] << " ----------\n";
+               break;
+          case 4:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[3] << " ----------\n";
+               break;
+          case 5:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[4] << " ----------\n";
+               break;
+          case 6:
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[5] << " ----------\n";
+               break;
+     }
+
+     Sleep(1000);
+     clearFromPosition(1, 1);
+     introduceUs();
 }
