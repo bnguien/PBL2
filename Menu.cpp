@@ -171,8 +171,8 @@ void introScreen()
           }
           Sleep(100); // Thời gian nghỉ để dễ quan sát hơn
      }
-
-     if (twoBoxButton(20, 30, 15, 2, 75, 11, 150, 75, "CONTINUE", "EXIT"))
+     vector<string> cE = {"CONTINUE", "EXIT"};
+     if (buttonList(20, 30, 15, 2, 55, cE, "row") == 1)
      {
           continueScreen();
      }
@@ -180,81 +180,6 @@ void introScreen()
      {
           exitScreen();
      }
-
-     /* int x = 20, y = 30, w = 15, h = 2, textColor = 11, backgroundColor = 150, selectedColor = 75;
-     boxOneLine(x, y, w, h, textColor, backgroundColor, "CONTINUE");
-     boxOneLine(x + 80, y, w, h, textColor, backgroundColor, "EXIT");
-     string content = "CONTINUE";
-     string newContent = "CONTINUE";
-     selectedBar(x, y, w, h, selectedColor, content);
-
-     int xp = x, yp = y;
-     int xOld = xp, yOld = yp;
-     bool check = true;
-     while (true)
-     {
-          if (check)
-          {
-               gotoXY(xOld, yOld);
-               selectedBar(xOld, yOld, w, h, backgroundColor, content);
-               xOld = xp, yOld = yp;
-               selectedBar(xp, yp, w, h, selectedColor, newContent);
-               check = false;
-          }
-
-          if (_kbhit())
-          {
-               char c = _getch();
-               if (c == -32)
-               {
-                    check = true;
-                    c = _getch();
-                    if (c == 77)
-                    { // Mũi tên phải
-                         if (xp != x + 80)
-                         {
-                              xp += 80;
-                              content = "CONTINUE";
-                              newContent = "EXIT";
-                         }
-                         else
-                         {
-                              xp = x;
-                              content = "EXIT";
-                              newContent = "CONTINUE";
-                         }
-                    }
-                    else if (c == 75)
-                    { // Mũi tên trái
-                         if (xp != x)
-                         {
-                              xp -= 80;
-                              content = "EXIT";
-                              newContent = "CONTINUE";
-                         }
-                         else
-                         {
-                              xp = x + 80;
-                              content = "CONTINUE";
-                              newContent = "EXIT";
-                         }
-                    }
-               }
-               else if (c == 13)
-               { // Phím Enter
-                    if (xp == 20)
-                    {
-                         continueScreen();
-                         break;
-                    }
-                    else
-                    {
-                         exitScreen();
-                         break;
-                    }
-               }
-          }
-     } */
 }
 
 void inputPassword(string &password)
@@ -326,42 +251,55 @@ void introduceUs()
      cout << border2 << endl;
 
      gotoXY(43, 31);
-     cout << "Did you have your own account?";
-     if(twoBoxButton(40, 33, 10, 2, 25, 11, 150, 75, "Yes", "No"))
+     cout << "Do you already have an account?";
+     vector<string> yesNo = {"Yes", "No"};
+     int yN = buttonList(38, 33, 10, 2, 20, yesNo, "row");
+     if (yN == 1)
      {
-          Sleep(900);
-          clearFromPosition(38,31);
-          cout << "Log in by ADMINISTRATOR or CUSTOMER account?";
+          Sleep (500);
+          clearFromPosition(38, 31);
+          cout << "Log in by AMINISTRATOR or CUSTOMER account?";
           string username, password;
-     
-          if (twoBoxButton(35, 33, 20, 2, 30, 11, 150, 75, "Administrator", "Customer"))
+
+          vector<string> adCus = {"Administrator", "Customer"};
+          int aC = buttonList(27, 33, 20, 2, 25, adCus, "row");
+          if (aC == 1)
           {
-               clearFromPosition(35,31);
-               gotoXY(38, 30); 
+               clearFromPosition(38, 30);
                changeColor(2);
                cout << "You are logging in by ADMINISTRATOR account!";
                changeColor(7);
-               logInBar(34, 31, 11, 150, username, password);
+               bool check = false;
+               do {
+                    logInBar(34, 31, 11, 150, username, password);
+                    if (check == true)
+                    {
+                         changeColor(4);
+                         cout << "Wrong username or password for administrator account!" << endl;
+                         changeColor(7);
+                    }
+               } while (check);
 
+               Sleep(500);
                system("cls");
                adminScreen();
           }
-          else
+          else if (aC == 2)
           {
-               clearFromPosition(35,31);
-               gotoXY(38, 30); 
+               clearFromPosition(38, 30);
                changeColor(2);
-               cout << "You are logging in by CUSTOMER account!";
+               cout << "You are logging in by CUSTOMER account";
                changeColor(7);
-               logInBar(34, 32, 11, 150, username, password);
+               logInBar(34, 31, 11, 150, username, password);
 
+               Sleep(500);
                system("cls");
                customerScreen();
           }
      }
-     else
+     else if (yN == 2)
      {
-          Sleep(900);
+          Sleep(500);
           system("cls");
           noAccountScreen();
      }
@@ -379,57 +317,76 @@ void noAccountScreen()
 void adminScreen()
 {
      cout << delLuna << endl;
-     gotoXY(29, 10);
+     gotoXY(29, 9);
      changeColor(2);
-     cout << "------------------ ADMINISTRATOR ------------------" << endl;
+     cout << "------------------ ADMINISTRATOR ------------------";
+     changeColor(12);
+     gotoXY(35, 10);
+     cout << "Please choose a function group first!";
      changeColor(7);
 
-     vector<string> staff = {
-          "1. Add New Staff",
-          "2. Update Staff's Information",
-          "3. Find Staff By First Name",
-          "4. Find Staff By Last Name",
-          "5. Find Staff By CCCD",
-          "6. Find Staff By Letter",
-          "7. Remove Staff By CCCD",
-          "8. Remove Staff"
+     vector<string> staffFunc = {
+          "1. Add New",
+          "2. Update Information",
+          "3. Remove By CCCD",
+          "4. Remove",
+          "5. Show All"
      };
-     for (int i = 0; i < staff.size(); i++)
+     for (int i = 0; i < staffFunc.size(); i++)
      {
-          gotoXY(10, 15 + i);
-          cout << staff[i];
+          gotoXY(1, 15 + i);
+          cout << staffFunc[i];
      }
-     vector<string> customer = {
-          "1. Add New Customer",
-          "2. Update Customer's Information",
-          "3. Find Customer By First Name",
-          "4. Find Customer By Last Name",
-          "5. Find Customer By CCCD",
-          "6. Find Customer By Letter",
-          "7. Remove Customer By CCCD",
-          "8. Remove Customer"   
+     vector<string> customerFunc = {
+          "1. Add New",
+          "2. Update Information",
+          "3. Find By First Name",
+          "4. Find By Last Name",
+          "5. Find By Letter",
+          "6. Find By CCCD",
+          "7. Remove By CCCD",
+          "8. Remove",
+          "9. Show All"   
      };
-     for (int i = 0; i < customer.size(); i++)
+     for (int i = 0; i < customerFunc.size(); i++)
      {
-          gotoXY(60, 15 + i);
-          cout << customer[i];
+          gotoXY(31, 15 + i);
+          cout << customerFunc[i];
      }
 
-     if(twoBoxButton(15, 11, 15, 2, 55, 11, 150, 75, "Staff", "Customer"));
-     
-     /*
-     cout << "\t SHOWING" << endl;
-     cout << "\t1. Show Staff" << endl;
-     cout << "\t2. Show Customer" << endl;
-     cout << "\t3. Show Room" << endl;
-     cout << "\t4. Show Service" << endl;
-     cout << "\n\t BOOKING" << endl;
-     cout << "\t1. Book Room" << endl;
-     cout << "\t2. Book Service" << endl;
-     cout << "\n\t REMOVING" <<endl;
-     cout << "\t1. Remove Staff" << endl;
-     cout << "\t2. Remove Staff by CCCD" << endl;
-     cout << "\t3. Remove Staff by Name" << endl; */
+     vector<string> roomFunc = {
+          "1. Change Room Status",
+          "2. Show All",
+     };
+     for (int i = 0; i < roomFunc.size(); i++)
+     {
+          gotoXY(61, 15 + i);
+          cout << roomFunc[i];
+     }
+
+     vector<string> serviceFunc = {
+          "1. Show All",
+     };
+     for (int i = 0; i < serviceFunc.size(); i++)
+     {
+          gotoXY(91, 15 + i);
+          cout << serviceFunc[i];
+     }
+
+     vector<string> billFunc = {
+          "1. Add New Bill",
+          "2. Check By Name & Phone number"
+     };
+     for (int i = 0; i < billFunc.size(); i++)
+     {
+          gotoXY(121, 15 + i);
+          cout << billFunc[i];
+     }
+
+     vector<string> groupFunc = {"Staff", "Customer", "Room", "Service", "Bill"};
+     int choice = buttonList (6, 12, 15, 2, 14, groupFunc, "row");
+     gotoXY (25, 30);
+     cout << "You have chosen function group:\t" << groupFunc[choice - 1];
 }
 
 void customerScreen()
