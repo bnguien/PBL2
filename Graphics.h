@@ -7,7 +7,7 @@
 #include <iomanip>
 #include <ctime>
 #include "Vector.h"
-#include "windows.h"
+
 using namespace std;
 
 #define KEY_NONE -1
@@ -272,6 +272,120 @@ void selectedBar(int x, int y, int w, int h, int backgroundColor, string content
     changeColor(7);
     gotoXY(x + 3, y + 1);
     cout << " " << left << setw(w - 6) << content;
+}
+
+int buttonList(int x, int y, int w, int h, int space, vector<string> content, string model)
+{
+    int number = content.size();
+    if (model == "row")
+    {
+        for (int i = 0; i < number; i++)
+            boxTwoLine(x + (space + w) * i, y, w, h, 11, 150, content[i]);
+    }
+    else if (model == "column")
+    {
+        for (int i = 0; i < number; i++)
+            boxOneLine(x, y + (space + h) * i, w, h, 11, 150, content[i]);
+    }
+
+    int iold = 0, inew = 0;
+    selectedBar(x, y, w, h, 75, content[iold]);
+
+    int xp = x, yp = y, xOld = xp, yOld = yp;
+    bool check = true;
+    
+    while (true)
+    {
+        if (check)
+        {
+            gotoXY(xOld, yOld);
+            selectedBar(xOld, yOld, w, h, 150, content[iold]);
+            xOld = xp, yOld = yp;
+            selectedBar(xp, yp, w, h, 75, content[inew]);
+            check = false;
+        }
+
+        if (_kbhit())
+        {
+            char c = _getch();
+
+            if (c == -32)
+            {
+                check = true;
+                c = _getch();
+                if (model == "row")
+                {
+                    if (c == 77)
+                    {
+                        if (inew < number - 1)
+                        {
+                            xp += (space + w);
+                            iold = inew;
+                            inew++;
+                        }
+                        else
+                        {
+                            xp = x;
+                            iold = inew;
+                            inew = 0;
+                        }
+                    }
+                    else if (c == 75)
+                    {
+                        if (inew > 0)
+                        {
+                            xp -= (space + w);
+                            iold = inew;
+                            inew--;
+                        }
+                        else
+                        {
+                            xp += (space + w) * (number - 1);
+                            iold = inew;
+                            inew = number - 1;
+                        }
+                    }
+                }
+                else if (model == "column")
+                {
+                    if (c == 80)
+                    {
+                        if (inew < number - 1)
+                        {
+                            yp += (space + h);
+                            iold = inew;
+                            inew++;
+                        }
+                        else
+                        {
+                            yp = y;
+                            iold = inew;
+                            inew = 0;
+                        }
+                    }
+                    else if (c == 72)
+                    {
+                        if (inew > 0)
+                        {
+                            yp -= (space + h);
+                            iold = inew;
+                            inew--;
+                        }
+                        else
+                        {
+                            yp += (space + h) * (number - 1);
+                            iold = inew;
+                            inew = number - 1;
+                        }
+                    }
+                }
+            }
+            else if (c == 13)
+            {
+                return inew + 1;
+            }
+        }
+    }
 }
 
 bool twoBoxButton(int x, int y, int w, int h, int d, int textColor, int backgroundColor, int selectedColor, string content1, string content2)
