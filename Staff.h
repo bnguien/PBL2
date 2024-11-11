@@ -33,12 +33,14 @@ public:
 
      void updateStaffFile(const vector<Staff> &staffs, const string &fileName);
      void addNewStaff(Staff &newStaff);
+     bool updateStaff(const string &type, const string &infor); //chua viet
      void removeStaff(Staff &staffToRemove);
      void removeStaffByCCCD(const string &CCCDToRemove);
 
      int cusExists(const vector<Customer> &customers, const Customer &newCus);
      bool writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName);
      bool addNewCustomer(Customer &newCus);
+     bool updateCustomer(const string &type, const string &infor); //chua viet
      bool removeCustomer(Customer &CusToRemove);
      bool removeCustomerByCCCD(const string &CCCDToRemove);
      bool findCustomerByCCCD(const string &CCCD);
