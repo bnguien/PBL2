@@ -117,6 +117,7 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
         Customer customer(person, roomIDs, arrivalDate, serviceIDs, serviceNames);
         customers.push_back(customer);
     }
+    return customers;
 }
 
 void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
