@@ -68,8 +68,13 @@ void exitScreen()
 {
      Sleep(300);
      system("cls");
-     gotoXY(20, 20);
-     cout << "Day la man hinh neu bam exit";
+     gotoXY(20, 10);
+     cout << "Thanks for using our system!";
+     gotoXY(20, 12);
+     cout << "Existing in a few seconds" << endl;
+     loadingBarAnimation(12);
+
+     exit;
 }
 
 void introScreen()
@@ -184,8 +189,14 @@ void introduceUs()
      cout << border2 << endl;
 
      gotoXY(43, 31);
-     cout << "Do you already have an account?";
+     cout << "Do you want to exit our system?";
      vector<string> yesNo = {"Yes", "No"};
+     if(buttonList(38, 33, 10, 2, 20, yesNo, "row") == 1)
+          exitScreen();
+
+     clearFromPosition(43, 31);
+     gotoXY(43, 31);
+     cout << "Do you already have an account?";
      int yN = buttonList(38, 33, 10, 2, 20, yesNo, "row");
      if (yN == 1)
      {
@@ -255,6 +266,7 @@ void noAccountScreen()
           "1. Show Rooms",
           "2. Show Services",
           "3. Book Rooms",
+          "4. Return"
      };
 
      switch(buttonList(38, 15, 31, 2, 2, function, "column"))
@@ -271,7 +283,11 @@ void noAccountScreen()
                clearFromPosition(1, 1);
                cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[2] << " ----------\n";
                break;
+          case 4: 
+               introduceUs();
+               break;
      }
+
      Sleep(1000);
      clearFromPosition(1, 1);
      introduceUs();
@@ -325,28 +341,19 @@ void adminScreen()
           cout << roomFunc[i];
      }
 
-     vector<string> serviceFunc = {
-          "1. Change Price",
-          "2. Show All",
+     vector<string> serBillFunc = {
+          "1. Change Service Price",
+          "2. Show All Services",
+          "3. Add New Bill",
+          "4. Check Bill",
+          "5. Remove Bill"
      };
-     for (int i = 0; i < serviceFunc.size(); i++)
+     for (int i = 0; i < serBillFunc.size(); i++)
      {
           gotoXY(102, 16 + i);
-          cout << serviceFunc[i];
+          cout << serBillFunc[i];
      }
-
-     vector<string> billFunc = {
-          "1. Add New",
-          "2. Check",
-          "3. Remove"
-     };
-     for (int i = 0; i < billFunc.size(); i++)
-     {
-          gotoXY(135, 16 + i);
-          cout << billFunc[i];
-     }
-
-     vector<string> groupFunc = {"Staff", "Customer", "Room", "Service", "Bill"};
+     vector<string> groupFunc = {"Staff", "Customer", "Room", "Ser&Bill", "Log Out"};
      string account = "Administrator";
      //int choice = buttonList (6, 12, 15, 2, 14, groupFunc, "row");
      switch (buttonList(6, 12, 15, 2, 18, groupFunc, "row"))
@@ -361,10 +368,10 @@ void adminScreen()
                roomFunction(account, roomFunc);
                break;
           case 4: 
-               serviceFunction(account, serviceFunc);
+               serBillFunction(account, serBillFunc);
                break;
-          case 5:
-               billFunction(account, billFunc);  
+          case 5: 
+               introduceUs();
                break;
      }
 }
@@ -514,11 +521,11 @@ void roomFunction(string account, vector<string> function)
      
 }
 
-void serviceFunction(string account, vector<string> function)
+void serBillFunction(string account, vector<string> function)
 {
      clearFromPosition(30, 10);
      changeColor(12);
-     cout << "SERVICE FUNCTIONS: Choose the function you want!";
+     cout << "SERVICE & BILL FUNCTIONS: Choose the function you want!";
      changeColor(7);
 
      function.push_back("RETURN");
@@ -537,7 +544,25 @@ void serviceFunction(string account, vector<string> function)
                cout << "\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
                break;
           }
-          case 3:
+          case 3: 
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 4:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 5:
+          {
+               clearFromPosition(1, 1);
+               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               break;
+          }
+          case 6:
           {
                clearFromPosition(1,1);
                adminScreen();
@@ -548,48 +573,6 @@ void serviceFunction(string account, vector<string> function)
      Sleep(1000);
      clearFromPosition(1,1);
      adminScreen();
-}
-
-void billFunction(string account, vector<string> function)
-{
-     clearFromPosition(30, 10);
-     changeColor(12);
-     cout << "BILL FUNCTIONS: Choose the function you want!";
-     changeColor(7);
-
-     function.push_back("RETURN");
-     int choice = buttonList(40, 12, 28, 2, 2, function, "column");
-     switch(choice)
-     {
-          case 1: 
-          {
-               clearFromPosition(1, 1);
-               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
-               break;
-          }
-          case 2:
-          {
-               clearFromPosition(1, 1);
-               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
-               break;
-          }
-          case 3:
-          {
-               clearFromPosition(1, 1);
-               cout << "\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
-               break;
-          }
-          case 4:
-          {
-               clearFromPosition(1,1);
-               adminScreen();
-               break;
-          }
-     }
-
-     Sleep(1000);
-               clearFromPosition(1,1);
-               adminScreen();
 }
 
 void customerScreen(const string &username)
@@ -612,6 +595,7 @@ void customerScreen(const string &username)
           "4. Check Information",
           "5. Change Information",
           "6. Check Bill"
+          "7. Log Out"
      };
 
      switch(buttonList(35, 13, 36, 2, 2, function, "column"))
@@ -639,6 +623,9 @@ void customerScreen(const string &username)
           case 6:
                clearFromPosition(1, 1);
                cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[5] << " ----------\n";
+               break;
+          case 7:
+               introduceUs();
                break;
      }
 
