@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "Login.h"
 #define MAX 100
 using namespace std;
 
@@ -75,5 +76,4 @@ void customerScreen(const string &username);
 void staffFunction(string account, vector<string> function);
 void customerFunction(string account, vector<string> function);
 void roomFunction(string account, vector<string> function);
-void serviceFunction(string account, vector<string> function);
-void billFunction(string account, vector<string> function);
+void serBillFunction(string account, vector<string> function);
