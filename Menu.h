@@ -1,5 +1,10 @@
 #include "Graphics.h"
+
+#include "Customer.h"
 #include "Login.h"
+
+#include "Function.h"
+#include "Vector.h"
 #define MAX 100
 using namespace std;
 
@@ -21,7 +26,6 @@ string welcomeMessage = R"(
         |  |    |  | |   _______| |  |              |  |         |  |      |  | |  | \  \ |  |   /  /__\  \
         |  |___/  /  |  |_______  |  |_______       |  |_______  |  |______|  | |  |  \  \|  |  /   _____  \
         |________/   |__________| |__________|      |__________| |____________| |__|   \_____| /__/      \__\
-
     )";
 
 string hotel = R"(                 
@@ -35,7 +39,6 @@ string hotel = R"(
                     |     |    |     | |    |_____|    |      |    |      |     |_______  |     |_______       
                     |     |    |     | |               |      |    |      |             | |             |      
                     |_____|    |_____| |_______________|      |____|      |_____________| |_____________|     
-   
 )";
 
 string delLuna = R"(
@@ -61,6 +64,7 @@ string welcome = R"(
 //---Sencondary Function---
 void inputPassword(string &password);
 void logInBar(int x, int y, int textColor, int backgroundColor);
+bool logInCheck(int x, int y, int textColor, int backgroundColor, string text);
 
 void welcomTo();
 void continueScreen();
