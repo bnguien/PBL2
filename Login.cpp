@@ -41,7 +41,7 @@ bool login(const vector<pair<string, string>>& accounts, const string& username,
     return false;
 }
 
-void loadingBarAnimation(int color) {
+/* void loadingBarAnimation(int color) {
     const int totalProgress = 100; 
     const int barWidth = 40;       
     string spinner = "|/-\\";    
@@ -67,7 +67,7 @@ void loadingBarAnimation(int color) {
     }
     cout << endl;
     changeConsoleColor(7);
-}
+} */
 
 string trim(string s) {
     s.erase(s.begin(), find_if(s.begin(), s.end(), [](unsigned char ch) {
