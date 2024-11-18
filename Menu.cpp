@@ -182,37 +182,32 @@ void logInBar(int x, int y, int textColor, int backgroundColor, string &username
 bool logInCheck(string username, string password, string text)
 {
      vector<pair<string, string>> accounts;
+
      if (text == "ADMINISTRATOR")
      {
           vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
-          vector<pair<string, string>> accounts;
-
           for (const auto &staff : staffs)
           {
-               string username = createUsername(staff.getFullName());
-               accounts.push_back(make_pair(trim(username), trim(staff.getCCCD())));
+               string user = createUsername(staff.getFullName());
+               accounts.push_back(make_pair(trim(user), trim(staff.getCCCD())));
           }
      }
      else if (text == "CUSTOMER")
      {
           vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
-          vector<pair<string, string>> accounts;
-
           for (const auto &customer : customers)
           {
-               string username = createUsername(customer.getFullName());
-               accounts.push_back(make_pair(trim(username), trim(customer.getCCCD())));
+               string user = createUsername(customer.getFullName());
+               accounts.push_back(make_pair(trim(user), trim(customer.getCCCD())));
           }
      }
-
-     if (login(accounts, username, password))
+     else
      {
-          return true;
-     }
-     else 
-     {
+          cout << "Invalid user type specified: " << text << endl;
           return false;
      }
+
+     return login(accounts, username, password);
 }
 
 void introduceUs()
@@ -289,7 +284,7 @@ void introduceUs()
                     else
                     {
                          gotoXY(32, 39);
-                         changeColor(12);
+                         changeColor(10);
                          cout << "Successfully logged in to the ADMINISTRATOR account!" << endl;
                          changeColor(7);
                     }
@@ -321,8 +316,8 @@ void introduceUs()
                     }
                     else
                     {
-                         gotoXY(32, 39);
-                         changeColor(12);
+                         gotoXY(35, 39);
+                         changeColor(10);
                          cout << "Successfully logged in to the CUSTOMER account!" << endl;
                          changeColor(7);
                     }
@@ -683,7 +678,7 @@ void customerScreen(const string &username)
          "3. Book Services",
          "4. Check Information",
          "5. Change Information",
-         "6. Check Bill"
+         "6. Check Bill",
          "7. Log Out"};
 
      switch (buttonList(35, 13, 36, 2, 2, function, "column"))
