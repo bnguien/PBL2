@@ -385,7 +385,7 @@ void noAccountScreen()
      case 4:
           clearFromPosition(1, 1);
           introduceUs();
-          break;
+          return;
      }
 
      cout << "Press Enter to continue..." << endl;
@@ -495,10 +495,10 @@ void customerScreen(const string &username, const string &password)
      case 7:
           system("cls");
           introduceUs();
-          break;
+          return;
      }
 
-     cout << "Press Enter to continue..." << endl;
+     cout << "\nPress Enter to continue..." << endl;
      cin.ignore(); 
      Sleep(900);
      system("cls");
@@ -582,7 +582,7 @@ void adminScreen(const string &username, const string &password)
      }
      vector<string> groupFunc = {"Staff", "Customer", "Room", "Ser&Bill", "Log Out"};
      string account = "Administrator";
-     // int choice = buttonList (6, 12, 15, 2, 14, groupFunc, "row");
+     
      switch (buttonList(6, 13, 15, 2, 18, groupFunc, "row"))
      {
      case 1:
@@ -651,7 +651,7 @@ void staffFunction(const string &username, const string &password, const string 
      }
      }
 
-     cout << "Press Enter to continue..." << endl;
+     cout << "\nPress Enter to continue..." << endl;
      cin.ignore(); 
      Sleep(900);
      system("cls");
@@ -736,7 +736,7 @@ void customerFunction(const string &username, const string &password, const stri
      }
      }
 
-     cout << "Press Enter to continue..." << endl;
+     cout << "\nPress Enter to continue..." << endl;
      cin.ignore(); 
      Sleep(900);
      system("cls");
@@ -792,7 +792,7 @@ void roomFunction(const string &username, const string &password, const string &
      }
      }
 
-     cout << "Press Enter to continue..." << endl;
+     cout << "\nPress Enter to continue..." << endl;
      cin.ignore(); 
      Sleep(900);
      system("cls");
@@ -872,7 +872,7 @@ void serBillFunction(const string &username, const string &password, const strin
      }
      }
 
-     cout << "Press Enter to continue..." << endl;
+     cout << "\nPress Enter to continue..." << endl;
      cin.ignore(); 
      Sleep(900);
      system("cls");
