@@ -273,13 +273,31 @@ void Customer::bookedRoom()
     std::cout << "Available rooms of type " << roomType << ":" << endl;
     for (const auto &filteredRoom : filteredRooms)
     {
-        std::cout << "ID: " << filteredRoom.getID() << endl;
-        std::cout << "Type: " << filteredRoom.getType() << endl;
-        std::cout << "Price (VND/night): " << filteredRoom.getPrice() << "/night" << endl;
-        std::cout << "Status: " << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << endl;
-        std::cout << "-----------------------------" << endl;
+        string border = "+---------------+-----------------------------------+";
+        cout << border << endl;
+        changeConsoleColor(9);
+        cout << "| Room ID       | " << left << setw(34) << filteredRoom.getID() << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(12);
+        cout << "| Room Type     | " << left << setw(34) << filteredRoom.getType() << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(8);
+        cout << "| Room Price    | " << left << setw(34) << filteredRoom.getPrice() <<"|" << endl;
+        cout << border << endl;
+        if (filteredRoom.checkAvailable())
+        {
+            changeConsoleColor(2);
+        }
+        else
+        {
+            changeConsoleColor(4); 
+        }
+        cout << "| Room Status   | " << left << setw(34) 
+             << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(7);
     }
-
+    changeConsoleColor(7);
     vector<string> availableRoomIDs;
     while (true)
     {
