@@ -389,7 +389,7 @@ void Customer::bookedRoom()
     std::cout << "Enter your address: ";
     getline(cin, add);
 
-    std::cout << "Enter your gender: ";
+    std::cout << "Enter your gender(male/female): ";
     getline(cin, gender);
 
     std::cout << "Enter your date of birth (DD/MM/YYYY): ";
@@ -460,8 +460,6 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
     Room room;
     string fileRoom = "Room.txt";
     vector<Room> rooms = room.readFileRoom(fileRoom);
-
-    loadingBarAnimation(5);
     string border = "*===================================================*";
     changeConsoleColor(1);
     std::cout << "\n"
