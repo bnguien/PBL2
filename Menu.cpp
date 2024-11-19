@@ -325,7 +325,7 @@ void introduceUs()
 
                Sleep(500);
                system("cls");
-               customerScreen(username);
+               customerScreen(username, password);
           }
      }
      else if (yN == 2)
@@ -338,6 +338,10 @@ void introduceUs()
 
 void noAccountScreen()
 {
+     vector<Service> services = Service::readFileService("Service.txt");
+     vector<Room> rooms = Room::readFileRoom("Room.txt");
+     Customer cus;
+     Room r;
      cout << delLuna << endl;
      gotoXY(29, 9);
      changeColor(2);
@@ -360,14 +364,25 @@ void noAccountScreen()
      case 1:
           clearFromPosition(1, 1);
           cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[0] << " ----------\n";
+          changeConsoleColor(3);
+          cout << setw(42) << "HERE ARE THE ROOMS WE OFFER" << endl;
+          changeConsoleColor(7);
+          cout << setw(37) << "--------------------" << endl;
+          r.printRoom(rooms, services);
           break;
      case 2:
           clearFromPosition(1, 1);
           cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[1] << " ----------\n";
+          changeConsoleColor(3);
+          cout << setw(42) << "HERE ARE THE ROOMS WE OFFER" << endl;
+          changeConsoleColor(7);
+          cout << setw(37) << "--------------------" << endl;
+          displayService(services);
           break;
      case 3:
           clearFromPosition(1, 1);
           cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[2] << " ----------\n";
+          cus.bookedRoom();
           break;
      case 4:
           clearFromPosition(1, 1);
@@ -518,6 +533,7 @@ void customerFunction(string account, vector<string> function)
 
      function.push_back("RETURN");
      int choice = buttonList(40, 12, 28, 2, 2, function, "column");
+
      switch (choice)
      {
      case 1:
@@ -659,8 +675,16 @@ void serBillFunction(string account, vector<string> function)
      adminScreen();
 }
 
-void customerScreen(const string &username)
+void customerScreen(const string &username, const string &password)
 {
+     vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+     vector<Service> services = Service::readFileService("Service.txt");
+     vector<Room> rooms = Room::readFileRoom("Room.txt");
+     string fileName = "Customer.txt";
+     Customer cus;
+     Bill tempBill;
+     Service ser;
+     Room r;
      cout << delLuna << endl;
      gotoXY(30, 9);
      cout << "Your username: " << username << endl;
@@ -671,7 +695,6 @@ void customerScreen(const string &username)
      gotoXY(35, 11);
      cout << "Please choose the function you want!";
      changeColor(7);
-
      vector<string> function = {
          "1. Show Rooms",
          "2. Show Services",
@@ -686,26 +709,42 @@ void customerScreen(const string &username)
      case 1:
           clearFromPosition(1, 1);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[0] << " ----------\n";
+          changeConsoleColor(3);
+          cout << setw(42) << "HERE ARE THE ROOMS WE OFFER" << endl;
+          changeConsoleColor(7);
+          cout << setw(37) << "--------------------" << endl;
+          r.printRoom(rooms, services);
           break;
      case 2:
           clearFromPosition(1, 1);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[1] << " ----------\n";
+          changeConsoleColor(3);
+          cout << setw(42) << "HERE ARE THE SERVICES WE OFFER" << endl;
+          changeConsoleColor(7);
+          cout << setw(37) << "--------------------" << endl;
+          displayService(services);
           break;
      case 3:
           clearFromPosition(1, 1);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[2] << " ----------\n";
+          cus.bookServices(username, password);
           break;
      case 4:
           clearFromPosition(1, 1);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[3] << " ----------\n";
+          cus.checkInfor(username, password, customers, services);
+          Sleep(1000);
           break;
      case 5:
           clearFromPosition(1, 1);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[4] << " ----------\n";
+          cus.updateCustomerInfo(username, password, customers, fileName);
           break;
      case 6:
           clearFromPosition(1, 1);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[5] << " ----------\n";
+          tempBill.checkBillInfo(username, password, customers, rooms, services);
+          Sleep(1000);
           break;
      case 7:
           clearFromPosition(1, 1);
