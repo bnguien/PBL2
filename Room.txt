@@ -65,7 +65,7 @@ S304|Single|450.000/night|Available|None
 S305|Single|450.000/night|Unavailable|None
 S306|Single|450.000/night|Unavailable|None
 S307|Single|480.000/night|Unavailable|None
-S308|Single|480.000/night|Available|None
+S308|Single|480.000/night|Unavailable|None
 S309|Single|480.000/night|Available|None
 S310|Single|480.000/night|Unavailable|None
 D301|Double|600.000/night|Unavailable|None
