@@ -73,11 +73,11 @@ void introScreen();
 
 void introduceUs();
 void noAccountScreen();
-void adminScreen();
+void adminScreen(const string &username, const string &password);
 void customerScreen(const string &username, const string &password);
 
 //---Screen for function---
-void staffFunction(string account, vector<string> function);
-void customerFunction(string account, vector<string> function);
-void roomFunction(string account, vector<string> function);
-void serBillFunction(string account, vector<string> function);
+void staffFunction(const string &username, const string &password, const string &account, vector<string> function);
+void customerFunction(const string &username, const string &password, const string &account, vector<string> function);
+void roomFunction(const string &username, const string &password, const string &account, vector<string> function);
+void serBillFunction(const string &username, const string &password, const string &account, vector<string> function);
