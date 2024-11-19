@@ -135,19 +135,35 @@ vector<Room> Room::readFileRoom(const string &fileName)
 
 void Room::printRoom(const vector<Room> &rooms, const vector<Service> &services)
 {
-    for (size_t i = 0; i < rooms.size(); ++i)
+    for (const auto &room : rooms)
     {
-        const Room &room = rooms[i];
-        cout << "ID: " << room.getID() << endl;
-        cout << "Type: " << room.getType() << endl;
-        cout << "Price (VND/night): " << room.getPrice() << endl;
-        cout << "Status: " << room.getStatus() << endl;
-
-        cout << "Services: ";
+        string border = "+---------------+-----------------------------------+";
+        cout << border << endl;
+        cout << "| Room ID       | " << left << setw(34) << room.getID() << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(12);
+        cout << "| Room Type     | " << left << setw(34) << room.getType() << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(8);
+        cout << "| Room Price    | " << left << setw(34) << room.getPrice() << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(7);
+        if (room.getStatus() == "Unavailable")
+        {
+            changeConsoleColor(4);
+        }
+        else if (room.getStatus() == "Available")
+        {
+            changeConsoleColor(2);
+        }
+        cout << "| Room Status   | " << left << setw(34) << room.getStatus() << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(3);
+        cout << "| Services      | ";
         const vector<string> &serviceIDs = room.getServiceIDs();
         if (serviceIDs.size() == 1 && serviceIDs[0] == "None")
         {
-            cout << "None";
+            cout << left << setw(34) << "None";
         }
         else
         {
@@ -158,9 +174,10 @@ void Room::printRoom(const vector<Room> &rooms, const vector<Service> &services)
                 cout << Service::getServiceName(serviceIDs[j], services);
             }
         }
+        cout << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(7);
         cout << endl;
-
-        cout << "-----------------------------" << endl;
     }
 }
 

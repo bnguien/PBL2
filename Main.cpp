@@ -96,13 +96,12 @@ int main()
                         inputPasswordStr = inputPassword();
                         changeConsoleColor(6);
                         std::cout << "|---------------------------------------------------------------------------------------------|" << std::endl;
-                        loadingBarAnimation(6);
                         if (login(accounts, inputUsername, inputPasswordStr))
                         {
                             changeConsoleColor(4);
                             std::cout << "LOGIN SUCCESSFULLY" << std::endl;
                             changeConsoleColor(6);
-                            loadingBarAnimation(7);
+                       
                             system("pause");
                             loggedIn = true;
                             userLoggedIn = true;
@@ -237,7 +236,7 @@ int main()
                             changeConsoleColor(4);
                             std::cout << "LOGIN SUCCESSFULLY" << std::endl;
                             changeConsoleColor(6);
-                            loadingBarAnimation(7);
+                       
                             system("pause");
                             loggedIn = true;
                             changeConsoleColor(7);

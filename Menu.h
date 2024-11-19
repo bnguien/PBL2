@@ -74,7 +74,7 @@ void introScreen();
 void introduceUs();
 void noAccountScreen();
 void adminScreen();
-void customerScreen(const string &username);
+void customerScreen(const string &username, const string &password);
 
 //---Screen for function---
 void staffFunction(string account, vector<string> function);

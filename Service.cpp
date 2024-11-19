@@ -32,7 +32,6 @@ void displayService(const vector<Service> &services)
      for (const auto &service : services)
      {
           string border = "+---------------+-----------------------------------+";
-          Sleep(1000);
           cout << border << endl;
           cout << "| Service ID    | " << left << setw(34) << service.ID << "|" << endl;
 
