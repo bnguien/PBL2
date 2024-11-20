@@ -41,34 +41,6 @@ bool login(const vector<pair<string, string>>& accounts, const string& username,
     return false;
 }
 
-/* void loadingBarAnimation(int color) {
-    const int totalProgress = 100; 
-    const int barWidth = 40;       
-    string spinner = "|/-\\";    
-
-    changeConsoleColor(color);
-    for (int progress = 0; progress <= totalProgress; ++progress) {
-        int completedWidth = barWidth * progress / totalProgress;
-
-        cout << "\rLoading [";
-        for (int i = 0; i < barWidth; ++i) {
-            if (i < completedWidth) {
-                cout << "-"; // Thanh đầy
-            } else {
-                cout << " "; // Thanh trống
-            }
-        }
-        cout << "] " << progress << "% "
-             << spinner[progress % spinner.size()]; // Hiệu ứng xoay
-
-        cout.flush(); // Đảm bảo in ra ngay lập tức
-
-        Sleep(20); // Windows (20ms)
-    }
-    cout << endl;
-    changeConsoleColor(7);
-} */
-
 string trim(string s) {
     s.erase(s.begin(), find_if(s.begin(), s.end(), [](unsigned char ch) {
         return !std::isspace(ch);
