@@ -226,7 +226,7 @@ string Staff::generateStaffID(const vector<Staff> &staffs, const string &positio
      }
 }
 
-void Staff::addNewStaff(Staff &newStaff)
+bool Staff::addNewStaff(Staff &newStaff)
 {
      string staffFile = "Staff.txt";
      if (this->position != "Manager")
@@ -234,62 +234,43 @@ void Staff::addNewStaff(Staff &newStaff)
           changeConsoleColor(4);
           cout << "\nAccess Denied: Only Managers can add new staff members!" << endl;
           changeConsoleColor(7);
-          return;
+          return false;
      }
 
      vector<Staff> staffs = readFileStaff(staffFile);
-     bool exists = false;
-     bool positionChanged = false;
 
      for (const auto &staff : staffs)
      {
-          if (staff == newStaff)
-          {
-               exists = true;
-               changeConsoleColor(4);
-               cout << "This staff member's information is already recorded in staff file!" << endl;
-               changeConsoleColor(7);
-               return;
-          }
-
           if (staff.getCCCD() == newStaff.getCCCD())
           {
-               positionChanged = (staff.getPosition() != newStaff.getPosition());
+               changeConsoleColor(4);
+               cout << "\nFailed to add new staff: Duplicate CCCD detected for "
+                    << newStaff.getCCCD() << "!" << endl;
+               changeConsoleColor(7);
+               return false;
           }
 
           if (staff.getID() == newStaff.getID())
           {
                string newID = generateStaffID(staffs, newStaff.getPosition());
                newStaff.setID(newID);
-               cout << "Duplicate ID detected. \nAutomatically generated new ID: "
+               cout << "\nDuplicate ID detected. \nAutomatically generated new ID: "
                     << newID << "for the new staff member." << endl;
           }
-     }
-
-     if (exists && !positionChanged)
-     {
-          cout << "Failed to add new staff due to duplicate CCCD information.\n"
-               << "No new position was assigned for this staff member!" << endl;
-          return;
      }
 
      vector<Staff> temp = {newStaff};
      temp[0].updateStaffFile(temp, staffFile);
 
-     if (exists && positionChanged)
-     {
-          cout << "New position assigned to the existing staff member having CCCD "
-               << newStaff.getCCCD() << "!\n";
-          return;
-     }
-
-     cout << "Successfully added new staff member with CCCD "
+     cout << "\nSuccessfully added new staff member with CCCD "
           << newStaff.getCCCD() << "!\n";
-     cout << "Review the new staff's information: " << endl;
+     cout << "\nReview the new staff's information: " << endl;
      newStaff.displayStaff(temp);
+
+     return true;
 }
 
-void Staff::removeStaff(Staff &staffToRemove)
+bool Staff::removeStaff(Staff &staffToRemove)
 {
      string staffFile = "Staff.txt";
 
@@ -298,7 +279,7 @@ void Staff::removeStaff(Staff &staffToRemove)
           changeConsoleColor(4);
           cout << "\nAccess Denied: Only Managers can add new staff members!" << endl;
           changeConsoleColor(7);
-          return;
+          return false;
      }
 
      vector<Staff> staffs = readFileStaff(staffFile);
@@ -308,7 +289,7 @@ void Staff::removeStaff(Staff &staffToRemove)
           changeConsoleColor(4);
           cout << "No staff members found in the file!" << endl;
           changeConsoleColor(7);
-          return;
+          return false;
      }
 
      vector<Staff> updatedStaffs;
@@ -332,14 +313,14 @@ void Staff::removeStaff(Staff &staffToRemove)
           changeConsoleColor(4);
           cout << "No staff member found with these details!" << endl;
           changeConsoleColor(7);
-          return;
+          return false;
      }
 
      ofstream file(staffFile, ios::trunc);
      if (!file.is_open())
      {
           cout << "Cannot open staff file!" << endl;
-          return;
+          return false;
      }
 
      for (const auto &staff : updatedStaffs)
@@ -360,9 +341,10 @@ void Staff::removeStaff(Staff &staffToRemove)
      changeConsoleColor(2);
      cout << "Successfully removed staff member with these details!" << endl;
      changeConsoleColor(7);
+     return true;
 }
 
-void Staff::removeStaffByCCCD(const string &CCCDToRemove)
+bool Staff::removeStaffByCCCD(const string &CCCDToRemove)
 {
      string staffFile = "Staff.txt";
 
@@ -371,7 +353,7 @@ void Staff::removeStaffByCCCD(const string &CCCDToRemove)
           changeConsoleColor(4);
           cout << "\nAccess Denied: Only Managers can add new staff members!" << endl;
           changeConsoleColor(7);
-          return;
+          return false;
      }
 
      vector<Staff> staffs = readFileStaff(staffFile);
@@ -381,7 +363,7 @@ void Staff::removeStaffByCCCD(const string &CCCDToRemove)
           changeConsoleColor(4);
           cout << "No staff members found in the file!" << endl;
           changeConsoleColor(7);
-          return;
+          return false;
      }
 
      vector<Staff> updatedStaffs;
@@ -403,14 +385,14 @@ void Staff::removeStaffByCCCD(const string &CCCDToRemove)
           changeConsoleColor(4);
           cout << "No staff member found with CCCD: " << CCCDToRemove << endl;
           changeConsoleColor(7);
-          return;
+          return false;
      }
 
      ofstream file(staffFile, ios::trunc);
      if (!file.is_open())
      {
           cout << "Cannot open staff file!" << endl;
-          return;
+          return false;
      }
 
      for (const auto &staff : updatedStaffs)
@@ -431,6 +413,7 @@ void Staff::removeStaffByCCCD(const string &CCCDToRemove)
      changeConsoleColor(2);
      cout << "Successfully removed staff member with CCCD: " << CCCDToRemove << endl;
      changeConsoleColor(7);
+     return true;
 }
 
 bool Staff::changeRoomStatus(const string &roomID)
@@ -483,6 +466,65 @@ bool Staff::changeRoomStatus(const string &roomID)
      return true;
 }
 
+bool Staff::updateStaff(const string &type, const string &infor, const string &ID)
+{
+     if (this->position != "Manager")
+     {
+          changeConsoleColor(4);
+          cout << "\nAccess Denied: Only Managers can add new staff members!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     string staffFile = "Staff.txt";
+     vector<Staff> staffs = readFileStaff(staffFile);
+     bool check = false;
+
+     for (auto &staff : staffs)
+     {
+          if (staff.getID() == ID)
+          {
+               if (type == "Phone")
+               {
+                    check = staff.setPhone(infor);
+               }
+               else if (type == "Position")
+               {
+                    check = staff.setPosition(infor);
+               }
+               else if (type == "Salary")
+               {
+                    staff.setSalary(infor);
+                    check = true;
+               }
+               else
+               {
+                    cout << "Invalid update type: " << type << endl;
+                    return false;
+               }
+               break;
+          }
+     }
+
+     if (!check)
+     {
+          changeConsoleColor(12);
+          cout << "Failed to update Staff's information. Invalid ID: " << ID << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     staffs[0].updateStaffFile(staffs, staffFile);
+
+     changeConsoleColor(2);
+     cout << "Successfully updated Staff's " << type << " to \""
+          << infor << "\" for ID: " << ID << endl;
+     changeConsoleColor(7);
+
+     return true;
+}
+
+//--- Customer Function ---
 int Staff::cusExists(const vector<Customer> &customers, const Customer &newCus)
 {
      for (size_t i = 0; i < customers.size(); i++)
@@ -716,8 +758,8 @@ bool Staff::findCustomerByLetter(const char &letter)
 
      for (const auto &customer : customers)
      {
-          if   (tolower(customer.getFullName().find(tolower(letter)) != string::npos) || 
-                toupper(customer.getFullName().find(toupper(letter)) != string::npos))
+          if (tolower(customer.getFullName().find(tolower(letter)) != string::npos) ||
+              toupper(customer.getFullName().find(toupper(letter)) != string::npos))
                customerList.push_back(customer);
      }
 
@@ -732,6 +774,34 @@ bool Staff::findCustomerByLetter(const char &letter)
           changeConsoleColor(4);
           cout << "No customer found with the character '" << toupper(letter) << "' in their name." << endl;
           changeConsoleColor(7);
+          return false;
+     }
+}
+
+/* bool updateCustomer(const string &type, const string &infor)
+{
+} */
+
+bool Staff::changeServicePrice(const string &serID, const string &price)
+{
+     vector<Service> services = Service::readFileService("Service.txt");
+
+     for (auto &service : services)
+     {
+          if (service.getID() == serID)
+          {
+               service.setPrice(price);
+               break;
+          }
+     }
+     if (services[0].updateServiceFile(services, "Service.txt"))
+     {
+          cout << "Successfully change price of service with ID: " << serID << " to " << price << endl;
+          return true;
+     }
+     else
+     {
+          cout << "Failed to change price!" << endl;
           return false;
      }
 }
