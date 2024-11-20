@@ -177,32 +177,30 @@ void logInBar(int x, int y, int textColor, int backgroundColor, string &username
      ShowCur(0);
 }
 
-bool logInCheck(string username, string password, string text)
+Staff logInStaff(const string &username, const string &password)
+{
+     vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
+     for (const auto &staff : staffs)
+     {
+         string user = trim(createUsername(staff.getFullName()));
+         string pass = trim(staff.getCCCD());
+         if (username == user && password == pass)
+             return staff;  // Đăng nhập thành công
+     }
+     
+     return Staff();
+}
+
+
+bool logInCus(const string &username, const string &password)
 {
      vector<pair<string, string>> accounts;
 
-     if (text == "ADMINISTRATOR")
+     vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+     for (const auto &customer : customers)
      {
-          vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
-          for (const auto &staff : staffs)
-          {
-               string user = createUsername(staff.getFullName());
-               accounts.push_back(make_pair(trim(user), trim(staff.getCCCD())));
-          }
-     }
-     else if (text == "CUSTOMER")
-     {
-          vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
-          for (const auto &customer : customers)
-          {
-               string user = createUsername(customer.getFullName());
-               accounts.push_back(make_pair(trim(user), trim(customer.getCCCD())));
-          }
-     }
-     else
-     {
-          cout << "Invalid user type specified: " << text << endl;
-          return false;
+          string user = createUsername(customer.getFullName());
+          accounts.push_back(make_pair(trim(user), trim(customer.getCCCD())));
      }
 
      return login(accounts, username, password);
@@ -256,6 +254,7 @@ void introduceUs()
           cout << "Log in by AMINISTRATOR or CUSTOMER account?";
           changeColor(7);
           string username, password;
+          Staff staff;
 
           vector<string> adCus = {"Administrator", "Customer"};
           int aC = buttonList(27, 32, 20, 2, 25, adCus, "row");
@@ -265,12 +264,20 @@ void introduceUs()
                changeColor(2);
                cout << "You are logging in by ADMINISTRATOR account!";
                changeColor(7);
-               bool check = false;
+               staff = logInStaff(username, password);
                do
                {
                     logInBar(34, 30, 11, 150, username, password);
-                    check = logInCheck(username, password, "ADMINISTRATOR");
-                    if (check == false)
+
+                    if (!staff.getPosition().empty())
+                    {
+                         gotoXY(32, 39);
+                         changeColor(10);
+                         cout << "Successfully logged in to the ADMINISTRATOR account!" << endl;
+                         changeColor(7);
+                         break;
+                    }
+                    else
                     {
                          gotoXY(32, 39);
                          changeColor(12);
@@ -279,18 +286,11 @@ void introduceUs()
                          Sleep(900);
                          clearFromPosition(34, 30);
                     }
-                    else
-                    {
-                         gotoXY(32, 39);
-                         changeColor(10);
-                         cout << "Successfully logged in to the ADMINISTRATOR account!" << endl;
-                         changeColor(7);
-                    }
-               } while (!check);
+               } while (true);
 
                Sleep(500);
                system("cls");
-               adminScreen(username, password);
+               adminScreen(staff);
           }
           else if (aC == 2)
           {
@@ -302,7 +302,7 @@ void introduceUs()
                do
                {
                     logInBar(34, 30, 11, 150, username, password);
-                    check = logInCheck(username, password, "CUSTOMER");
+                    check = logInCus(username, password);
                     if (check == false)
                     {
                          gotoXY(32, 39);
@@ -389,7 +389,7 @@ void noAccountScreen()
      }
 
      cout << "Press Enter to continue..." << endl;
-     cin.ignore(); 
+     cin.ignore();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -499,7 +499,7 @@ void customerScreen(const string &username, const string &password)
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore(); 
+     cin.ignore();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -520,20 +520,20 @@ void customerScreen(const string &username, const string &password)
           return;
      }
 }
-
 //---ADMINISTRATOR SCREEN---
-void adminScreen(const string &username, const string &password)
+void adminScreen(Staff &staff)
 {
      cout << delLuna << endl;
      gotoXY(30, 9);
      changeColor(12);
-     cout << "Your username: " << username; 
+     string username = trim(createUsername(staff.getFullName()));
+     cout << "Your username: " << username;
      gotoXY(29, 10);
      changeColor(2);
      cout << "------------------ ADMINISTRATOR ------------------";
      changeColor(12);
-     gotoXY(35, 11);
-     cout << "Please choose a function group first!";
+     gotoXY(20, 11);
+     cout << "Please choose a function group first! STAFF FUNCTION is only for MANAGER!";
      changeColor(7);
 
      vector<string> staffFunc = {
@@ -582,20 +582,27 @@ void adminScreen(const string &username, const string &password)
      }
      vector<string> groupFunc = {"Staff", "Customer", "Room", "Ser&Bill", "Log Out"};
      string account = "Administrator";
-     
+
      switch (buttonList(6, 13, 15, 2, 18, groupFunc, "row"))
      {
      case 1:
-          staffFunction(username, password, account, staffFunc);
+          if (staff.getPosition() == "Manager")
+          {
+               staffFunction(staff, staffFunc);
+          }
+          else 
+          {
+               adminScreen(staff);
+          }
           break;
      case 2:
-          customerFunction(username, password, account, customerFunc);
+          customerFunction(staff, customerFunc);
           break;
      case 3:
-          roomFunction(username, password, account, roomFunc);
+          roomFunction(staff, roomFunc);
           break;
      case 4:
-          serBillFunction(username, password, account, serBillFunc);
+          serBillFunction(staff, serBillFunc);
           break;
      case 5:
           clearFromPosition(1, 1);
@@ -604,7 +611,7 @@ void adminScreen(const string &username, const string &password)
      }
 }
 //---FUNCTION OF ADMINISTRATOR---
-void staffFunction(const string &username, const string &password, const string &account, vector<string> function)
+void staffFunction(Staff &staff, vector<string> &function)
 {
      clearFromPosition(30, 11);
      changeColor(12);
@@ -619,40 +626,233 @@ void staffFunction(const string &username, const string &password, const string 
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          // Add new staff
+          cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
+
+          do
+          {
+               string fullName, CCCD, phone, add, gender, day, ID, position, salary;
+               changeColor(2);
+               cout << "Please enter new staff's information!\n";
+               changeColor(7);
+
+               cin.ignore();
+               cout << "Enter full name:\n\t";
+               getline(cin, fullName);
+
+               cout << "Enter CCCD: \n\t";
+               cin >> CCCD;
+               CCCD = trim(CCCD);
+
+               cout << "Enter phone number:\n\t";
+               cin >> phone;
+               phone = trim(phone);
+
+               cin.ignore();
+               cout << "Enter address:\n\t";
+               getline(cin, add);
+
+               cout << "Enter gender:\n\t";
+               cin >> gender;
+               gender = trim(gender);
+
+               cout << "Enter day of birth (dd/mm/yyyy):\n\t";
+               cin >> day;
+               Date DOB(day);
+
+               cout << "Enter position: (Receptionist, Laundry, Housekeeping, Server)\n\t";
+               cin >> position;
+               position = toLower(position);
+               position[0] = toupper(position[0]);
+
+               cout << "Enter ID: (ID will be automatically generated if you enter existed ID)\n\t";
+               cin >> ID;
+               cout << "Enter salary:\n\t";
+               cin >> salary;
+               Staff newStaff(fullName, CCCD, phone, add, gender, DOB, ID, position, salary);
+
+               if (!staff.addNewStaff(newStaff))
+               {
+                    cout << "\nDo you want to try again? (y/n)";
+                    string ch;
+                    cin >> ch;
+                    ch = toLower(ch);
+                    if (ch == "n")
+                         break;
+               }
+               else
+                    break;
+
+          } while (true);
+
           break;
      }
+
      case 2:
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          // Update Information
+          cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
+
+          string continueChoice;
+          do
+          {
+               string ID, type, infor;
+               cout << "Enter Staff's ID you want to update information:\n\t";
+               cin >> ID;
+
+               cout << "Enter type of information (Phone, Position, Salary):\n\t";
+               cin >> type;
+
+               type = toLower(type);
+               if (type != "phone" && type != "position" && type != "salary")
+               {
+                    changeColor(4);
+                    cout << "Invalid type entered: " << type
+                         << ". Please use Phone, Position, or Salary.\n";
+                    changeColor(7);
+                    continue;
+               }
+
+               type[0] = toupper(type[0]);
+
+               cout << "Enter new value for " << type << ":\n\t";
+               cin >> infor;
+
+               if (!staff.updateStaff(type, infor, ID))
+               {
+                    cout << "\nDo you want to try again? (y/n): ";
+                    cin >> continueChoice;
+                    continueChoice = toLower(continueChoice);
+               }
+               else
+                    break;
+
+          } while (continueChoice == "y");
+
           break;
      }
+
      case 3:
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Remove staff
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          do
+          {
+               cout << "-------------------------------------------";
+               char type;
+               cout << "\nDo you want to remove a staff(a) or by staff's CCCD?(b) (a/b)";
+               do
+               {
+                    cin >> type;
+                    type = tolower(type);
+               } while (type != 'a' && type != 'b');
+
+               if (type == 'a')
+               {
+                    changeColor(2);
+                    cout << "Please enter staff's information that you want to remove!\n";
+                    changeColor(7);
+                    string fullName, CCCD, phone, add, gender, day;
+                    string ID, position, salary;
+
+                    cin.ignore();
+                    cout << "Enter full name:\n\t";
+                    getline(cin, fullName);
+
+                    cout << "Enter CCCD: \n\t";
+                    cin >> CCCD;
+                    CCCD = trim(CCCD);
+
+                    cout << "Enter phone number:\n\t";
+                    cin >> phone;
+                    phone = trim(phone);
+
+                    cin.ignore();
+                    cout << "Enter address:\n\t";
+                    cin >> add;
+
+                    cout << "Enter gender:\n\t";
+                    cin >> gender;
+                    gender = trim(gender);
+
+                    cout << "Enter day of birth (dd/mm/yyyy):\n\t";
+                    cin >> day;
+                    Date DOB(day);
+
+                    cout << "Enter position: (Receptionist, Laundry, Housekeeping, Server)\n\t";
+                    cin >> position;
+                    position = toLower(position);
+                    position[0] = toupper(position[0]);
+
+                    cout << "Enter ID:\n\t";
+                    cin >> ID;
+                    cout << "Enter salary: ";
+                    cin >> salary;
+
+                    Staff staffToRemove(fullName, CCCD, phone, add, gender, DOB, ID, position, salary);
+
+                    if (!staff.removeStaff(staff))
+                    {
+                         cout << "\nDo you want to try again? (y/n)";
+                         string ch;
+                         cin >> ch;
+                         ch = toLower(ch);
+                         if (ch == "n")
+                              break;
+                    }
+                    else
+                         break;
+               }
+               else if (type == 'b')
+               {
+                    string CCCD;
+                    cout << "Enter staff's CCCD you want to remove:\n\t";
+                    cin >> CCCD;
+                    CCCD = trim(CCCD);
+
+                    if (!staff.removeStaffByCCCD(CCCD))
+                    {
+                         cout << "\nDo you want to try again? (y/n)";
+                         string ch;
+                         cin >> ch;
+                         ch = toLower(ch);
+                         if (ch == "n")
+                              break;
+                    }
+                    else
+                         break;
+               }
+          } while (true);
+
           break;
      }
+
      case 4:
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Show All
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
+          staff.displayStaff(staffs);
           break;
      }
+
      case 5:
      {
           clearFromPosition(1, 1);
-          adminScreen(username, password);
+          adminScreen(staff);
           break;
      }
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore(); 
+     cin.ignore();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -663,7 +863,7 @@ void staffFunction(const string &username, const string &password, const string 
      if (buttonList(25, 6, 10, 2, 20, yesNo, "row") == 1)
      {
           system("cls");
-          adminScreen(username, password);
+          adminScreen(staff);
           return;
      }
      else
@@ -674,7 +874,7 @@ void staffFunction(const string &username, const string &password, const string 
      }
 }
 
-void customerFunction(const string &username, const string &password, const string &account, vector<string> function)
+void customerFunction(Staff &staff, vector<string> &function)
 {
      clearFromPosition(30, 11);
      changeColor(12);
@@ -690,13 +890,20 @@ void customerFunction(const string &username, const string &password, const stri
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Add New
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          changeColor(2);
+          cout << "\nPlease enter new customer's information!" << endl;
+          changeColor(7);
+
           break;
      }
      case 2:
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Update information
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
           break;
      }
@@ -704,13 +911,115 @@ void customerFunction(const string &username, const string &password, const stri
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Find
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          changeColor(2);
+          cout << "Choose what you want to find by:\n\t1. By CCCD\n\t2. By First Name\n\t3. By Last Name\n\t4. By Letter" << endl;
+          changeColor(7);
+          int choose;
+          cin >> choose;
+          switch (choose)
+          {
+          case 1:
+               do
+               {
+                    string CCCD;
+                    cin.ignore();
+                    cout << "Enter customer's CCCD:\n\t";
+                    getline(cin, CCCD);
+                    if (!staff.findCustomerByCCCD(CCCD))
+                    {
+                         cout << "\nDo you want to try again? (y/n)";
+                         string ch;
+                         cin >> ch;
+                         ch = toLower(ch);
+                         if (ch == "n")
+                              break;
+                    }
+                    else
+                         break;
+
+               } while (true);
+               break;
+          case 2:
+               do
+               {
+                    string firstName;
+                    cin.ignore();
+                    cout << "Enter customer's first name:\n\t";
+                    getline(cin, firstName);
+
+                    if (!staff.findCustomerByFirstName(firstName))
+                    {
+                         cout << "\nDo you want to try again? (y/n)";
+                         string ch;
+                         cin >> ch;
+                         ch = toLower(ch);
+                         if (ch == "n")
+                              break;
+                    }
+                    else
+                         break;
+
+               } while (true);
+               break;
+          case 3:
+               do
+               {
+                    string lastName;
+                    cin.ignore();
+                    cout << "Enter customer's first name:\n\t";
+                    getline(cin, lastName);
+
+                    if (!staff.findCustomerByLastName(lastName))
+                    {
+                         cout << "\nDo you want to try again? (y/n)";
+                         string ch;
+                         cin >> ch;
+                         ch = toLower(ch);
+                         if (ch == "n")
+                              break;
+                    }
+                    else
+                         break;
+
+               } while (true);
+               break;
+          case 4:
+               do
+               {
+                    char letter;
+                    cin.ignore();
+                    cout << "Enter letter in customer's name:\n\t";
+                    cin >> letter;
+
+                    if (!staff.findCustomerByLetter(letter))
+                    {
+                         cout << "\nDo you want to try again? (y/n)";
+                         string ch;
+                         cin >> ch;
+                         ch = toLower(ch);
+                         if (ch == "n")
+                              break;
+                    }
+                    else
+                         break;
+
+               } while (true);
+               break;
+          default:
+               changeColor(4);
+               cout << "Please enter valid choice!\n";
+               changeColor(7);
+          }
           break;
      }
      case 4:
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Book
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
           break;
      }
@@ -718,6 +1027,7 @@ void customerFunction(const string &username, const string &password, const stri
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Remove
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
           break;
      }
@@ -725,19 +1035,31 @@ void customerFunction(const string &username, const string &password, const stri
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Show All
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+          vector<Service> services = Service::readFileService("Service.txt");
+          if (customers.empty())
+          {
+               changeConsoleColor(4);
+               cout << "No customers found. Please add customer information.\n";
+               changeConsoleColor(7);
+          }
+          else
+               customers[0].displayCustomer(customers, services);
           break;
      }
      case 7:
      {
           clearFromPosition(1, 1);
-          adminScreen(username, password);
+          adminScreen(staff);
           break;
      }
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore(); 
+     cin.ignore();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -748,7 +1070,7 @@ void customerFunction(const string &username, const string &password, const stri
      if (buttonList(25, 6, 10, 2, 20, yesNo, "row") == 1)
      {
           system("cls");
-          adminScreen(username, password);
+          adminScreen(staff);
           return;
      }
      else
@@ -759,7 +1081,7 @@ void customerFunction(const string &username, const string &password, const stri
      }
 }
 
-void roomFunction(const string &username, const string &password, const string &account, vector<string> function)
+void roomFunction(Staff &staff, vector<string> &function)
 {
      clearFromPosition(30, 11);
      changeColor(12);
@@ -774,26 +1096,79 @@ void roomFunction(const string &username, const string &password, const string &
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Change Status
           cout << "\t\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          do
+          {
+               string ID;
+               cout << "\nEnter room ID you want to change status:\n\t";
+               cin >> ID;
+
+               if (ID.empty())
+               {
+                    changeConsoleColor(4);
+                    cout << "Room ID cannot be empty. Please try again.\n";
+                    changeConsoleColor(7);
+                    continue;
+               }
+
+               if (!staff.changeRoomStatus(ID))
+               {
+                    cout << "\nDo you want to try again? (y/n): ";
+                    string ch;
+                    cin >> ch;
+                    ch = toLower(ch);
+                    if (ch == "n")
+                         break;
+               }
+               else
+                    break;
+          } while (true);
+
           break;
      }
+
      case 2:
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Show All
           cout << "\t\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          vector<Room> rooms = Room::readFileRoom("Room.txt");
+          vector<Service> services = Service::readFileService("Service.txt");
+
+          if (rooms.empty())
+          {
+               changeConsoleColor(4);
+               cout << "No rooms available.\n";
+               changeConsoleColor(7);
+          }
+          else if (services.empty())
+          {
+               changeConsoleColor(4);
+               cout << "No services available.\n";
+               changeConsoleColor(7);
+          }
+          else
+          {
+               Room::printRoom(rooms, services);
+          }
+
           break;
      }
+
      case 3:
      {
           clearFromPosition(1, 1);
-          adminScreen(username, password);
+          adminScreen(staff);
           break;
      }
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore(); 
+     cin.ignore();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -804,7 +1179,7 @@ void roomFunction(const string &username, const string &password, const string &
      if (buttonList(25, 6, 10, 2, 20, yesNo, "row") == 1)
      {
           system("cls");
-          adminScreen(username, password);
+          adminScreen(staff);
           return;
      }
      else
@@ -815,7 +1190,7 @@ void roomFunction(const string &username, const string &password, const string &
      }
 }
 
-void serBillFunction(const string &username, const string &password, const string &account, vector<string> function)
+void serBillFunction(Staff &staff, vector<string> &function)
 {
      clearFromPosition(30, 11);
      changeColor(12);
@@ -830,16 +1205,44 @@ void serBillFunction(const string &username, const string &password, const strin
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Change Service Price
           cout << "\t\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          cout << "\nEnter service ID: ";
+          string ID;
+          cin >> ID;
+
+          cout << "Enter new price: ";
+          string price;
+          cin >> price;
+
+          staff.changeServicePrice(ID, price);
           break;
      }
+
      case 2:
      {
           clearFromPosition(1, 10);
           changeColor(11);
+          // Show All Services
           cout << "\t\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          vector<Service> services = Service::readFileService("Service.txt");
+
+          if (services.empty())
+          {
+               changeConsoleColor(4);
+               cout << "No services available. Please add services to the system.\n";
+               changeConsoleColor(7);
+          }
+          else
+          {
+               displayService(services);
+          }
+
           break;
      }
+
      case 3:
      {
           clearFromPosition(1, 10);
@@ -859,21 +1262,18 @@ void serBillFunction(const string &username, const string &password, const strin
           clearFromPosition(1, 10);
           changeColor(11);
           cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
-          break;clearFromPosition(1, 10);
-          changeColor(11);
-          cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
           break;
      }
      case 6:
      {
           clearFromPosition(1, 1);
-          adminScreen(username, password);
+          adminScreen(staff);
           break;
      }
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore(); 
+     cin.ignore();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -884,7 +1284,7 @@ void serBillFunction(const string &username, const string &password, const strin
      if (buttonList(25, 6, 10, 2, 20, yesNo, "row") == 1)
      {
           system("cls");
-          adminScreen(username, password);
+          adminScreen(staff);
           return;
      }
      else
@@ -894,4 +1294,3 @@ void serBillFunction(const string &username, const string &password, const strin
           return;
      }
 }
-
