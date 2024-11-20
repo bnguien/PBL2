@@ -15,7 +15,20 @@ public:
      Staff() {}
      Staff(const Staff &s) : Person(s), ID(s.ID), position(s.position), salary(s.salary) {}
      Staff(string fullName, string CCCD, string phone, string add, string gender, Date DOB, string ID, string position, string salary)
-         : Person(fullName, CCCD, phone, add, gender, DOB), ID(ID), position(position), salary(salary) {}
+         : Person(fullName, CCCD, phone, add, gender, DOB), ID(ID), salary(salary)
+     {
+          if (position == "Manager" || position == "Receptionist" 
+           || position == "Housekeeping" || position == "Laundry" || position == "Server")
+          {
+               this->position = position;
+          }
+          else
+          {
+               changeConsoleColor(12);
+               cout << "The entered position '" << position << "' is not available in our hotel!" << endl;
+               cout << "Valide position are: Manager, Receptionist, Housekeeping, Laundry, Server." << endl;
+          }
+     }
 
      void setID(const string &ID);
      string getID() const;
@@ -32,24 +45,26 @@ public:
      bool hasAccess() const;
 
      void updateStaffFile(const vector<Staff> &staffs, const string &fileName);
-     void addNewStaff(Staff &newStaff);
-     bool updateStaff(const string &type, const string &infor); //chua viet
-     void removeStaff(Staff &staffToRemove);
-     void removeStaffByCCCD(const string &CCCDToRemove);
+     bool addNewStaff(Staff &newStaff);
+     bool updateStaff(const string &type, const string &infor, const string &ID);
+     bool removeStaff(Staff &staffToRemove);
+     bool removeStaffByCCCD(const string &CCCDToRemove);
 
      int cusExists(const vector<Customer> &customers, const Customer &newCus);
      bool writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName);
      bool addNewCustomer(Customer &newCus);
-     bool updateCustomer(const string &type, const string &infor); //chua viet
+     bool updateCustomer(const string &type, const string &infor);
      bool removeCustomer(Customer &CusToRemove);
      bool removeCustomerByCCCD(const string &CCCDToRemove);
+
      bool findCustomerByCCCD(const string &CCCD);
      bool findCustomerByFirstName(const string &firstName);
      bool findCustomerByLastName(const string &lastName);
      bool findCustomerByLetter(const char &letter);
 
-     bool changeRoomStatus(const string &roomID); 
-     
+     bool changeRoomStatus(const string &roomID);
+     bool changeServicePrice(const string &serID, const string &price);
+
      ~Staff() {}
 };
 

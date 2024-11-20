@@ -19,7 +19,9 @@ public:
      string getType() const;
      string getDesc() const;
      string getPrice() const;
+     bool setPrice(const string &price);
 
+     bool updateServiceFile(const vector<Service> &services, const string &fileName);
      static string generateSerID(const vector<Service> &services, const string &name);
      static string getServiceName(const string &serviceID, const vector<Service> &services);
      friend void displayService(const vector<Service> &services);

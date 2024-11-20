@@ -26,6 +26,19 @@ string Service::getPrice() const
 {
      return this->price;
 }
+bool Service::setPrice(const string &price)
+{
+     if (price.empty())
+     {
+          changeColor(4);
+          cout << "Price can not be empty!\n";
+          changeColor(7);
+          return false;
+     }
+     
+     this->price = price;
+     return true;
+}
 
 void displayService(const vector<Service> &services)
 {
@@ -128,4 +141,26 @@ string Service::generateSerID(const vector<Service> &services, const string &nam
           newID << name[0] << setw(2) << setfill('0') << lastNumber;
           return newID.str();
      }
+}
+
+bool Service::updateServiceFile(const vector<Service> &services, const string &fileName)
+{
+     ofstream file(fileName, ios::trunc);
+     if (!file.is_open())
+     {
+          cout << "Cannot open file for writing!" << endl;
+          return false;
+     }
+
+     for (const auto &service : services)
+     {
+          file << service.getID() << "|"
+               << service.getName() << "|"
+               << service.getType() << "|"
+               << service.getDesc() << "|"
+               << service.getPrice() << endl;
+     }
+
+     file.close();
+     return true;
 }
