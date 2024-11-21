@@ -907,10 +907,9 @@ void customerFunction(Staff &staff, vector<string> &function)
           // Add New
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(2);
-          cout << "\nPlease enter new customer's information!" << endl;
           do
                {
-                    if (!staff.addNewCustomer())
+                    if (!staff.addNewCustomer(staff))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
