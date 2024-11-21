@@ -612,39 +612,6 @@ bool Staff::writeRemainingCus(const vector<Customer> &remainingCustomers, const 
      return true;
 }
 
-bool Staff::removeCustomer(Customer &CusToRemove)
-{
-     string customerFile = "Customer.txt";
-     if (!hasAccess())
-          return false;
-
-     vector<Customer> customers = Customer::readFileCustomer(customerFile);
-
-     int index = cusExists(customers, CusToRemove);
-     if (index < 0)
-     {
-          changeConsoleColor(4);
-          cout << "Cannot find this customer's information to remove!" << endl;
-          changeConsoleColor(7);
-          return false;
-     }
-
-     vector<Customer> remainingCustomers;
-     for (size_t i = 0; i < customers.size(); i++)
-          if (i != index)
-               remainingCustomers.push_back(customers[i]);
-
-     if (writeRemainingCus(remainingCustomers, customerFile))
-     {
-          changeConsoleColor(2);
-          cout << "Successfully removed customer with CCCD: " << CusToRemove.getCCCD()
-               << " and full name: " << CusToRemove.getFullName() << endl;
-
-          return true;
-     }
-     return false;
-}
-
 bool Staff::removeCustomerByCCCD(const string &CCCDToRemove)
 {
      string customerFile = "Customer.txt";
