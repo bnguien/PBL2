@@ -145,12 +145,13 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         std::cout << "|" << endl;
         std::cout << border << endl;
 
-        std::cout << "| Room IDs                                               |" << endl;
+        std::cout << "| Room IDs      | ";
+        cout << left << setw(39);
         for (const auto &room : customer.getRoomIDs())
         {
             std::cout << room << " ";
         }
-        std::cout << endl;
+        cout << "|" << endl;
         std::cout << border << endl;
 
         std::cout << "| Arrival Date  | " << left << setw(39);
@@ -160,7 +161,7 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
 
         if (customer.getServiceIDs().empty())
         {
-            std::cout << "| Service      | " << left << setw(39);
+            std::cout << "| Service       | " << left << setw(39);
             std::cout << "No services booked";
             std::cout << "|" << endl;
             std::cout << border << endl;
