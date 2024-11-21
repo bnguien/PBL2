@@ -890,7 +890,11 @@ void customerFunction(Staff &staff, vector<string> &function)
 
      string username = createUsername(trim(staff.getFullName()));
      string password = staff.getCCCD();
-
+     string fileName = "Customer.txt";
+     Customer cus;
+     vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+     vector<Service> services = Service::readFileService("Service.txt");
+     vector<Room> rooms = Room::readFileRoom("Room.txt");
      function.push_back("RETURN");
      int choice = buttonList(40, 13, 28, 2, 2, function, "column");
 
@@ -902,11 +906,24 @@ void customerFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Add New
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
-
           changeColor(2);
           cout << "\nPlease enter new customer's information!" << endl;
-          changeColor(7);
+          do
+               {
+                    if (!staff.addNewCustomer())
+                    {
+                         cout << "\nDo you want to try again? (y/n)";
+                         string ch;
+                         cin >> ch;
+                         ch = toLower(ch);
+                         if (ch == "n")
+                              break;
+                    }
+                    else
+                         break;
 
+               } while (true);
+          changeColor(7);
           break;
      }
      case 2:
@@ -915,6 +932,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Update information
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          cus.updateCustomerInfo(username, password, customers, fileName);
           changeColor(7);
 
           break;
@@ -937,8 +955,6 @@ void customerFunction(Staff &staff, vector<string> &function)
                do
                {
                     string CCCD;
-                    cin.ignore();
-                    cout << "Enter customer's CCCD:\n\t";
                     getline(cin, CCCD);
                     if (!staff.findCustomerByCCCD(CCCD))
                     {
@@ -1257,7 +1273,10 @@ void serBillFunction(Staff &staff, vector<string> &function)
      changeColor(12);
      cout << "SERVICE & BILL FUNCTIONS: Choose the function you want!";
      changeColor(7);
-
+     vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+     vector<Service> services = Service::readFileService("Service.txt");
+     vector<Room> rooms = Room::readFileRoom("Room.txt");
+     BillStaff Bill;
      function.push_back("RETURN");
      int choice = buttonList(40, 13, 30, 2, 2, function, "column");
      switch (choice)
@@ -1327,6 +1346,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          Bill.checkBillByNameAndCCCD(customers, rooms, services);
           changeColor(7);
           break;
      }
