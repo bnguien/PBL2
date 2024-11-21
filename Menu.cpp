@@ -182,15 +182,14 @@ Staff logInStaff(const string &username, const string &password)
      vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
      for (const auto &staff : staffs)
      {
-         string user = trim(createUsername(staff.getFullName()));
-         string pass = trim(staff.getCCCD());
-         if (username == user && password == pass)
-             return staff;  // Đăng nhập thành công
+          string user = trim(createUsername(staff.getFullName()));
+          string pass = trim(staff.getCCCD());
+          if (username == user && password == pass)
+               return staff; // Đăng nhập thành công
      }
-     
+
      return Staff();
 }
-
 
 bool logInCus(const string &username, const string &password)
 {
@@ -264,10 +263,11 @@ void introduceUs()
                changeColor(2);
                cout << "You are logging in by ADMINISTRATOR account!";
                changeColor(7);
-               staff = logInStaff(username, password);
+
                do
                {
                     logInBar(34, 30, 11, 150, username, password);
+                    staff = logInStaff(username, password);
 
                     if (!staff.getPosition().empty())
                     {
@@ -286,6 +286,7 @@ void introduceUs()
                          Sleep(900);
                          clearFromPosition(34, 30);
                     }
+
                } while (true);
 
                Sleep(500);
@@ -303,6 +304,7 @@ void introduceUs()
                {
                     logInBar(34, 30, 11, 150, username, password);
                     check = logInCus(username, password);
+
                     if (check == false)
                     {
                          gotoXY(32, 39);
@@ -590,7 +592,7 @@ void adminScreen(Staff &staff)
           {
                staffFunction(staff, staffFunc);
           }
-          else 
+          else
           {
                adminScreen(staff);
           }
@@ -881,6 +883,9 @@ void customerFunction(Staff &staff, vector<string> &function)
      cout << "CUSTOMER FUNCTIONS: Choose the function you want!";
      changeColor(7);
 
+     string username = createUsername(trim(staff.getFullName()));
+     string password = staff.getCCCD();
+
      function.push_back("RETURN");
      int choice = buttonList(40, 13, 28, 2, 2, function, "column");
 
@@ -905,6 +910,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Update information
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
           break;
      }
      case 3:
@@ -1020,7 +1026,32 @@ void customerFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           // Book
-          cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
+
+          Customer cus;
+
+          cout << "What do you want to book ROOMS(a) or SERVICE(b)? (a/b)";
+          char ch;
+          do
+          {
+               cin >> ch;
+               ch = tolower(ch);
+               // book rooms
+               if (ch == 'a')
+               {
+                    cus.bookedRoom();
+                    break;
+               }
+               else if (ch == 'b')
+               {
+                    cus.bookServices(username, password);
+                    break;
+               }
+               else
+               {
+                    cout << "Invalid choice! Please enter 'a' for ROOMS or 'b' for SERVICES: ";
+               }
+          } while (true);
           break;
      }
      case 5:
@@ -1028,7 +1059,26 @@ void customerFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           // Remove
-          cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
+
+          do
+          {
+               cout << "\nEnter customer's CCCD you want to remove: ";
+               string CCCD;
+               cin >> CCCD;
+               CCCD = trim(CCCD);
+
+               char ch;
+               if (!staff.removeCustomerByCCCD(CCCD))
+               {
+                    cout << "\nDo you want to try again? (y/n)";
+                    cin >> ch;
+                    ch = tolower(ch);
+                    if (ch == 'n') break;
+               }
+               else break;
+          } while (true);
+
           break;
      }
      case 6:
