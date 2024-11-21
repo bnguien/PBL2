@@ -151,7 +151,7 @@ int main()
                                 case 2:
                                 {
                                     BillStaff billTemp;
-                                    billTemp.checkBillByNameAndPhone(customers, rooms, services);
+                                    billTemp.checkBillByNameAndCCCD(customers, rooms, services);
                                     break;
                                 }
                                 case 4:
