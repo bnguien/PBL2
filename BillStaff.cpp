@@ -1,19 +1,19 @@
 #include "BillStaff.h"
-
+using namespace std;
 void BillStaff::addBill(Bill *bill)
 {
     bills.push_back(bill);
 }
-void BillStaff::checkBillByNameAndPhone(const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services)
+void BillStaff::checkBillByNameAndCCCD(const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services)
 {
     std::string customerName;
-    std::string phone;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::string CCCD;
+    Staff staff;
     std::cout << "Enter customer name: ";
     std::getline(std::cin, customerName);
 
-    std::cout << "Enter phone number: ";
-    std::getline(std::cin, phone);
+    std::cout << "Enter CCCD number: ";
+    std::getline(std::cin, CCCD);
 
     bool found = false;
     std::string lowerCustomerName = toLower(customerName);
@@ -21,7 +21,7 @@ void BillStaff::checkBillByNameAndPhone(const vector<Customer> &customers, const
     for (const auto &customer : customers)
     {
         std::string fullName = toLower(customer.getFullName());
-        if (fullName == lowerCustomerName && customer.getPhone() == phone)
+        if (fullName == lowerCustomerName && customer.getCCCD() == CCCD)
         {
             found = true;
             std::cout << "Check-in Date: ";
@@ -87,6 +87,7 @@ void BillStaff::checkBillByNameAndPhone(const vector<Customer> &customers, const
 
             if (paymentConfirmation == "yes" || paymentConfirmation == "Yes")
             {
+                staff.removeCustomerByCCCD(CCCD);
                 std::cout << "Customer information has been removed successfully." << std::endl;
             }
             else if (paymentConfirmation == "no" || paymentConfirmation == "No")
@@ -104,7 +105,7 @@ void BillStaff::checkBillByNameAndPhone(const vector<Customer> &customers, const
 
     if (!found)
     {
-        std::cout << "No customer found with the given name and phone number." << std::endl;
+        std::cout << "No customer found with the given name and CCCD number." << std::endl;
     }
 }
 

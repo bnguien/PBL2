@@ -10,6 +10,6 @@ public:
     BillStaff() : Bill() {}
 
     void addBill(Bill *bill);
-    void checkBillByNameAndPhone(const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services);
+    void checkBillByNameAndCCCD(const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services);
     ~BillStaff();
 };

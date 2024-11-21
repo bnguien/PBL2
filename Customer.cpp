@@ -5,6 +5,7 @@
 #include "Service.h"
 #include "Login.h"
 #include "Bill.h"
+#include "Graphics.h"
 
 using namespace std;
 void Customer::setArrivalDate(const Date &arrivalDate)
@@ -283,7 +284,7 @@ void Customer::bookedRoom()
         cout << "| Room Type     | " << left << setw(34) << filteredRoom.getType() << "|" << endl;
         cout << border << endl;
         changeConsoleColor(8);
-        cout << "| Room Price    | " << left << setw(34) << filteredRoom.getPrice() <<"|" << endl;
+        cout << "| Room Price    | " << left << setw(34) << filteredRoom.getPrice() << "|" << endl;
         cout << border << endl;
         if (filteredRoom.checkAvailable())
         {
@@ -291,9 +292,9 @@ void Customer::bookedRoom()
         }
         else
         {
-            changeConsoleColor(4); 
+            changeConsoleColor(4);
         }
-        cout << "| Room Status   | " << left << setw(34) 
+        cout << "| Room Status   | " << left << setw(34)
              << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << "|" << endl;
         cout << border << endl;
         changeConsoleColor(7);
@@ -392,31 +393,77 @@ void Customer::bookedRoom()
             std::cout << "No available rooms selected. Please try again." << endl;
         }
     }
+    system("cls");
 
     string fullName, CCCD, phone, add, gender, DOBstr, arrivalDateStr;
     Date DOB, arrivalDate;
 
-    std::cout << "Enter your full name: ";
-    getline(cin, fullName);
+    changeConsoleColor(14);
+    gotoXY(50, 11);
+    std::cout << "+-------------------------------------------+" << std::endl;
+    gotoXY(50, 12);
+    std::cout << "|            YOUR INFORMATION               |" << std::endl;
+    gotoXY(50, 13);
+    std::cout << "+-------------------------------------------+" << std::endl;
 
-    std::cout << "Enter your CCCD: ";
-    getline(cin, CCCD);
+    gotoXY(50, 14);
+    std::cout << "|  Full Name      :                         |" << std::endl;
+    gotoXY(50, 15);
+    std::cout << "|-------------------------------------------|" << std::endl;
 
-    std::cout << "Enter your phone number: ";
-    getline(cin, phone);
+    gotoXY(50, 16);
+    std::cout << "|  CCCD           :                         |" << std::endl;
+    gotoXY(50, 17);
+    std::cout << "|-------------------------------------------|" << std::endl;
 
-    std::cout << "Enter your address: ";
-    getline(cin, add);
+    gotoXY(50, 18);
+    std::cout << "|  Phone Number   :                         |" << std::endl;
+    gotoXY(50, 19);
+    std::cout << "|-------------------------------------------|" << std::endl;
 
-    std::cout << "Enter your gender(male/female): ";
-    getline(cin, gender);
+    gotoXY(50, 20);
+    std::cout << "|  Address        :                         |" << std::endl;
+    gotoXY(50, 21);
+    std::cout << "|-------------------------------------------|" << std::endl;
 
-    std::cout << "Enter your date of birth (DD/MM/YYYY): ";
-    getline(cin, DOBstr);
+    gotoXY(50, 22);
+    std::cout << "|  Gender         :                         |" << std::endl;
+    gotoXY(50, 23);
+    std::cout << "|-------------------------------------------|" << std::endl;
+
+    gotoXY(50, 24);
+    std::cout << "|  Birth Date     :                         |" << std::endl;
+    gotoXY(50, 25);
+    std::cout << "|-------------------------------------------|" << std::endl;
+
+    gotoXY(50, 26);
+    std::cout << "|  Arrival Date   :                         |" << std::endl;
+    gotoXY(50, 27);
+    std::cout << "+-------------------------------------------+" << std::endl;
+
+    changeConsoleColor(15);
+
+    gotoXY(70, 14);
+    std::getline(std::cin, fullName);
+
+    gotoXY(70, 16);
+    std::getline(std::cin, CCCD);
+
+    gotoXY(70, 18);
+    std::getline(std::cin, phone);
+
+    gotoXY(70, 20);
+    std::getline(std::cin, add);
+
+    gotoXY(70, 22);
+    std::getline(std::cin, gender);
+
+    gotoXY(70, 24);
+    std::getline(std::cin, DOBstr);
     DOB = Date(DOBstr);
 
-    std::cout << "Enter your arrival date (DD/MM/YYYY): ";
-    getline(cin, arrivalDateStr);
+    gotoXY(70, 26);
+    std::getline(std::cin, arrivalDateStr);
     arrivalDate = Date(arrivalDateStr);
 
     fullName = Person::standardizeString(fullName);
@@ -442,7 +489,7 @@ void Customer::bookedRoom()
             roomRef.setStatus("Unavailable");
         }
     }
-
+    std::cout<<endl;
     room.updateRoomFile(rooms, fileRoom);
     std::cout << "Booking successful for rooms: ";
     for (const auto &bookedID : availableRoomIDs)
@@ -503,9 +550,9 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
 
     while (true)
     {
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         std::cout << "Enter the Room ID (eg., S101, D201, T301) to book services: ";
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         getline(cin, roomID);
         if (roomID.empty())
         {
@@ -675,8 +722,10 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                 string newPhone;
                 cout << "Enter the new phone number: ";
                 getline(cin, newPhone);
-                customer.setPhone(newPhone);
-                cout << "Phone number updated successfully.\n";
+                if (customer.setPhone(newPhone))
+                {
+                    cout << "Phone number updated successfully.\n";
+                }
             }
             else if (choice == 2)
             {
