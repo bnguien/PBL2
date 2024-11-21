@@ -630,6 +630,7 @@ void staffFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Add new staff
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
+          changeColor(7);
 
           do
           {
@@ -696,6 +697,7 @@ void staffFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Update Information
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
+          changeColor(7);
 
           string continueChoice;
           do
@@ -742,6 +744,7 @@ void staffFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Remove staff
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
 
           do
           {
@@ -840,6 +843,8 @@ void staffFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Show All
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
+          
           vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
           staff.displayStaff(staffs);
           break;
@@ -910,6 +915,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Update information
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
 
           break;
      }
@@ -1027,6 +1033,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Book
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
+          changeColor(7);
 
           Customer cus;
 
@@ -1060,6 +1067,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Remove
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
+          changeColor(7);
 
           do
           {
@@ -1074,9 +1082,11 @@ void customerFunction(Staff &staff, vector<string> &function)
                     cout << "\nDo you want to try again? (y/n)";
                     cin >> ch;
                     ch = tolower(ch);
-                    if (ch == 'n') break;
+                    if (ch == 'n')
+                         break;
                }
-               else break;
+               else
+                    break;
           } while (true);
 
           break;
@@ -1087,6 +1097,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Show All
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
 
           vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
           vector<Service> services = Service::readFileService("Service.txt");
@@ -1257,6 +1268,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Change Service Price
           cout << "\t\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
 
           cout << "\nEnter service ID: ";
           string ID;
@@ -1266,7 +1278,15 @@ void serBillFunction(Staff &staff, vector<string> &function)
           string price;
           cin >> price;
 
-          staff.changeServicePrice(ID, price);
+          if (!staff.changeServicePrice(ID, price))
+          {
+               cout << "\nDo you want to try again? (y/n)";
+               string ch;
+               cin >> ch;
+               ch = toLower(ch);
+               if (ch == "n")
+                    break;
+          }
           break;
      }
 
@@ -1276,6 +1296,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Show All Services
           cout << "\t\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
 
           vector<Service> services = Service::readFileService("Service.txt");
 
@@ -1298,6 +1319,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
           break;
      }
      case 4:
@@ -1305,6 +1327,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
           break;
      }
      case 5:
@@ -1312,6 +1335,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          changeColor(7);
           break;
      }
      case 6:
