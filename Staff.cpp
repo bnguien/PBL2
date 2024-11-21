@@ -752,23 +752,32 @@ bool Staff::findCustomerByLetter(const char &letter)
 bool Staff::changeServicePrice(const string &serID, const string &price)
 {
      vector<Service> services = Service::readFileService("Service.txt");
+     bool found = false;
 
      for (auto &service : services)
      {
           if (service.getID() == serID)
           {
                service.setPrice(price);
+               found = true;
                break;
           }
      }
+
+     if (!found)
+     {
+          cout << "\nCannot find service's ID: " << serID << endl;
+          return false;
+     }
+
      if (services[0].updateServiceFile(services, "Service.txt"))
      {
-          cout << "Successfully change price of service with ID: " << serID << " to " << price << endl;
+          cout << "Successfully changed price of service with ID: " << serID << " to " << price << endl;
           return true;
      }
      else
      {
-          cout << "Failed to change price!" << endl;
+          cout << "Failed to update service file!" << endl;
           return false;
      }
 }
