@@ -548,36 +548,102 @@ bool Staff::hasAccess() const
      return false;
 }
 
-bool Staff::addNewCustomer()
+bool Staff::addNewCustomer(Staff &staff)
 {
-    Room room;
+   Room room;
     string fileRoom = "Room.txt";
     vector<Room> rooms = room.readFileRoom(fileRoom);
-    if (!hasAccess()) 
-        return false;
+    gotoXY(55, 15);
+    changeConsoleColor(6);
+    std::cout << "SELECT TYPE OF ROOM" << endl;
+    changeConsoleColor(7);
+    vector<string> roomTypeOptions = {"Single", "Double", "Triple","Return"};
+    int roomTypeIndex = buttonList(6, 17, 15, 2, 18, roomTypeOptions, "row");
 
+    if (roomTypeIndex < 0 || roomTypeIndex > roomTypeOptions.size())
+    {
+        std::cout << "Invalid selection!" << endl;
+        return false;
+    }
+
+    string selectedRoomType = roomTypeOptions[roomTypeIndex - 1];
+    char roomTypeChar = (selectedRoomType == "Single") ? 'S' 
+                        : (selectedRoomType == "Double") ? 'D'
+                        : (selectedRoomType == "Triple") ? 'T'
+                        : '\0';
+
+    system("cls");
+    if (selectedRoomType == "Return") {
+        clearFromPosition(1, 1);
+        adminScreen(staff); 
+        return false;
+    }
+    vector<Room> filteredRooms;
+    for (const auto &room : rooms)
+    {
+        if (!room.getID().empty() && room.getID().front() == roomTypeChar)
+        {
+            filteredRooms.push_back(room);
+        }
+    }
+
+    if (filteredRooms.empty())
+    {
+        std::cout << "No rooms available for the selected type: " << selectedRoomType << endl;
+        return false;
+    }
+
+    std::cout << "Available rooms of type " << selectedRoomType << ":" << endl;
+    for (const auto &filteredRoom : filteredRooms)
+    {
+        Sleep(100);
+        string border = "+---------------+-----------------------------------+";
+        cout << border << endl;
+        changeConsoleColor(9);
+        cout << "| Room ID       | " << left << setw(34) << filteredRoom.getID() << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(12);
+        cout << "| Room Type     | " << left << setw(34) << filteredRoom.getType() << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(8);
+        cout << "| Room Price    | " << left << setw(34) << filteredRoom.getPrice() << "|" << endl;
+        cout << border << endl;
+        if (filteredRoom.checkAvailable())
+        {
+            changeConsoleColor(2);
+        }
+        else
+        {
+            changeConsoleColor(4);
+        }
+        cout << "| Room Status   | " << left << setw(34)
+             << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << "|" << endl;
+        cout << border << endl;
+        changeConsoleColor(7);
+    }
+    changeConsoleColor(7);
     vector<string> availableRoomIDs;
     while (true)
     {
-        std::cout << "Enter the room IDs that the customer want to book (separated by commas): ";
+        std::cout << "Enter the room IDs you want to book (separated by commas): ";
         string roomIDsInput;
         getline(cin, roomIDsInput);
 
         vector<string> roomIDs;
         string currentRoomID = "";
 
-        // Tách mã phòng nhập vào, bỏ qua khoảng trắng
         for (char ch : roomIDsInput)
         {
             if (ch == ',')
             {
+
                 if (!currentRoomID.empty())
                 {
                     roomIDs.push_back(currentRoomID);
                     currentRoomID.clear();
                 }
             }
-            else if (ch != ' ')  // Bỏ qua dấu cách
+            else
             {
                 currentRoomID += ch;
             }
@@ -590,19 +656,15 @@ bool Staff::addNewCustomer()
 
         availableRoomIDs.clear();
         vector<string> unavailableRoomIDs;
-
-        // Kiểm tra trạng thái của từng phòng trong danh sách
         for (const string &inputRoomID : roomIDs)
         {
             bool roomFound = false;
-
-            // Tìm phòng trong danh sách các phòng
-            for (const Room& roomRef : rooms)
+            for (const Room &room : filteredRooms)
             {
-                if (roomRef.getID() == inputRoomID)
+                if (room.getID() == inputRoomID)
                 {
                     roomFound = true;
-                    if (roomRef.checkAvailable())
+                    if (room.checkAvailable())
                     {
                         availableRoomIDs.push_back(inputRoomID);
                     }
@@ -610,18 +672,15 @@ bool Staff::addNewCustomer()
                     {
                         unavailableRoomIDs.push_back(inputRoomID);
                     }
-                    break;  // Không cần phải kiểm tra thêm nếu đã tìm thấy phòng
+                    break;
                 }
             }
-
-            // Nếu không tìm thấy phòng trong danh sách
             if (!roomFound)
             {
                 unavailableRoomIDs.push_back(inputRoomID);
             }
         }
 
-        // Thông báo phòng không có sẵn
         if (!unavailableRoomIDs.empty())
         {
             std::cout << "Rooms ";
@@ -637,7 +696,6 @@ bool Staff::addNewCustomer()
             continue;
         }
 
-        // Thông báo phòng có sẵn và tiếp tục với việc đặt phòng
         if (!availableRoomIDs.empty())
         {
             std::cout << "Rooms ";
@@ -661,7 +719,8 @@ bool Staff::addNewCustomer()
 
     string fullName, CCCD, phone, add, gender, DOBstr, arrivalDateStr;
     Date DOB, arrivalDate;
-
+    gotoXY(50, 9);
+    std::cout << "Please enter new customer's information!" << endl;
     changeConsoleColor(14);
     gotoXY(50, 11);
     std::cout << "+-------------------------------------------+" << std::endl;
@@ -746,7 +805,6 @@ bool Staff::addNewCustomer()
         return false;
     }
 
-    // Cập nhật trạng thái phòng
     for (auto &roomRef : rooms)
     {
         if (find(availableRoomIDs.begin(), availableRoomIDs.end(), roomRef.getID()) != availableRoomIDs.end())
@@ -761,7 +819,7 @@ bool Staff::addNewCustomer()
     {
         std::cout << bookedID << " ";
     }
-    std::cout << endl;
+    std::cout<<endl;
     return true;
 }
 
