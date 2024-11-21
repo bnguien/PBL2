@@ -548,35 +548,223 @@ bool Staff::hasAccess() const
      return false;
 }
 
-bool Staff::addNewCustomer(Customer &newCus)
+bool Staff::addNewCustomer()
 {
-     string customerFile = "Customer.txt";
-     if (!hasAccess())
-          return false;
+    Room room;
+    string fileRoom = "Room.txt";
+    vector<Room> rooms = room.readFileRoom(fileRoom);
+    if (!hasAccess()) 
+        return false;
 
-     vector<Customer> customers = Customer::readFileCustomer(customerFile);
+    vector<string> availableRoomIDs;
+    while (true)
+    {
+        std::cout << "Enter the room IDs that the customer want to book (separated by commas): ";
+        string roomIDsInput;
+        getline(cin, roomIDsInput);
 
-     if (cusExists(customers, newCus) >= 0)
-     {
-          changeConsoleColor(4);
-          cout << "This customer's information is already recorded in our hotel's customer file!" << endl;
-          changeConsoleColor(7);
-          system("pause");
-          return false;
-     }
+        vector<string> roomIDs;
+        string currentRoomID = "";
 
-     if (!Customer::saveCustomerToFile(newCus, customerFile))
-     {
-          changeConsoleColor(4);
-          cout << "\nFailed to save to our hotel's customer file!" << endl;
-          changeConsoleColor(7);
-          system("pause");
-          return false;
-     }
-     cout << "Successfully added new customer with CCCD: " << newCus.getCCCD()
-          << " and full name: " << newCus.getFullName() << endl;
-     return true;
+        // Tách mã phòng nhập vào, bỏ qua khoảng trắng
+        for (char ch : roomIDsInput)
+        {
+            if (ch == ',')
+            {
+                if (!currentRoomID.empty())
+                {
+                    roomIDs.push_back(currentRoomID);
+                    currentRoomID.clear();
+                }
+            }
+            else if (ch != ' ')  // Bỏ qua dấu cách
+            {
+                currentRoomID += ch;
+            }
+        }
+
+        if (!currentRoomID.empty())
+        {
+            roomIDs.push_back(currentRoomID);
+        }
+
+        availableRoomIDs.clear();
+        vector<string> unavailableRoomIDs;
+
+        // Kiểm tra trạng thái của từng phòng trong danh sách
+        for (const string &inputRoomID : roomIDs)
+        {
+            bool roomFound = false;
+
+            // Tìm phòng trong danh sách các phòng
+            for (const Room& roomRef : rooms)
+            {
+                if (roomRef.getID() == inputRoomID)
+                {
+                    roomFound = true;
+                    if (roomRef.checkAvailable())
+                    {
+                        availableRoomIDs.push_back(inputRoomID);
+                    }
+                    else
+                    {
+                        unavailableRoomIDs.push_back(inputRoomID);
+                    }
+                    break;  // Không cần phải kiểm tra thêm nếu đã tìm thấy phòng
+                }
+            }
+
+            // Nếu không tìm thấy phòng trong danh sách
+            if (!roomFound)
+            {
+                unavailableRoomIDs.push_back(inputRoomID);
+            }
+        }
+
+        // Thông báo phòng không có sẵn
+        if (!unavailableRoomIDs.empty())
+        {
+            std::cout << "Rooms ";
+            for (size_t i = 0; i < unavailableRoomIDs.size(); ++i)
+            {
+                std::cout << unavailableRoomIDs[i];
+                if (i < unavailableRoomIDs.size() - 1)
+                {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << " are unavailable. Please choose another room." << endl;
+            continue;
+        }
+
+        // Thông báo phòng có sẵn và tiếp tục với việc đặt phòng
+        if (!availableRoomIDs.empty())
+        {
+            std::cout << "Rooms ";
+            for (size_t i = 0; i < availableRoomIDs.size(); ++i)
+            {
+                std::cout << availableRoomIDs[i];
+                if (i < availableRoomIDs.size() - 1)
+                {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << " are available. Proceeding with booking." << endl;
+            break;
+        }
+        else
+        {
+            std::cout << "No available rooms selected. Please try again." << endl;
+        }
+    }
+    system("cls");
+
+    string fullName, CCCD, phone, add, gender, DOBstr, arrivalDateStr;
+    Date DOB, arrivalDate;
+
+    changeConsoleColor(14);
+    gotoXY(50, 11);
+    std::cout << "+-------------------------------------------+" << std::endl;
+    gotoXY(50, 12);
+    std::cout << "|            YOUR INFORMATION               |" << std::endl;
+    gotoXY(50, 13);
+    std::cout << "+-------------------------------------------+" << std::endl;
+
+    gotoXY(50, 14);
+    std::cout << "|  Full Name      :                         |" << std::endl;
+    gotoXY(50, 15);
+    std::cout << "|-------------------------------------------|" << std::endl;
+
+    gotoXY(50, 16);
+    std::cout << "|  CCCD           :                         |" << std::endl;
+    gotoXY(50, 17);
+    std::cout << "|-------------------------------------------|" << std::endl;
+
+    gotoXY(50, 18);
+    std::cout << "|  Phone Number   :                         |" << std::endl;
+    gotoXY(50, 19);
+    std::cout << "|-------------------------------------------|" << std::endl;
+
+    gotoXY(50, 20);
+    std::cout << "|  Address        :                         |" << std::endl;
+    gotoXY(50, 21);
+    std::cout << "|-------------------------------------------|" << std::endl;
+
+    gotoXY(50, 22);
+    std::cout << "|  Gender         :                         |" << std::endl;
+    gotoXY(50, 23);
+    std::cout << "|-------------------------------------------|" << std::endl;
+
+    gotoXY(50, 24);
+    std::cout << "|  Birth Date     :                         |" << std::endl;
+    gotoXY(50, 25);
+    std::cout << "|-------------------------------------------|" << std::endl;
+
+    gotoXY(50, 26);
+    std::cout << "|  Arrival Date   :                         |" << std::endl;
+    gotoXY(50, 27);
+    std::cout << "+-------------------------------------------+" << std::endl;
+
+    changeConsoleColor(15);
+
+    gotoXY(70, 14);
+    std::getline(std::cin, fullName);
+
+    gotoXY(70, 16);
+    std::getline(std::cin, CCCD);
+
+    gotoXY(70, 18);
+    std::getline(std::cin, phone);
+
+    gotoXY(70, 20);
+    std::getline(std::cin, add);
+
+    gotoXY(70, 22);
+    std::getline(std::cin, gender);
+
+    gotoXY(70, 24);
+    std::getline(std::cin, DOBstr);
+    DOB = Date(DOBstr);
+
+    gotoXY(70, 26);
+    std::getline(std::cin, arrivalDateStr);
+    arrivalDate = Date(arrivalDateStr);
+
+    fullName = Person::standardizeString(fullName);
+    add = Person::standardizeString(add);
+    gender = Person::standardizeString(gender);
+    Person person(fullName, CCCD, phone, add, gender, DOB);
+
+    Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
+    string customerFile = "Customer.txt";
+    if (!Customer::saveCustomerToFile(newCustomer, customerFile))
+    {
+        changeConsoleColor(4);
+        cout << "\nFailed to save to our hotel's customer file!" << endl;
+        changeConsoleColor(7);
+        system("pause");
+        return false;
+    }
+
+    // Cập nhật trạng thái phòng
+    for (auto &roomRef : rooms)
+    {
+        if (find(availableRoomIDs.begin(), availableRoomIDs.end(), roomRef.getID()) != availableRoomIDs.end())
+        {
+            roomRef.setStatus("Unavailable");
+        }
+    }
+    std::cout << endl;
+    room.updateRoomFile(rooms, fileRoom);
+    std::cout << "Booking successful for rooms: ";
+    for (const auto &bookedID : availableRoomIDs)
+    {
+        std::cout << bookedID << " ";
+    }
+    std::cout << endl;
+    return true;
 }
+
 
 bool Staff::writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName)
 {
