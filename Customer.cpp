@@ -248,19 +248,36 @@ void Customer::bookedRoom()
     Room room;
     string fileRoom = "Room.txt";
     vector<Room> rooms = room.readFileRoom(fileRoom);
+    gotoXY(55, 5);
+    changeConsoleColor(6);
+    std::cout << "SELECT TYPE OF ROOM" << endl;
+    changeConsoleColor(7);
+    vector<string> roomTypeOptions = {"Single", "Double", "Triple","Return"};
+    int roomTypeIndex = buttonList(6, 8, 15, 2, 18, roomTypeOptions, "row");
 
-    string roomType;
-    std::cout << "Enter the type of room you want to book (single, double, triple): ";
-    cin >> roomType;
-    cin.ignore();
+    if (roomTypeIndex < 0 || roomTypeIndex > roomTypeOptions.size())
+    {
+        std::cout << "Invalid selection!" << endl;
+        return;
+    }
 
+    string selectedRoomType = roomTypeOptions[roomTypeIndex - 1];
+    char roomTypeChar = (selectedRoomType == "Single") ? 'S' 
+                        : (selectedRoomType == "Double") ? 'D'
+                        : (selectedRoomType == "Triple") ? 'T'
+                        : '\0';
+
+    system("cls");
+    if (selectedRoomType == "Return") {
+        // Quay lại màn hình chính hoặc menu trước đó
+        clearFromPosition(1, 1);
+        noAccountScreen();  // Hoặc quay lại màn hình chính nếu cần
+        return;
+    }
     vector<Room> filteredRooms;
-
     for (const auto &room : rooms)
     {
-        if ((roomType == "single" && room.getID().front() == 'S') ||
-            (roomType == "double" && room.getID().front() == 'D') ||
-            (roomType == "triple" && room.getID().front() == 'T'))
+        if (!room.getID().empty() && room.getID().front() == roomTypeChar)
         {
             filteredRooms.push_back(room);
         }
@@ -268,13 +285,14 @@ void Customer::bookedRoom()
 
     if (filteredRooms.empty())
     {
-        std::cout << "No rooms available for the selected type: " << roomType << endl;
+        std::cout << "No rooms available for the selected type: " << selectedRoomType << endl;
         return;
     }
 
-    std::cout << "Available rooms of type " << roomType << ":" << endl;
+    std::cout << "Available rooms of type " << selectedRoomType << ":" << endl;
     for (const auto &filteredRoom : filteredRooms)
     {
+        Sleep(100);
         string border = "+---------------+-----------------------------------+";
         cout << border << endl;
         changeConsoleColor(9);
@@ -489,7 +507,7 @@ void Customer::bookedRoom()
             roomRef.setStatus("Unavailable");
         }
     }
-    std::cout<<endl;
+    std::cout << endl;
     room.updateRoomFile(rooms, fileRoom);
     std::cout << "Booking successful for rooms: ";
     for (const auto &bookedID : availableRoomIDs)
