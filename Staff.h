@@ -54,7 +54,6 @@ public:
      bool writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName);
      bool addNewCustomer(Customer &newCus);
      bool updateCustomer(const string &type, const string &infor);
-     bool removeCustomer(Customer &CusToRemove);
      bool removeCustomerByCCCD(const string &CCCDToRemove);
 
      bool findCustomerByCCCD(const string &CCCD);
