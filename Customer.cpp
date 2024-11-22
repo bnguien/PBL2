@@ -8,6 +8,7 @@
 #include "Graphics.h"
 
 using namespace std;
+void noAccountScreen();
 void Customer::setArrivalDate(const Date &arrivalDate)
 {
     this->arrivalDate = arrivalDate;
@@ -252,7 +253,7 @@ void Customer::bookedRoom()
     changeConsoleColor(6);
     std::cout << "SELECT TYPE OF ROOM" << endl;
     changeConsoleColor(7);
-    vector<string> roomTypeOptions = {"Single", "Double", "Triple","Return"};
+    vector<string> roomTypeOptions = {"Single", "Double", "Triple", "Return"};
     int roomTypeIndex = buttonList(6, 8, 15, 2, 18, roomTypeOptions, "row");
 
     if (roomTypeIndex < 0 || roomTypeIndex > roomTypeOptions.size())
@@ -262,16 +263,16 @@ void Customer::bookedRoom()
     }
 
     string selectedRoomType = roomTypeOptions[roomTypeIndex - 1];
-    char roomTypeChar = (selectedRoomType == "Single") ? 'S' 
+    char roomTypeChar = (selectedRoomType == "Single")   ? 'S'
                         : (selectedRoomType == "Double") ? 'D'
                         : (selectedRoomType == "Triple") ? 'T'
-                        : '\0';
+                                                         : '\0';
 
     system("cls");
-    if (selectedRoomType == "Return") {
-        // Quay lại màn hình chính hoặc menu trước đó
+    if (selectedRoomType == "Return")
+    {
         clearFromPosition(1, 1);
-        noAccountScreen();  // Hoặc quay lại màn hình chính nếu cần
+        noAccountScreen();
         return;
     }
     vector<Room> filteredRooms;
@@ -417,73 +418,214 @@ void Customer::bookedRoom()
     Date DOB, arrivalDate;
 
     changeConsoleColor(14);
-    gotoXY(50, 11);
-    std::cout << "+-------------------------------------------+" << std::endl;
-    gotoXY(50, 12);
-    std::cout << "|            YOUR INFORMATION               |" << std::endl;
-    gotoXY(50, 13);
-    std::cout << "+-------------------------------------------+" << std::endl;
+    gotoXY(40, 11);
+    std::cout << "+-------------------------------------------------------+" << std::endl;
+    gotoXY(40, 12);
+    std::cout << "|                   YOUR INFORMATION                    |" << std::endl;
+    gotoXY(40, 13);
+    std::cout << "+-------------------------------------------------------+" << std::endl;
 
-    gotoXY(50, 14);
-    std::cout << "|  Full Name      :                         |" << std::endl;
-    gotoXY(50, 15);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 14);
+    std::cout << "|  Full Name               |                            |" << std::endl;
+    gotoXY(40, 15);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 16);
-    std::cout << "|  CCCD           :                         |" << std::endl;
-    gotoXY(50, 17);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 16);
+    std::cout << "|  CCCD                    |                            |" << std::endl;
+    gotoXY(40, 17);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 18);
-    std::cout << "|  Phone Number   :                         |" << std::endl;
-    gotoXY(50, 19);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 18);
+    std::cout << "|  Phone Number            |                            |" << std::endl;
+    gotoXY(40, 19);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 20);
-    std::cout << "|  Address        :                         |" << std::endl;
-    gotoXY(50, 21);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 20);
+    std::cout << "|  Address                 |                            |" << std::endl;
+    gotoXY(40, 21);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 22);
-    std::cout << "|  Gender         :                         |" << std::endl;
-    gotoXY(50, 23);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 22);
+    std::cout << "|  Gender(Male/Female)     |                            |" << std::endl;
+    gotoXY(40, 23);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 24);
-    std::cout << "|  Birth Date     :                         |" << std::endl;
-    gotoXY(50, 25);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 24);
+    std::cout << "|  DOB(DD/MM/YYYY)         |                            |" << std::endl;
+    gotoXY(40, 25);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 26);
-    std::cout << "|  Arrival Date   :                         |" << std::endl;
-    gotoXY(50, 27);
-    std::cout << "+-------------------------------------------+" << std::endl;
+    gotoXY(40, 26);
+    std::cout << "|  Arrival Date(DD/MM/YYYY)|                            |" << std::endl;
+    gotoXY(40, 27);
+    std::cout << "+-------------------------------------------------------+" << std::endl;
 
     changeConsoleColor(15);
 
-    gotoXY(70, 14);
+    gotoXY(69, 14);
     std::getline(std::cin, fullName);
 
-    gotoXY(70, 16);
-    std::getline(std::cin, CCCD);
+    bool isValidCCCD = false;
 
-    gotoXY(70, 18);
-    std::getline(std::cin, phone);
+    do
+    {
+        gotoXY(69, 16);
+        std::getline(std::cin, CCCD);
 
-    gotoXY(70, 20);
+        if (CCCD.length() != 12)
+        {
+            changeConsoleColor(4);
+            gotoXY(97, 16);
+            cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 16);
+            cout << string(75, ' ');
+        }
+        else
+        {
+            bool isDigitOnly = true;
+            for (size_t i = 0; i < CCCD.length(); i++)
+            {
+                if (!isdigit(CCCD[i]))
+                {
+                    isDigitOnly = false;
+                    gotoXY(97, 16);
+                    changeConsoleColor(4);
+                    cout << "CCCD must have only digits!Press enter to try again" << endl;
+                    changeConsoleColor(7);
+                    _getch();
+                    gotoXY(97, 16);
+                    cout << string(75, ' ');
+                    break;
+                }
+            }
+            if (isDigitOnly)
+            {
+                isValidCCCD = true;
+            }
+        }
+
+        if (!isValidCCCD)
+        {
+            gotoXY(69, 16);
+            cout << string(CCCD.length(), ' ');
+        }
+
+    } while (!isValidCCCD);
+    bool isValidPhone = false;
+
+    do
+    {
+        gotoXY(69, 18);
+        std::getline(std::cin, phone);
+
+        if (phone.length() != 10)
+        {
+            gotoXY(97, 18);
+            changeConsoleColor(4);
+            cout << "Phone must have exactly 10 digits!Press enter to try again" << endl;
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 18);
+            cout << string(75, ' ');
+        }
+        else if (phone[0] != '0')
+        {
+            gotoXY(97, 18);
+            changeConsoleColor(4);
+            cout << "First number must be 0! Press enter to try again" << endl;
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 18);
+            cout << string(75, ' ');
+        }
+        else
+        {
+            bool isDigitOnly = true;
+            for (size_t i = 1; i < phone.length(); i++)
+            {
+                if (!isdigit(phone[i]))
+                {
+                    isDigitOnly = false;
+                    gotoXY(97, 18);
+                    changeConsoleColor(4);
+                    cout << "Phone must have only digits! Press enter to try again" << endl;
+                    changeConsoleColor(7);
+                    gotoXY(97, 18);
+                    _getch();
+                    cout << string(75, ' ');
+                    break;
+                }
+            }
+            if (isDigitOnly)
+            {
+                isValidPhone = true;
+            }
+        }
+
+        if (!isValidPhone)
+        {
+            gotoXY(69, 18);
+            cout << string(phone.length(), ' ');
+        }
+
+    } while (!isValidPhone);
+
+    gotoXY(69, 20);
     std::getline(std::cin, add);
 
-    gotoXY(70, 22);
+    gotoXY(69, 22);
     std::getline(std::cin, gender);
 
-    gotoXY(70, 24);
-    std::getline(std::cin, DOBstr);
-    DOB = Date(DOBstr);
+    while (true)
+    {
+        gotoXY(69, 24);
+        cout << string(25, ' ');
+        gotoXY(69, 24);
+        std::getline(std::cin, DOBstr);
 
-    gotoXY(70, 26);
-    std::getline(std::cin, arrivalDateStr);
-    arrivalDate = Date(arrivalDateStr);
+        try
+        {
+            DOB = Date(DOBstr);
+            break;
+        }
+        catch (const std::invalid_argument &e)
+        {
+            gotoXY(97, 24);
+            changeConsoleColor(4);
+            std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 24);
+            cout << string(75, ' ');
 
+        }
+    }
+
+    while (true)
+    {
+        gotoXY(69, 26);
+        cout << string(25, ' ');
+        gotoXY(69, 26);
+        std::getline(std::cin, arrivalDateStr);
+
+        try
+        {
+            arrivalDate = Date(arrivalDateStr);
+            break;
+        }
+        catch (const std::invalid_argument &e)
+        {
+            gotoXY(97, 26);
+            changeConsoleColor(4);
+            std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 26);
+            cout << string(75, ' ');
+        }
+    }
     fullName = Person::standardizeString(fullName);
     add = Person::standardizeString(add);
     gender = Person::standardizeString(gender);
@@ -758,14 +900,25 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
             }
             else if (choice == 3)
             {
-                string newDOB;
                 cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
-                getline(cin, newDOB);
+                string newDOB; 
+                while (true)
+                {
+                    std::getline(std::cin, newDOB); 
 
-                Date dobDate(newDOB);
-                customer.setDOB(dobDate);
+                    try
+                    {
+                        Date dobDate(newDOB);   
+                        customer.setDOB(dobDate); 
 
-                cout << "Date of Birth updated successfully.\n";
+                        cout << "Date of Birth updated successfully.\n"; 
+                        break;                                          
+                    }
+                    catch (const std::invalid_argument &e)
+                    {
+                        cout << "Invalid date format. Please try again (dd/mm/yyyy): ";
+                    }
+                }
             }
             else
             {
