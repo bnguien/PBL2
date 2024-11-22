@@ -1,6 +1,7 @@
 #include "Bill.h"
 #include "Date.h"
 #include "Login.h"
+#define INT_MAX 2147483647 
 
 using namespace std;
 
@@ -108,11 +109,17 @@ int Bill::convert(const string &input)
 Date Bill::inputCheckoutDate(const Date &checkInDate)
 {
     int day, month, year;
-
     while (true)
     {
         cout << "Enter check-out date (DD MM YYYY): ";
         cin >> day >> month >> year;
+        if (cin.fail())
+        {
+            cin.clear();                   
+            cin.ignore(INT_MAX, '\n'); 
+            cout << "Invalid input format. Please enter numeric values (DD MM YYYY)." << endl;
+            continue;
+        }
 
         Date checkoutDate(day, month, year);
         if (!checkoutDate.isValid())
@@ -120,13 +127,11 @@ Date Bill::inputCheckoutDate(const Date &checkInDate)
             cout << "Invalid date, please enter again." << endl;
             continue;
         }
-
         if (checkInDate > checkoutDate)
         {
             cout << "Check-out date must be after check-in date. Please enter again." << endl;
             continue;
         }
-
         return checkoutDate;
     }
 }
