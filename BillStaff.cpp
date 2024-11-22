@@ -4,11 +4,10 @@ void BillStaff::addBill(Bill *bill)
 {
     bills.push_back(bill);
 }
-void BillStaff::checkBillByNameAndCCCD(const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services)
+void BillStaff::checkBillByNameAndCCCD(Staff& staff,const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services)
 {
     std::string customerName;
     std::string CCCD;
-    Staff staff;
     std::cout << "Enter customer name: ";
     std::getline(std::cin, customerName);
 
@@ -87,8 +86,10 @@ void BillStaff::checkBillByNameAndCCCD(const vector<Customer> &customers, const 
 
             if (paymentConfirmation == "yes" || paymentConfirmation == "Yes")
             {
-                staff.removeCustomerByCCCD(CCCD);
+                if(staff.removeCustomerByCCCD(staff,CCCD))
+                {
                 std::cout << "Customer information has been removed successfully." << std::endl;
+                }
             }
             else if (paymentConfirmation == "no" || paymentConfirmation == "No")
             {
