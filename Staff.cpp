@@ -2,6 +2,7 @@
 #include "Customer.h"
 #include "Room.h"
 #include "Service.h"
+void adminScreen(Staff &staff);
 
 void Staff::setID(const string &ID)
 {
@@ -535,17 +536,17 @@ int Staff::cusExists(const vector<Customer> &customers, const Customer &newCus)
      return -1;
 }
 
-bool Staff::hasAccess() const
+bool Staff::hasAccess(const Staff &staff) const
 {
-     if (this->position == "Manager" || this->position == "Receptionist")
+     if (staff.getPosition() != "Manager" && staff.getPosition() != "Receptionist")
      {
-          return true;
-     }
-     changeConsoleColor(4);
-     cout << "\nAccess Denied: Only Managers and Receptionists can change room status!" << endl;
+         changeConsoleColor(4);
+     cout << "\nAccess Denied: Only Managers and Receptionists can use this function!" << endl;
      changeConsoleColor(7);
      system("pause");
      return false;
+     }
+     return true;     
 }
 
 bool Staff::addNewCustomer(Staff &staff)
@@ -719,75 +720,217 @@ bool Staff::addNewCustomer(Staff &staff)
 
     string fullName, CCCD, phone, add, gender, DOBstr, arrivalDateStr;
     Date DOB, arrivalDate;
-    gotoXY(50, 9);
+    gotoXY(40, 9);
     std::cout << "Please enter new customer's information!" << endl;
     changeConsoleColor(14);
-    gotoXY(50, 11);
-    std::cout << "+-------------------------------------------+" << std::endl;
-    gotoXY(50, 12);
-    std::cout << "|            YOUR INFORMATION               |" << std::endl;
-    gotoXY(50, 13);
-    std::cout << "+-------------------------------------------+" << std::endl;
+        gotoXY(40, 11);
+    std::cout << "+-------------------------------------------------------+" << std::endl;
+    gotoXY(40, 12);
+    std::cout << "|                   YOUR INFORMATION                    |" << std::endl;
+    gotoXY(40, 13);
+    std::cout << "+-------------------------------------------------------+" << std::endl;
 
-    gotoXY(50, 14);
-    std::cout << "|  Full Name      :                         |" << std::endl;
-    gotoXY(50, 15);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 14);
+    std::cout << "|  Full Name               |                            |" << std::endl;
+    gotoXY(40, 15);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 16);
-    std::cout << "|  CCCD           :                         |" << std::endl;
-    gotoXY(50, 17);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 16);
+    std::cout << "|  CCCD                    |                            |" << std::endl;
+    gotoXY(40, 17);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 18);
-    std::cout << "|  Phone Number   :                         |" << std::endl;
-    gotoXY(50, 19);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 18);
+    std::cout << "|  Phone Number            |                            |" << std::endl;
+    gotoXY(40, 19);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 20);
-    std::cout << "|  Address        :                         |" << std::endl;
-    gotoXY(50, 21);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 20);
+    std::cout << "|  Address                 |                            |" << std::endl;
+    gotoXY(40, 21);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 22);
-    std::cout << "|  Gender         :                         |" << std::endl;
-    gotoXY(50, 23);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 22);
+    std::cout << "|  Gender(Male/Female)     |                            |" << std::endl;
+    gotoXY(40, 23);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 24);
-    std::cout << "|  Birth Date     :                         |" << std::endl;
-    gotoXY(50, 25);
-    std::cout << "|-------------------------------------------|" << std::endl;
+    gotoXY(40, 24);
+    std::cout << "|  DOB(DD/MM/YYYY)         |                            |" << std::endl;
+    gotoXY(40, 25);
+    std::cout << "|-------------------------------------------------------|" << std::endl;
 
-    gotoXY(50, 26);
-    std::cout << "|  Arrival Date   :                         |" << std::endl;
-    gotoXY(50, 27);
-    std::cout << "+-------------------------------------------+" << std::endl;
+    gotoXY(40, 26);
+    std::cout << "|  Arrival Date(DD/MM/YYYY)|                            |" << std::endl;
+    gotoXY(40, 27);
+    std::cout << "+-------------------------------------------------------+" << std::endl;
 
     changeConsoleColor(15);
 
-    gotoXY(70, 14);
+    gotoXY(69, 14);
     std::getline(std::cin, fullName);
 
-    gotoXY(70, 16);
-    std::getline(std::cin, CCCD);
+    bool isValidCCCD = false;
 
-    gotoXY(70, 18);
-    std::getline(std::cin, phone);
+    do
+    {
+        gotoXY(69, 16);
+        std::getline(std::cin, CCCD);
 
-    gotoXY(70, 20);
+        if (CCCD.length() != 12)
+        {
+            changeConsoleColor(4);
+            gotoXY(97, 16);
+            cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 16);
+            cout << string(75, ' ');
+        }
+        else
+        {
+            bool isDigitOnly = true;
+            for (size_t i = 0; i < CCCD.length(); i++)
+            {
+                if (!isdigit(CCCD[i]))
+                {
+                    isDigitOnly = false;
+                    gotoXY(97, 16);
+                    changeConsoleColor(4);
+                    cout << "CCCD must have only digits!Press enter to try again" << endl;
+                    changeConsoleColor(7);
+                    _getch();
+                    gotoXY(97, 16);
+                    cout << string(75, ' ');
+                    break;
+                }
+            }
+            if (isDigitOnly)
+            {
+                isValidCCCD = true;
+            }
+        }
+
+        if (!isValidCCCD)
+        {
+            gotoXY(69, 16);
+            cout << string(CCCD.length(), ' ');
+        }
+
+    } while (!isValidCCCD);
+    bool isValidPhone = false;
+
+    do
+    {
+        gotoXY(69, 18);
+        std::getline(std::cin, phone);
+
+        if (phone.length() != 10)
+        {
+            gotoXY(97, 18);
+            changeConsoleColor(4);
+            cout << "Phone must have exactly 10 digits!Press enter to try again" << endl;
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 18);
+            cout << string(75, ' ');
+        }
+        else if (phone[0] != '0')
+        {
+            gotoXY(97, 18);
+            changeConsoleColor(4);
+            cout << "First number must be 0! Press enter to try again" << endl;
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 18);
+            cout << string(75, ' ');
+        }
+        else
+        {
+            bool isDigitOnly = true;
+            for (size_t i = 1; i < phone.length(); i++)
+            {
+                if (!isdigit(phone[i]))
+                {
+                    isDigitOnly = false;
+                    gotoXY(97, 18);
+                    changeConsoleColor(4);
+                    cout << "Phone must have only digits! Press enter to try again" << endl;
+                    changeConsoleColor(7);
+                    gotoXY(97, 18);
+                    _getch();
+                    cout << string(75, ' ');
+                    break;
+                }
+            }
+            if (isDigitOnly)
+            {
+                isValidPhone = true;
+            }
+        }
+
+        if (!isValidPhone)
+        {
+            gotoXY(69, 18);
+            cout << string(phone.length(), ' ');
+        }
+
+    } while (!isValidPhone);
+
+    gotoXY(69, 20);
     std::getline(std::cin, add);
 
-    gotoXY(70, 22);
+    gotoXY(69, 22);
     std::getline(std::cin, gender);
 
-    gotoXY(70, 24);
-    std::getline(std::cin, DOBstr);
-    DOB = Date(DOBstr);
+    while (true)
+    {
+        gotoXY(69, 24);
+        cout << string(25, ' ');
+        gotoXY(69, 24);
+        std::getline(std::cin, DOBstr);
 
-    gotoXY(70, 26);
-    std::getline(std::cin, arrivalDateStr);
-    arrivalDate = Date(arrivalDateStr);
+        try
+        {
+            DOB = Date(DOBstr);
+            break;
+        }
+        catch (const std::invalid_argument &e)
+        {
+            gotoXY(97, 24);
+            changeConsoleColor(4);
+            std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 24);
+            cout << string(75, ' ');
+
+        }
+    }
+
+    while (true)
+    {
+        gotoXY(69, 26);
+        cout << string(25, ' ');
+        gotoXY(69, 26);
+        std::getline(std::cin, arrivalDateStr);
+
+        try
+        {
+            arrivalDate = Date(arrivalDateStr);
+            break;
+        }
+        catch (const std::invalid_argument &e)
+        {
+            gotoXY(97, 26);
+            changeConsoleColor(4);
+            std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 26);
+            cout << string(75, ' ');
+        }
+    }
 
     fullName = Person::standardizeString(fullName);
     add = Person::standardizeString(add);
@@ -858,45 +1001,83 @@ bool Staff::writeRemainingCus(const vector<Customer> &remainingCustomers, const 
      return true;
 }
 
-bool Staff::removeCustomerByCCCD(const string &CCCDToRemove)
+bool Staff::removeCustomerByCCCD(const Staff &staff,const string &CCCDToRemove)
 {
      string customerFile = "Customer.txt";
-     if (!hasAccess())
-          return false;
+     if (hasAccess(staff))
+    {
+     ifstream inFile(customerFile);
+    if (!inFile)
+    {
+        changeConsoleColor(4);
+        cout << "Failed to open customer file!" << endl;
+        changeConsoleColor(7);
+        return false;
+    }
 
-     vector<Customer> customers = Customer::readFileCustomer(customerFile);
-     Customer tempCustomer;
-     tempCustomer.setCCCD(CCCDToRemove);
-     int index = cusExists(customers, tempCustomer);
-     if (index < 0)
-     {
-          changeConsoleColor(4);
-          cout << "Cannot find this customer's information to remove!" << endl;
-          changeConsoleColor(7);
-          return false;
-     }
+    vector<string> customers;
+    string line;
+    while (getline(inFile, line))
+    {
+        customers.push_back(line);
+    }
+    inFile.close();
 
-     vector<Customer> remainingCustomers;
-     for (size_t i = 0; i < customers.size(); i++)
-          if (i != index)
-               remainingCustomers.push_back(customers[i]);
+    bool found = false;
+    vector<string> remainingCustomers;
+    for (const auto &customer : customers)
+    {
+        size_t pos = customer.find('|');
+        if (pos != string::npos)
+        {
 
-     if (writeRemainingCus(remainingCustomers, customerFile))
-     {
-          changeConsoleColor(2);
-          cout << "Successfully removed customer with CCCD: " << CCCDToRemove << endl;
+            size_t start = pos + 1;
+            size_t end = customer.find('|', start);
+            string CCCD = customer.substr(start, end - start);
 
-          return true;
-     }
-     return false;
+            if (CCCD == CCCDToRemove)
+            {
+                found = true;
+                continue;
+            }
+        }
+        remainingCustomers.push_back(customer);
+    }
+
+    if (!found)
+    {
+        changeConsoleColor(4);
+        cout << "Cannot find this customer's information to remove!" << endl;
+        changeConsoleColor(7);
+        return false;
+    }
+    ofstream outFile(customerFile);
+    if (!outFile)
+    {
+        changeConsoleColor(4);
+        cout << "Failed to write to customer file!" << endl;
+        changeConsoleColor(7);
+        return false;
+    }
+
+    for (const auto &customer : remainingCustomers)
+    {
+        outFile << customer << endl;
+    }
+    outFile.close();
+    changeConsoleColor(2);
+    cout << "Successfully removed customer with CCCD: " << CCCDToRemove << endl;
+    changeConsoleColor(7);
+    return true;
+    }
+    else return false;
 }
 
-bool Staff::findCustomerByCCCD(const string &CCCD)
+bool Staff::findCustomerByCCCD(const Staff &staff, const string &CCCD)
 {
      string customerFile = "Customer.txt";
-     if (!hasAccess())
-          return false;
-
+     if (hasAccess(staff))
+     {
      vector<Customer> customers = Customer::readFileCustomer(customerFile);
      Customer tempCustomer;
      tempCustomer.setCCCD(CCCD);
@@ -914,15 +1095,15 @@ bool Staff::findCustomerByCCCD(const string &CCCD)
      tempCustomers.push_back(tempCustomer);
      vector<Service> services = Service::readFileService("Service.txt");
      tempCustomer.displayCustomer(tempCustomers, services);
-
      return true;
+     }
+     return false;
 }
 
-bool Staff::findCustomerByAttribute(const string &attributeName, const string &attributeValue)
+bool Staff::findCustomerByAttribute(const Staff &staff, const string &attributeName, const string &attributeValue)
 {
-     if (!hasAccess())
-          return false;
-
+     if (hasAccess(staff))
+     {
      vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
      vector<Customer> customerList;
 
@@ -948,24 +1129,25 @@ bool Staff::findCustomerByAttribute(const string &attributeName, const string &a
           changeConsoleColor(7);
           return false;
      }
+     }
 }
 
-bool Staff::findCustomerByFirstName(const string &firstName)
+bool Staff::findCustomerByFirstName(const Staff &staff,const string &firstName)
 {
-     return findCustomerByAttribute("firstName", firstName);
+     return findCustomerByAttribute(staff,"firstName", firstName);
 }
 
-bool Staff::findCustomerByLastName(const string &lastName)
+bool Staff::findCustomerByLastName(const Staff &staff, const string &lastName)
 {
-     return findCustomerByAttribute("lastName", lastName);
+     return findCustomerByAttribute(staff,"lastName", lastName);
 }
 
-bool Staff::findCustomerByLetter(const char &letter)
+bool Staff::findCustomerByLetter(const Staff &staff,const char &letter)
 {
      string customerFile = "Customer.txt";
-     if (!hasAccess())
+     if (hasAccess(staff))
           return false;
-
+     {
      vector<Customer> customers = Customer::readFileCustomer(customerFile);
      vector<Customer> customerList;
 
@@ -988,6 +1170,7 @@ bool Staff::findCustomerByLetter(const char &letter)
           cout << "No customer found with the character '" << toupper(letter) << "' in their name." << endl;
           changeConsoleColor(7);
           return false;
+     }
      }
 }
 

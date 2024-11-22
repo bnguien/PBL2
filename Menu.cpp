@@ -955,7 +955,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                {
                     string CCCD;
                     getline(cin, CCCD);
-                    if (!staff.findCustomerByCCCD(CCCD))
+                    if (!staff.findCustomerByCCCD(staff,CCCD))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
@@ -977,7 +977,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                     cout << "Enter customer's first name:\n\t";
                     getline(cin, firstName);
 
-                    if (!staff.findCustomerByFirstName(firstName))
+                    if (!staff.findCustomerByFirstName(staff,firstName))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
@@ -999,7 +999,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                     cout << "Enter customer's first name:\n\t";
                     getline(cin, lastName);
 
-                    if (!staff.findCustomerByLastName(lastName))
+                    if (!staff.findCustomerByLastName(staff,lastName))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
@@ -1021,7 +1021,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                     cout << "Enter letter in customer's name:\n\t";
                     cin >> letter;
 
-                    if (!staff.findCustomerByLetter(letter))
+                    if (!staff.findCustomerByLetter(staff,letter))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
@@ -1092,7 +1092,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                CCCD = trim(CCCD);
 
                char ch;
-               if (!staff.removeCustomerByCCCD(CCCD))
+               if (!staff.removeCustomerByCCCD(staff,CCCD))
                {
                     cout << "\nDo you want to try again? (y/n)";
                     cin >> ch;
@@ -1345,7 +1345,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
-          Bill.checkBillByNameAndCCCD(customers, rooms, services);
+          Bill.checkBillByNameAndCCCD(staff,customers, rooms, services);
           changeColor(7);
           break;
      }

@@ -2,6 +2,7 @@
 #define STAFF_H
 
 #include "Person.h"
+#include "Graphics.h"
 class Customer;
 class Room;
 class Service;
@@ -41,8 +42,8 @@ public:
      static vector<Staff> readFileStaff(const string &fileName);
      static string generateStaffID(const vector<Staff> &staffs, const string &position);
      void displayStaff(const vector<Staff> &staffs);
-     bool findCustomerByAttribute(const string &attributeName, const string &attributeValue);
-     bool hasAccess() const;
+     bool findCustomerByAttribute(const Staff &staff, const string &attributeName, const string &attributeValue);
+     bool hasAccess(const Staff &staff) const ;
 
      void updateStaffFile(const vector<Staff> &staffs, const string &fileName);
      bool addNewStaff(Staff &newStaff);
@@ -54,12 +55,12 @@ public:
      bool writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName);
      bool addNewCustomer(Staff &staff);
      bool updateCustomer(const string &fileName, vector<Customer> &customers);
-     bool removeCustomerByCCCD(const string &CCCDToRemove);
+     bool removeCustomerByCCCD(const Staff &staff,const string &CCCDToRemove);
 
-     bool findCustomerByCCCD(const string &CCCD);
-     bool findCustomerByFirstName(const string &firstName);
-     bool findCustomerByLastName(const string &lastName);
-     bool findCustomerByLetter(const char &letter);
+     bool findCustomerByCCCD(const Staff &staff, const string &CCCD);
+     bool findCustomerByFirstName(const Staff &staff,const string &firstName);
+     bool findCustomerByLastName(const Staff &staff,const string &lastName);
+     bool findCustomerByLetter(const Staff &staff,const char &letter);
 
      bool changeRoomStatus(const string &roomID);
      bool changeServicePrice(const string &serID, const string &price);
