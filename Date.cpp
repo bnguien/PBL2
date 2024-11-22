@@ -13,6 +13,7 @@ Date::Date(const string &dateStr)
 {
     stringstream ss(dateStr);
     string token;
+
     getline(ss, token, '/');
     try
     {
@@ -20,9 +21,9 @@ Date::Date(const string &dateStr)
     }
     catch (const invalid_argument &e)
     {
-        cout << "Invalid input for day: " << token << endl;
-        return;
+        throw invalid_argument("Invalid input for day: " + token);
     }
+
     getline(ss, token, '/');
     try
     {
@@ -30,9 +31,9 @@ Date::Date(const string &dateStr)
     }
     catch (const invalid_argument &e)
     {
-        cout << "Invalid input for month: " << token << endl;
-        return;
+        throw invalid_argument("Invalid input for month: " + token);
     }
+
     getline(ss, token, '/');
     try
     {
@@ -40,12 +41,12 @@ Date::Date(const string &dateStr)
     }
     catch (const invalid_argument &e)
     {
-        cout << "Invalid input for year: " << token << endl;
-        return;
+        throw invalid_argument("Invalid input for year: " + token);
     }
+
     if (!setMonth(month) || !setYear(year) || !setDay(day))
     {
-        cout << "Invalid date: " << dateStr << endl;
+        throw invalid_argument("Invalid date: " + dateStr);
     }
 }
 
