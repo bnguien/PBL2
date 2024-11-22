@@ -419,17 +419,25 @@ bool Staff::removeStaffByCCCD(const string &CCCDToRemove)
 
 bool Staff::changeRoomStatus(const string &roomID)
 {
-     if (!(this->position == "Manager" || this->position == "Receptionist"))
+     if (this->position != "Manager" && this->position != "Receptionist")
      {
-          changeConsoleColor(4);
+          changeConsoleColor(4); 
           cout << "\nAccess Denied: Only Managers and Receptionists can change room status!" << endl;
-          changeConsoleColor(7);
+          changeConsoleColor(7); 
           system("pause");
           return false;
      }
 
      string roomFile = "Room.txt";
      vector<Room> rooms = Room::readFileRoom(roomFile);
+     if (rooms.empty())
+     {
+          changeConsoleColor(4);
+          cout << "\nError: Unable to load room data. Please check the file!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
      bool exists = false;
 
      for (auto &room : rooms)
@@ -437,33 +445,30 @@ bool Staff::changeRoomStatus(const string &roomID)
           if (room.getID() == roomID)
           {
                exists = true;
-               if (room.checkAvailable())
-               {
-                    if (room.setStatus("Unavailable"))
-                    {
-                         changeConsoleColor(2);
-                         cout << "Successfully changed room status from AVAILABLE to UNAVAILABLE." << endl;
-                         changeConsoleColor(7);
-                    }
-               }
-               else
-               {
-                    if (room.setStatus("Available"))
-                    {
-                         changeConsoleColor(2);
-                         cout << "Successfully changed room status from UNAVAILABLE to AVAILABLE" << endl;
-                         changeConsoleColor(7);
-                    }
-               }
+               room.setStatus(room.checkAvailable() ? "Unavailable" : "Available");
                break;
           }
      }
 
      if (!exists)
      {
-          cout << "Failed to find room with ID: " << roomID << ". Please try adding a new one." << endl;
+          changeConsoleColor(4);
+          cout << "Error: Room with ID " << roomID << " not found. Please try adding a new one." << endl;
+          changeConsoleColor(7);
           return false;
      }
+
+     if (!Room::updateRoomFile(rooms, roomFile))
+     {
+          changeConsoleColor(4);
+          cout << "Error: Failed to update room file. Please try again!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     changeConsoleColor(2); 
+     cout << "Successfully changed room status for ID: " << roomID << endl;
+     changeConsoleColor(7);
      return true;
 }
 
@@ -1173,10 +1178,6 @@ bool Staff::findCustomerByLetter(const Staff &staff,const char &letter)
      }
      }
 }
-
-/* bool updateCustomer(const string &type, const string &infor)
-{
-} */
 
 bool Staff::changeServicePrice(const string &serID, const string &price)
 {

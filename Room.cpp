@@ -181,13 +181,13 @@ void Room::printRoom(const vector<Room> &rooms, const vector<Service> &services)
     }
 }
 
-void Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
+bool Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
 {
     ofstream file(fileRoom);
     if (!file.is_open())
     {
         cout << "Cannot open room file!" << endl;
-        return;
+        return false;
     }
 
     for (size_t i = 0; i < rooms.size(); ++i)
@@ -204,8 +204,8 @@ void Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
              << r.getStatus() << "|"
              << svList << endl;
     }
-
     file.close();
+    return false;
 }
 
 void Room::addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs)
