@@ -1,7 +1,7 @@
 #include "Bill.h"
 #include "Date.h"
 #include "Login.h"
-#define INT_MAX 2147483647 
+#define int_max 2147483647 
 
 using namespace std;
 
@@ -116,7 +116,7 @@ Date Bill::inputCheckoutDate(const Date &checkInDate)
         if (cin.fail())
         {
             cin.clear();                   
-            cin.ignore(INT_MAX, '\n'); 
+            cin.ignore(int_max, '\n'); 
             cout << "Invalid input format. Please enter numeric values (DD MM YYYY)." << endl;
             continue;
         }
