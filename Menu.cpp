@@ -263,11 +263,32 @@ void introduceUs()
                changeColor(2);
                cout << "You are logging in by ADMINISTRATOR account!";
                changeColor(7);
+               int count = 1;
 
                do
                {
                     logInBar(34, 30, 11, 150, username, password);
                     staff = logInStaff(username, password);
+
+                    if (count >= 3)
+                    {
+                         clearFromPosition(32, 30);
+                         changeColor(4);
+                         gotoXY(35, 31);
+                         cout << "+-------------------------------------------------------+";
+                         gotoXY(35, 32);
+                         cout << "|         WRONG username or password OVER 3 TIME!       |";
+                         gotoXY(35, 33);
+                         cout << "| Our system will pause for 5 seconds before RETURNING. |";
+                         gotoXY(35, 34);
+                         cout << "+-------------------------------------------------------+";
+                         changeColor(7);
+                         Sleep(5000);
+
+                         clearFromPosition(1, 1);
+                         introScreen();
+                         break;
+                    }
 
                     if (!staff.getPosition().empty())
                     {
@@ -275,6 +296,9 @@ void introduceUs()
                          changeColor(10);
                          cout << "Successfully logged in to the ADMINISTRATOR account!" << endl;
                          changeColor(7);
+                         Sleep(500);
+                         system("cls");
+                         adminScreen(staff);
                          break;
                     }
                     else
@@ -285,13 +309,9 @@ void introduceUs()
                          changeColor(7);
                          Sleep(900);
                          clearFromPosition(34, 30);
+                         ++count;
                     }
-
                } while (true);
-
-               Sleep(500);
-               system("cls");
-               adminScreen(staff);
           }
           else if (aC == 2)
           {
@@ -300,10 +320,32 @@ void introduceUs()
                cout << "You are logging in by CUSTOMER account!";
                changeColor(7);
                bool check = false;
+
+               int count = 1;
                do
                {
                     logInBar(34, 30, 11, 150, username, password);
                     check = logInCus(username, password);
+
+                    if (count >= 3)
+                    {
+                         clearFromPosition(32, 30);
+                         changeColor(4);
+                         gotoXY(35, 31);
+                         cout << "+-------------------------------------------------------+";
+                         gotoXY(35, 32);
+                         cout << "|         WRONG username or password OVER 3 TIME!       |";
+                         gotoXY(35, 33);
+                         cout << "| Our system will pause for 5 seconds before RETURNING. |";
+                         gotoXY(35, 34);
+                         cout << "+-------------------------------------------------------+";
+                         changeColor(7);
+                         Sleep(5000);
+
+                         clearFromPosition(1, 1);
+                         introScreen();
+                         break;
+                    }
 
                     if (check == false)
                     {
@@ -313,6 +355,7 @@ void introduceUs()
                          changeColor(7);
                          Sleep(900);
                          clearFromPosition(34, 30);
+                         ++ count;
                     }
                     else
                     {
@@ -320,12 +363,12 @@ void introduceUs()
                          changeColor(10);
                          cout << "Successfully logged in to the CUSTOMER account!" << endl;
                          changeColor(7);
+                         Sleep(500);
+                         system("cls");
+                         customerScreen(username, password);
+                         break;
                     }
                } while (!check);
-
-               Sleep(500);
-               system("cls");
-               customerScreen(username, password);
           }
      }
      else if (yN == 2)
@@ -844,7 +887,7 @@ void staffFunction(Staff &staff, vector<string> &function)
           // Show All
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
-          
+
           vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
           staff.displayStaff(staffs);
           break;
@@ -908,20 +951,20 @@ void customerFunction(Staff &staff, vector<string> &function)
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(2);
           do
+          {
+               if (!staff.addNewCustomer(staff))
                {
-                    if (!staff.addNewCustomer(staff))
-                    {
-                         cout << "\nDo you want to try again? (y/n)";
-                         string ch;
-                         cin >> ch;
-                         ch = toLower(ch);
-                         if (ch == "n")
-                              break;
-                    }
-                    else
+                    cout << "\nDo you want to try again? (y/n)";
+                    string ch;
+                    cin >> ch;
+                    ch = toLower(ch);
+                    if (ch == "n")
                          break;
+               }
+               else
+                    break;
 
-               } while (true);
+          } while (true);
           changeColor(7);
           break;
      }
@@ -955,7 +998,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                {
                     string CCCD;
                     getline(cin, CCCD);
-                    if (!staff.findCustomerByCCCD(staff,CCCD))
+                    if (!staff.findCustomerByCCCD(staff, CCCD))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
@@ -977,7 +1020,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                     cout << "Enter customer's first name:\n\t";
                     getline(cin, firstName);
 
-                    if (!staff.findCustomerByFirstName(staff,firstName))
+                    if (!staff.findCustomerByFirstName(staff, firstName))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
@@ -999,7 +1042,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                     cout << "Enter customer's first name:\n\t";
                     getline(cin, lastName);
 
-                    if (!staff.findCustomerByLastName(staff,lastName))
+                    if (!staff.findCustomerByLastName(staff, lastName))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
@@ -1021,7 +1064,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                     cout << "Enter letter in customer's name:\n\t";
                     cin >> letter;
 
-                    if (!staff.findCustomerByLetter(staff,letter))
+                    if (!staff.findCustomerByLetter(staff, letter))
                     {
                          cout << "\nDo you want to try again? (y/n)";
                          string ch;
@@ -1092,7 +1135,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                CCCD = trim(CCCD);
 
                char ch;
-               if (!staff.removeCustomerByCCCD(staff,CCCD))
+               if (!staff.removeCustomerByCCCD(staff, CCCD))
                {
                     cout << "\nDo you want to try again? (y/n)";
                     cin >> ch;
@@ -1345,7 +1388,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
-          Bill.checkBillByNameAndCCCD(staff,customers, rooms, services);
+          Bill.checkBillByNameAndCCCD(staff, customers, rooms, services);
           changeColor(7);
           break;
      }
