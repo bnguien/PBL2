@@ -1,6 +1,9 @@
 #ifndef ROOM_H
 #define ROOM_H
 
+#include "Vector.h"
+#include <string>
+using namespace std;
 class Service;
 
 class Room
