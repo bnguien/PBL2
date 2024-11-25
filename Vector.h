@@ -64,4 +64,5 @@ public:
     void print() const;
 };
 
+#include "Vector.cpp"
 #endif
