@@ -54,7 +54,7 @@ public:
      int cusExists(const vector<Customer> &customers, const Customer &newCus);
      bool writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName);
      bool addNewCustomer(Staff &staff);
-     bool updateCustomer(const string &fileName, vector<Customer> &customers);
+     bool updateCustomer (Staff &staff, const string &fileName, vector<Customer> &customers);
      bool removeCustomerByCCCD(const Staff &staff,const string &CCCDToRemove);
 
      bool findCustomerByCCCD(const Staff &staff, const string &CCCD);
