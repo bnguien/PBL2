@@ -9,6 +9,7 @@
 
 using namespace std;
 void noAccountScreen();
+void customerScreen(const string &username, const string &password);
 void Customer::setArrivalDate(const Date &arrivalDate)
 {
     this->arrivalDate = arrivalDate;
@@ -599,7 +600,6 @@ void Customer::bookedRoom()
             _getch();
             gotoXY(97, 24);
             cout << string(75, ' ');
-
         }
     }
 
@@ -867,62 +867,159 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
         if (createUsername(customer.getFullName()) == inputUserName && customer.getCCCD() == inputPassword)
         {
             customerFound = true;
+            gotoXY(53, 12);
+            changeConsoleColor(6);
+            std::cout << "WHICH INFORMATION WOULD YOU LIKE TO UPDATE" << endl;
+            changeConsoleColor(7);
+            vector<string> options = {"Change phone number", "Change address", "Change Date of Birth (DOB)", "Return"};
+            int choice = buttonList(40, 15, 34, 2, 2, options, "column");
 
-            int choice;
-            cout << "Select the information you want to update:\n";
-            cout << "1. Change phone number\n";
-            cout << "2. Change address\n";
-            cout << "3. Change Date of Birth (DOB)\n";
-            cout << "Choice: ";
-            cin >> choice;
-            cin.ignore();
+            if (choice < 1 || choice > options.size())
+            {
+                cout << "Invalid selection!\n";
+                return;
+            }
 
-            if (choice == 1)
+            string selectedOption = options[choice - 1];
+            system("cls");
+            gotoXY(1, 1);
+            changeConsoleColor(3);
+            cout << "HOTEL DEL LUNA" << endl;
+            changeConsoleColor(7);
+            cout << "______________" << endl;
+
+            if (selectedOption == "Change phone number")
             {
                 string newPhone;
-                cout << "Enter the new phone number: ";
-                getline(cin, newPhone);
-                if (customer.setPhone(newPhone))
-                {
-                    cout << "Phone number updated successfully.\n";
-                }
-            }
-            else if (choice == 2)
-            {
-                string newAddress;
-                cout << "Enter the new address: ";
-                getline(cin, newAddress);
-
-                newAddress = Person::standardizeString(newAddress);
-                customer.setAdd(newAddress);
-
-                cout << "Address updated successfully.\n";
-            }
-            else if (choice == 3)
-            {
-                cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
-                string newDOB; 
                 while (true)
                 {
-                    std::getline(std::cin, newDOB); 
-
-                    try
+                    gotoXY(10, 5);
+                    changeConsoleColor(9);
+                    cout << "Enter the new phone number: ";
+                    changeConsoleColor(7);
+                    getline(cin, newPhone);
+                    if (customer.getPhone() == newPhone)
                     {
-                        Date dobDate(newDOB);   
-                        customer.setDOB(dobDate); 
-
-                        cout << "Date of Birth updated successfully.\n"; 
-                        break;                                          
+                        gotoXY(10, 7);
+                        changeConsoleColor(4);
+                        cout << "The new phone number is the same as the old one. Please enter a different phone number." << endl;
+                        changeConsoleColor(7);
+                        _getch();
+                        gotoXY(30, 5);
+                        cout << string(75, ' ');
+                        gotoXY(10, 7);
+                        cout << string(150, ' ');
                     }
-                    catch (const std::invalid_argument &e)
+                    else
                     {
-                        cout << "Invalid date format. Please try again (dd/mm/yyyy): ";
+                        if (customer.setPhone(newPhone))
+                        {
+                            changeConsoleColor(2);
+                            cout << "Phone number updated successfully.\n";
+                            changeConsoleColor(7);
+                            break;
+                        }
+                        else
+                        {
+                            changeColor(4);
+                            _getch();
+                            gotoXY(10, 7);
+                            cout << string(100, ' ');
+                            gotoXY(30, 5);
+                            cout << string(75, ' ');
+                            gotoXY(1, 7);
+                            cout << string(150, ' ');
+                        }
+                    }
+                    changeConsoleColor(7);
+                }
+            }
+            else if (selectedOption == "Change address")
+            {
+                while (true)
+                {
+                    gotoXY(10, 5);
+                    string newAddress;
+                    changeConsoleColor(9);
+                    cout << "Enter the new address: ";
+                    changeConsoleColor(7);
+                    getline(cin, newAddress);
+                    if (customer.getAdd() == newAddress)
+                    {
+                        gotoXY(10, 7);
+                        changeConsoleColor(4);
+                        cout << "The new address is the same as the old one. Please enter a different address." << endl;
+                        changeConsoleColor(7);
+                        _getch();
+                        gotoXY(30, 5);
+                        cout << string(75, ' ');
+                        gotoXY(10, 7);
+                        cout << string(150, ' ');
+                    }
+                    else
+                    {
+                        newAddress = Person::standardizeString(newAddress);
+                        customer.setAdd(newAddress);
+                        changeConsoleColor(2);
+                        cout << "Address updated successfully.\n";
+                        changeConsoleColor(7);
+                        break;
                     }
                 }
             }
-            else
+            else if (selectedOption == "Change Date of Birth (DOB)")
             {
-                cout << "Invalid choice!\n";
+                gotoXY(10, 5);
+                changeConsoleColor(9);
+                cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
+                changeConsoleColor(7);
+                string newDOB;
+                while (true)
+                {
+                    std::getline(std::cin, newDOB);
+                    if (customer.getDOB() == newDOB)
+                    {
+                        gotoXY(10, 7);
+                        changeConsoleColor(4);
+                        cout << "The new date of birth is the same as the old one. Please enter a different date of birth." << endl;
+                        changeConsoleColor(7);
+                        _getch();
+                        gotoXY(52, 5);
+                        cout << string(75, ' ');
+                        gotoXY(10, 7);
+                        cout << string(150, ' ');
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Date dobDate(newDOB);
+                            customer.setDOB(dobDate);
+                            changeConsoleColor(2);
+                            cout << "Date of Birth updated successfully.\n";
+                            changeConsoleColor(7);
+                            break;
+                        }
+                        catch (const std::invalid_argument &e)
+                        {
+                            changeConsoleColor(4);
+                            gotoXY(10, 7);
+                            cout << "Invalid date format. Please try again (dd/mm/yyyy): ";
+                            changeConsoleColor(7);
+                            _getch();
+                            gotoXY(53, 5);
+                            cout << string(75, ' ');
+                            gotoXY(10, 7);
+                            cout << string(150, ' ');
+                            continue;
+                        }
+                    }
+                }
+            }
+            else if (selectedOption == "Return")
+            {
+                clearFromPosition(1, 1);
+                customerScreen(inputUserName, inputPassword);
                 return;
             }
 
@@ -950,7 +1047,6 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
              << customer.getAdd() << "|"
              << customer.getDOB().toString() << "|"
              << customer.getGender() << "|";
-
         vector<string> roomIDs = customer.getRoomIDs();
         for (size_t i = 0; i < roomIDs.size(); ++i)
         {
@@ -960,7 +1056,17 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                 file << ",";
             }
         }
-        file << "|" << customer.getArrivalDate().toString() << "|" << endl;
+        file << "|" << customer.getArrivalDate().toString() << "|";
+        vector<string> serviceIDs = customer.getServiceIDs();
+        for (size_t i = 0; i < serviceIDs.size(); ++i)
+        {
+            file << serviceIDs[i];
+            if (i < serviceIDs.size() - 1)
+            {
+                file << ",";
+            }
+        }
+        file << endl;
     }
 
     file.close();
