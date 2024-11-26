@@ -355,7 +355,7 @@ void introduceUs()
                          changeColor(7);
                          Sleep(900);
                          clearFromPosition(34, 30);
-                         ++ count;
+                         ++count;
                     }
                     else
                     {
@@ -974,7 +974,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Update information
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
-          cus.updateCustomerInfo(username, password, customers, fileName);
+          staff.updateCustomer(staff, fileName, customers);
           changeColor(7);
 
           break;

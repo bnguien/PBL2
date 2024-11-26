@@ -1213,3 +1213,298 @@ bool Staff::changeServicePrice(const string &serID, const string &price)
           return false;
      }
 }
+bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer> &customers)
+{
+     while (true)
+     {
+          gotoXY(35, 12);
+          changeConsoleColor(9);
+          cout << "ENTER CUSTOMER'S NAME AND CUSTOMER'S ID CARD(CCCD)" << endl;
+          changeConsoleColor(14);
+          gotoXY(25, 14);
+          std::cout << "|---------------------------------------------------------------------|" << std::endl;
+          gotoXY(25, 15);
+          std::cout << "|  Customer's Name           |                                        |" << std::endl;
+          gotoXY(25, 16);
+          std::cout << "|---------------------------------------------------------------------|" << std::endl;
+          gotoXY(25, 17);
+          std::cout << "|  Customer's CCCD (ID card) |                                        |" << std::endl;
+          gotoXY(25, 18);
+          std::cout << "|---------------------------------------------------------------------|" << std::endl;
+          string inputName, inputCCCD;
+          changeConsoleColor(7);
+          gotoXY(55, 15);
+          getline(cin, inputName);
+          bool isValidCCCD = false;
+          do
+          {
+               gotoXY(55, 17);
+               getline(cin, inputCCCD);
+
+               if (inputCCCD.length() != 12)
+               {
+                    changeConsoleColor(4);
+                    gotoXY(97, 17);
+                    cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
+                    changeConsoleColor(7);
+                    _getch();
+                    gotoXY(97, 17);
+                    cout << string(75, ' ');
+               }
+               else
+               {
+                    bool isDigitOnly = true;
+                    for (size_t i = 0; i < inputCCCD.length(); i++)
+                    {
+                         if (!isdigit(inputCCCD[i]))
+                         {
+                              isDigitOnly = false;
+                              gotoXY(97, 17);
+                              changeConsoleColor(4);
+                              cout << "CCCD must have only digits!Press enter to try again" << endl;
+                              changeConsoleColor(7);
+                              _getch();
+                              gotoXY(97, 17);
+                              cout << string(75, ' ');
+                              break;
+                         }
+                    }
+                    if (isDigitOnly)
+                    {
+                         isValidCCCD = true;
+                    }
+               }
+
+               if (!isValidCCCD)
+               {
+                    gotoXY(55, 17);
+                    cout << string(inputCCCD.length(), ' ');
+               }
+
+          } while (!isValidCCCD);
+
+          bool customerFound = false;
+          for (Customer &customer : customers)
+          {
+               if (customer.getFullName() == inputName && customer.getCCCD() == inputCCCD)
+               {
+                    customerFound = true;
+                    system("cls");
+                    gotoXY(1, 1);
+                    changeConsoleColor(3);
+                    cout << "HOTEL DEL LUNA" << endl;
+                    changeConsoleColor(7);
+                    cout << "______________" << endl;
+                    gotoXY(37, 5);
+                    changeConsoleColor(6);
+                    std::cout << "WHICH CUSTOMER'S INFORMATION WOULD YOU LIKE TO UPDATE" << endl;
+                    changeConsoleColor(7);
+                    vector<string> options = {"Change phone number", "Change address", "Change Date of Birth (DOB)", "Return"};
+                    int choice = buttonList(40, 8, 34, 2, 2, options, "column");
+
+                    if (choice < 1 || choice > options.size())
+                    {
+                         cout << "Invalid selection!\n";
+                         return false;
+                    }
+
+                    string selectedOption = options[choice - 1];
+                    system("cls");
+                    gotoXY(1, 1);
+                    changeConsoleColor(3);
+                    cout << "HOTEL DEL LUNA" << endl;
+                    changeConsoleColor(7);
+                    cout << "______________" << endl;
+                    if (selectedOption == "Change phone number")
+                    {
+                         string newPhone;
+                         while (true)
+                         {
+                              gotoXY(10, 5);
+                              changeConsoleColor(9);
+                              cout << "Enter the new phone number: ";
+                              changeConsoleColor(7);
+                              getline(cin, newPhone);
+                              if (customer.getPhone() == newPhone)
+                              {
+                                   gotoXY(10, 7);
+                                   changeConsoleColor(4);
+                                   cout << "The new phone number is the same as the old one. Please enter a different phone number." << endl;
+                                   changeConsoleColor(7);
+                                   _getch();
+                                   gotoXY(30, 5);
+                                   cout << string(75, ' ');
+                                   gotoXY(10, 7);
+                                   cout << string(150, ' ');
+                              }
+                              else
+                              {
+                                   if (customer.setPhone(newPhone))
+                                   {
+                                        changeConsoleColor(2);
+                                        cout << "Phone number updated successfully.\n";
+                                        changeConsoleColor(7);
+                                        break;
+                                   }
+                                   else
+                                   {
+                                        changeColor(4);
+                                        _getch();
+                                        gotoXY(10, 7);
+                                        cout << string(100, ' ');
+                                        gotoXY(30, 5);
+                                        cout << string(75, ' ');
+                                        gotoXY(1, 7);
+                                        cout << string(150, ' ');
+                                   }
+                              }
+                              changeConsoleColor(7);
+                         }
+                    }
+                    else if (selectedOption == "Change address")
+                    {
+                         while (true)
+                         {
+                              gotoXY(10, 5);
+                              string newAddress;
+                              changeConsoleColor(9);
+                              cout << "Enter the new address: ";
+                              changeConsoleColor(7);
+                              getline(cin, newAddress);
+                              if (customer.getAdd() == newAddress)
+                              {
+                                   gotoXY(10, 7);
+                                   changeConsoleColor(4);
+                                   cout << "The new address is the same as the old one. Please enter a different address." << endl;
+                                   changeConsoleColor(7);
+                                   _getch();
+                                   gotoXY(30, 5);
+                                   cout << string(75, ' ');
+                                   gotoXY(10, 7);
+                                   cout << string(150, ' ');
+                              }
+                              else
+                              {
+                                   newAddress = Person::standardizeString(newAddress);
+                                   customer.setAdd(newAddress);
+                                   changeConsoleColor(2);
+                                   cout << "Address updated successfully.\n";
+                                   changeConsoleColor(7);
+                                   break;
+                              }
+                         }
+                    }
+                    else if (selectedOption == "Change Date of Birth (DOB)")
+                    {
+                         gotoXY(10, 5);
+                         changeConsoleColor(9);
+                         cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
+                         changeConsoleColor(7);
+                         string newDOB;
+                         while (true)
+                         {
+                              std::getline(std::cin, newDOB);
+                              if (customer.getDOB() == newDOB)
+                              {
+                                   gotoXY(10, 7);
+                                   changeConsoleColor(4);
+                                   cout << "The new date of birth is the same as the old one. Please enter a different date of birth." << endl;
+                                   changeConsoleColor(7);
+                                   _getch();
+                                   gotoXY(52, 5);
+                                   cout << string(75, ' ');
+                                   gotoXY(10, 7);
+                                   cout << string(150, ' ');
+                              }
+                              else
+                              {
+                                   try
+                                   {
+                                        Date dobDate(newDOB);
+                                        customer.setDOB(dobDate);
+                                        changeConsoleColor(2);
+                                        cout << "Date of Birth updated successfully.\n";
+                                        changeConsoleColor(7);
+                                        break;
+                                   }
+                                   catch (const std::invalid_argument &e)
+                                   {
+                                        changeConsoleColor(4);
+                                        gotoXY(10, 7);
+                                        cout << "Invalid date format. Please try again (dd/mm/yyyy): ";
+                                        changeConsoleColor(7);
+                                        _getch();
+                                        gotoXY(53, 5);
+                                        cout << string(75, ' ');
+                                        gotoXY(10, 7);
+                                        cout << string(150, ' ');
+                                        continue;
+                                   }
+                              }
+                         }
+                    }
+                    else if (selectedOption == "Return")
+                    {
+                         clearFromPosition(1, 1);
+                         adminScreen(staff);
+                    }
+
+                    break;
+               }
+          }
+          if (!customerFound)
+          {
+               changeConsoleColor(4);
+               gotoXY(25, 20);
+               cout << "Customer not found. Please try again!" << endl;
+               changeConsoleColor(7);
+               _getch();
+               gotoXY(55, 15);
+               cout << string(75, ' ');
+               gotoXY(55, 17);
+               cout << string(75, ' ');
+               gotoXY(25, 20);
+               cout << string(75, ' ');
+          }
+          else
+          {
+               break;
+          }
+     }
+     ofstream file(fileName, ios::trunc);
+     if (!file.is_open())
+     {
+          cout << "Cannot open file!" << endl;
+          return false;
+     }
+     for (const Customer &customer : customers)
+    {
+        file << customer.getFullName() << "|"
+             << customer.getCCCD() << "|"
+             << customer.getPhone() << "|"
+             << customer.getAdd() << "|"
+             << customer.getDOB().toString() << "|"
+             << customer.getGender() << "|";
+        vector<string> roomIDs = customer.getRoomIDs();
+        for (size_t i = 0; i < roomIDs.size(); ++i)
+        {
+            file << roomIDs[i];
+            if (i < roomIDs.size() - 1)
+            {
+                file << ",";
+            }
+        }
+        file << "|" << customer.getArrivalDate().toString() << "|";
+        vector<string> serviceIDs = customer.getServiceIDs();
+        for (size_t i = 0; i < serviceIDs.size(); ++i)
+        {
+            file << serviceIDs[i];
+            if (i < serviceIDs.size() - 1)
+            {
+                file << ",";
+            }
+        }
+        file << endl;
+    }
+     file.close();
+}
