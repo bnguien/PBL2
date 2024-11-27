@@ -50,7 +50,7 @@ public:
     string getFirstName();
     string getLastName();
     void toLowerCase(string &str);
-    string standardizeString(const string &input);
+    static string standardizeString(const string &input);
     static vector<Person> readFilePerson(const string &fileName);
     static void displayPerson(const vector<Person> &people);
     ~Person() {}
