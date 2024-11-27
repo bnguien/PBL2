@@ -184,7 +184,7 @@ void boxOneLine(int x, int y, int w, int h, int textColor, int backgroundColor, 
     //**
     changeColor(7);
     gotoXY(x + 3, y + 1);
-    cout << " " << left << setw(w - 6) << content;
+    cout << " " << left << setw(w - 6) << setfill(' ') << content;
     changeColor(textColor);
     if (h <= 1 || w <= 1)
         return; // khong xu ly
@@ -228,7 +228,7 @@ void boxTwoLine(int x, int y, int w, int h, int textColor, int backgroundColor, 
     //**
     changeColor(7);
     gotoXY(x + 3, y + 1);
-    cout << " " << left << setw(w - 6) << content;
+    cout << " " << left << setw(w - 6) << setfill(' ') << content;
     changeColor(textColor);
     if (h <= 1 || w <= 1)
         return; // khong xu ly
