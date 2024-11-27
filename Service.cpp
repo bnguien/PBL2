@@ -42,34 +42,33 @@ bool Service::setPrice(const string &price)
 
 void displayService(const vector<Service> &services)
 {
+     string border = "\t+-----+------+----------+--------------+-----------------+---------------------+";
+     cout << border << endl;
+     cout << "\t| STT |  ID  |   NAME   |     TYPE     |   DESCRIPTION   |        PRICE        |" << endl;
+     cout << border << endl;
+
+     int count = 0;
      for (const auto &service : services)
      {
-          string border = "+---------------+-----------------------------------+";
-          cout << border << endl;
-          cout << "| Service ID    | " << left << setw(34) << service.ID << "|" << endl;
+          ++ count;
+          cout << "\t| " << setw(3) << setfill('0') << right << count << " | "
+               << setw(5) << setfill(' ') << left << service.getID() << "| ";
 
-          if (service.name == "Food")
+          if (service.getName() == "Food")
+               changeConsoleColor(2);
+          else if (service.getName() == "Snack")
+               changeConsoleColor(14);
+          else if (service.getName() == "Drinks")
+               changeConsoleColor(11);
+          else if (service.getName() == "Laundary")
                changeConsoleColor(9);
-          else if (service.name == "Snack")
-               changeConsoleColor(10);
-          else if (service.name == "Drinks")
-               changeConsoleColor(6);
-          else if (service.name == "Laundary")
-               changeConsoleColor(5);
-          cout << border << endl;
 
-          cout << "| Service Name  | " << left << setw(34) << service.name << "|" << endl;
-          cout << border << endl;
-          changeConsoleColor(12);
-          cout << "| Service Type  | " << left << setw(34) << service.type << "|" << endl;
-          cout << border << endl;
-          changeConsoleColor(8);
-          cout << "| Service Desc  | " << left << setw(34) << service.description << "|" << endl;
-          cout << border << endl;
+          cout << setw(9) << service.getName();
           changeConsoleColor(7);
-          cout << "| Price         | " << left << setw(34) << service.price << "|" << endl;
+          cout << "| " << setw(13) << service.getType() << "| "
+               << setw(16) << service.getDesc() << "| "
+               << setw(20) << service.getPrice() << "|" << endl;
           cout << border << endl;
-          cout << endl;
      }
 }
 
