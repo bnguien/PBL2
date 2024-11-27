@@ -135,64 +135,35 @@ vector<Room> Room::readFileRoom(const string &fileName)
 
 void Room::printRoom(const vector<Room> &rooms, const vector<Service> &services)
 {
-    /* for (const auto &room : rooms)
-    {
-        string border = "+---------------+-----------------------------------+";
-        cout << border << endl;
-        cout << "| Room ID       | " << left << setw(34) << room.getID() << "|" << endl;
-        cout << border << endl;
-        changeConsoleColor(12);
-        cout << "| Room Type     | " << left << setw(34) << room.getType() << "|" << endl;
-        cout << border << endl;
-        changeConsoleColor(8);
-        cout << "| Room Price    | " << left << setw(34) << room.getPrice() << "|" << endl;
-        cout << border << endl;
-        changeConsoleColor(7);
-        if (room.getStatus() == "Unavailable")
-        {
-            changeConsoleColor(4);
-        }
-        else if (room.getStatus() == "Available")
-        {
-            changeConsoleColor(2);
-        }
-        cout << "| Room Status   | " << left << setw(34) << room.getStatus() << "|" << endl;
-        cout << border << endl;
-        changeConsoleColor(3);
-        cout << "| Services      | ";
-        const vector<string> &serviceIDs = room.getServiceIDs();
-        if (serviceIDs.size() == 1 && serviceIDs[0] == "None")
-        {
-            cout << left << setw(34) << "None";
-        }
-        else
-        {
-            for (size_t j = 0; j < serviceIDs.size(); ++j)
-            {
-                if (j > 0)
-                    cout << ", ";
-                cout << Service::getServiceName(serviceIDs[j], services);
-            }
-        }
-        cout << "|" << endl;
-        cout << border << endl;
-        changeConsoleColor(7);
-        cout << endl;
-    } */
-
-    string border1 = "+-----+--------+----------+---------------+--------------+-------------------------------------+";
-    string border2 = "|     |        |          |               |              | ";
+    string border1 = "\t+-----+--------+----------+---------------+--------------+-------------------------------------+";
+    string border2 = "\t|     |        |          |               |              | ";
     cout << border1 << endl;
-    cout << "| STT | RoomID | RoomType |   RoomPrice   |    Status    |             Service IDs             |" << endl;
+    cout << "\t| STT | RoomID | RoomType |   RoomPrice   |    Status    |             Service IDs             |" << endl;
+    cout << border1 << endl;
     int count = 0;
     for (const auto &room : rooms)
     {
         ++count;
-        cout << "| " << setw(3) << setfill('0') << count << " |  "
-             << setw(6) << room.getID() << "|  "
-             << setw(8) << room.getType() << "| "
-             << setw(14) << room.getPrice() << "| "
-             << setw(13) << room.getStatus() << "| ";
+        cout << "\t| " << setw(3) << setfill('0') << right << count << " |  "
+             << setw(6) << setfill (' ') << left << room.getID() << "|  ";
+        if (room.getType() == "Single")
+            changeConsoleColor(10);
+        else if (room.getType() == "Double")
+            changeConsoleColor(14);
+        else if (room.getType() == "Triple")
+            changeConsoleColor(11);
+        cout << setw(8) << room.getType();
+        changeConsoleColor(7);
+        cout << "| " << setw(14) << room.getPrice() << "| ";
+
+        if (room.getStatus() == "Available")
+            changeConsoleColor(2);
+        else if (room.getStatus() == "Unavailable")
+            changeConsoleColor(4);
+
+        cout << setw(13) << room.getStatus();
+        changeConsoleColor(7);
+        cout << "| ";
 
         vector<string> serviceIDs = room.getServiceIDs();
 
@@ -219,8 +190,8 @@ void Room::printRoom(const vector<Room> &rooms, const vector<Service> &services)
                     serID = "";
                 }
             }
-            cout << border1 << endl;
         }
+        cout << border1 << endl;
     }
 }
 
