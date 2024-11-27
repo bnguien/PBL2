@@ -20,3 +20,4 @@ Nguyen Viet Hoang|048092034125|0975521482|Da Nang|Male|14/02/1992|S04|Server|8.0
 Hoang Tran Ngoc Linh|048300002425|0380166435|Da Nang|Female|11/05/2000|S05|Server|7.350.000/month
 Huynh Ngoc Hung|045201023418|0974531180|Quang Tri|Male|05/06/2001|S06|Server|7.350.000/month
 Ngan Nguyen|047389251238|0384698955|Quang Tri|Female|10/10/2006|L05|Laundry|4.000.000/month
+Luong Quang Nguyen Thuan|045299041937|0939745519|Ha Tinh|Male|25/05/1999|S07|Server|2.340.000/month
