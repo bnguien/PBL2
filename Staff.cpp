@@ -890,52 +890,164 @@ bool Staff::addNewCustomer(Staff &staff)
      std::getline(std::cin, gender);
 
      while (true)
-     {
-          gotoXY(69, 24);
-          cout << string(25, ' ');
-          gotoXY(69, 24);
-          std::getline(std::cin, DOBstr);
+    {
+        gotoXY(69, 24);
+        cout << string(25, ' ');
+        gotoXY(69, 24);
+        std::getline(std::cin, DOBstr);
 
-          try
-          {
-               DOB = Date(DOBstr);
-               break;
-          }
-          catch (const std::invalid_argument &e)
-          {
-               gotoXY(97, 24);
-               changeConsoleColor(4);
-               std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
-               changeConsoleColor(7);
-               _getch();
-               gotoXY(97, 24);
-               cout << string(75, ' ');
-          }
-     }
+        if (DOBstr.empty())
+        {
+            gotoXY(97, 24);
+            changeConsoleColor(4);
+            std::cout << "Date of Birth cannot be empty. Press enter to try again (dd/mm/yyyy).";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 24);
+            cout << string(75, ' ');
+            continue;
+        }
 
-     while (true)
-     {
-          gotoXY(69, 26);
-          cout << string(25, ' ');
-          gotoXY(69, 26);
-          std::getline(std::cin, arrivalDateStr);
+        stringstream ss(DOBstr);
+        string token;
+        int day = 0, month = 0, year = 0;
+        bool validDate = true;
 
-          try
-          {
-               arrivalDate = Date(arrivalDateStr);
-               break;
-          }
-          catch (const std::invalid_argument &e)
-          {
-               gotoXY(97, 26);
-               changeConsoleColor(4);
-               std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
-               changeConsoleColor(7);
-               _getch();
-               gotoXY(97, 26);
-               cout << string(75, ' ');
-          }
-     }
+        Date DOBDate(DOBstr);
+        if (!DOBDate.isValidDateFormat(DOBstr))
+        {
+            validDate = false;
+        }
+        else
+        {
+            getline(ss, token, '/');
+            if (DOBDate.isNumber(token))
+            {
+                day = stoi(token);
+            }
+            else
+            {
+                validDate = false;
+            }
+
+            getline(ss, token, '/');
+            if (DOBDate.isNumber(token))
+            {
+                month = stoi(token);
+            }
+            else
+            {
+                validDate = false;
+            }
+
+            getline(ss, token, '/');
+            if (DOBDate.isNumber(token))
+            {
+                year = stoi(token);
+            }
+            else
+            {
+                validDate = false;
+            }
+        }
+
+        if (!validDate || day == 0 || month == 0 || year == 0)
+        {
+            gotoXY(97, 24);
+            changeConsoleColor(4);
+            std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 24);
+            cout << string(75, ' ');
+            continue;
+        }
+        else
+        {
+            DOB = Date(DOBstr);
+            break;
+        }
+    }
+
+    while (true)
+    {
+        gotoXY(69, 26);
+        cout << string(25, ' ');
+        gotoXY(69, 26);
+        std::getline(std::cin, arrivalDateStr);
+
+        if (arrivalDateStr.empty())
+        {
+            gotoXY(97, 26);
+            changeConsoleColor(4);
+            std::cout << "Arrival date cannot be empty. Press enter to try again (dd/mm/yyyy).";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 26);
+            cout << string(75, ' ');
+            continue;
+        }
+
+        stringstream ss(arrivalDateStr);
+        string token;
+        int day = 0, month = 0, year = 0;
+        bool validDate = true;
+
+        Date arrivalDateTemp(arrivalDateStr);
+        if (!arrivalDateTemp.isValidDateFormat(arrivalDateStr))
+        {
+            validDate = false;
+        }
+        else
+        {
+            getline(ss, token, '/');
+            if (arrivalDateTemp.isNumber(token))
+            {
+                day = stoi(token);
+            }
+            else
+            {
+                validDate = false;
+            }
+
+            getline(ss, token, '/');
+            if (arrivalDateTemp.isNumber(token))
+            {
+                month = stoi(token);
+            }
+            else
+            {
+                validDate = false;
+            }
+
+            getline(ss, token, '/');
+            if (arrivalDateTemp.isNumber(token))
+            {
+                year = stoi(token);
+            }
+            else
+            {
+                validDate = false;
+            }
+        }
+
+        if (!validDate || day == 0 || month == 0 || year == 0)
+        {
+            gotoXY(97, 26);
+            changeConsoleColor(4);
+            std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(97, 26);
+            cout << string(75, ' ');
+            continue;
+        }
+        else
+        {
+            arrivalDate = Date(arrivalDateStr);
+            break;
+        }
+    }
      vector<string> Options = {"Cancel", "Confirm"};
      int optionIndex = buttonList(45, 29, 15, 2, 18, Options, "row");
      string selectedOption = Options[optionIndex - 1];
@@ -1436,67 +1548,121 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                          }
                     }
                     else if (selectedOption == "Change Date of Birth (DOB)")
+            {
+                gotoXY(10, 5);
+                changeConsoleColor(9);
+                cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
+                changeConsoleColor(7);
+                string newDOB;
+                while (true)
+                {
+                    std::getline(std::cin, newDOB);
+                    if (customer.getDOB() == newDOB)
                     {
-                         gotoXY(10, 5);
-                         changeConsoleColor(9);
-                         cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
-                         changeConsoleColor(7);
-                         string newDOB;
-                         while (true)
-                         {
-                              std::getline(std::cin, newDOB);
-                              if (customer.getDOB() == newDOB)
-                              {
-                                   gotoXY(10, 7);
-                                   changeConsoleColor(4);
-                                   cout << "The new date of birth is the same as the old one. Please enter a different date of birth." << endl;
-                                   changeConsoleColor(7);
-                                   _getch();
-                                   gotoXY(52, 5);
-                                   cout << string(75, ' ');
-                                   gotoXY(10, 7);
-                                   cout << string(150, ' ');
-                              }
-                              else
-                              {
-                                   try
-                                   {
-                                        vector<string> Options = {"Cancel", "Confirm"};
-                                        int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
-                                        string selectedOption = Options[optionIndex - 1];
-                                        if (selectedOption == "Cancel")
-                                        {
-                                             clearFromPosition(1, 1);
-                                             adminScreen(staff);
-                                             return false;
-                                        }
-                                        else if (selectedOption == "Confirm")
-                                        {
-                                             Date dobDate(newDOB);
-                                             customer.setDOB(dobDate);
-                                             changeConsoleColor(2);
-                                             gotoXY(40, 11);
-                                             cout << "Date of Birth updated successfully.\n";
-                                             changeConsoleColor(7);
-                                             break;
-                                        }
-                                   }
-                                   catch (const std::invalid_argument &e)
-                                   {
-                                        changeConsoleColor(4);
-                                        gotoXY(10, 7);
-                                        cout << "Invalid date format. Please try again (dd/mm/yyyy): ";
-                                        changeConsoleColor(7);
-                                        _getch();
-                                        gotoXY(53, 5);
-                                        cout << string(75, ' ');
-                                        gotoXY(10, 7);
-                                        cout << string(150, ' ');
-                                        continue;
-                                   }
-                              }
-                         }
+                        gotoXY(10, 7);
+                        changeConsoleColor(4);
+                        cout << "The new date of birth is the same as the old one. Please enter a different date of birth." << endl;
+                        changeConsoleColor(7);
+                        _getch();
+                        gotoXY(52, 5);
+                        cout << string(75, ' ');
+                        gotoXY(10, 7);
+                        cout << string(150, ' ');
                     }
+                    else
+                    {
+                        if (newDOB.empty())
+                        {
+                            changeConsoleColor(4);
+                            gotoXY(10, 7);
+                            cout << "Date of Birth cannot be empty!" << endl;
+                            changeConsoleColor(7);
+                            _getch();
+                            gotoXY(10, 7);
+                            continue;
+                        }
+
+                        stringstream ss(newDOB);
+                        string token;
+                        int day = 0, month = 0, year = 0;
+                        bool validDate = true;
+
+                        Date DobDate(newDOB);
+                        if (!DobDate.isValidDateFormat(newDOB))
+                        {
+                            validDate = false;
+                        }
+                        else
+                        {
+                            getline(ss, token, '/');
+                            if (DobDate.isNumber(token))
+                            {
+                                day = stoi(token);
+                            }
+                            else
+                            {
+                                validDate = false;
+                            }
+
+                            getline(ss, token, '/');
+                            if (DobDate.isNumber(token))
+                            {
+                                month = stoi(token);
+                            }
+                            else
+                            {
+                                validDate = false;
+                            }
+
+                            getline(ss, token, '/');
+                            if (DobDate.isNumber(token))
+                            {
+                                year = stoi(token);
+                            }
+                            else
+                            {
+                                validDate = false;
+                            }
+                        }
+
+                        if (!validDate || day == 0 || month == 0 || year == 0)
+                        {
+                            changeConsoleColor(4);
+                            gotoXY(10, 7);
+                            cout << "Invalid date format. Please enter a valid Date of Birth (DD/MM/YYYY): ";
+                            changeConsoleColor(7);
+                            _getch();
+                            gotoXY(52, 5);
+                            cout << string(150, ' ');
+                            gotoXY(10, 7);
+                            cout << string(150, ' ');
+                            gotoXY(52, 5);
+                            continue;
+                        }
+
+                        Date dobDate(newDOB);
+                        customer.setDOB(dobDate);
+
+                        vector<string> Options = {"Cancel", "Confirm"};
+                        int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                        string selectedOption = Options[optionIndex - 1];
+                        if (selectedOption == "Cancel")
+                        {
+                            clearFromPosition(1, 1);
+                            adminScreen(staff);
+                            return false;
+                        }
+                        else if (selectedOption == "Confirm")
+                        {
+                            changeConsoleColor(2);
+                            gotoXY(40, 11);
+                            cout << "Date of Birth updated successfully.\n";
+                            changeConsoleColor(7);
+                            break;
+                        }
+                    }
+                }
+            }
                     else if (selectedOption == "Return")
                     {
                          clearFromPosition(1, 1);
