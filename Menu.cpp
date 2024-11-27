@@ -617,9 +617,8 @@ void adminScreen(Staff &staff)
      vector<string> serBillFunc = {
          "1. Change Service Price",
          "2. Show All Services",
-         "3. Add New Bill",
-         "4. Check Bill",
-         "5. Remove Bill"};
+         "3. Check Bill",
+         };
      for (int i = 0; i < serBillFunc.size(); i++)
      {
           gotoXY(102, 17 + i);
@@ -1380,27 +1379,11 @@ void serBillFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
-          changeColor(7);
-          break;
-     }
-     case 4:
-     {
-          clearFromPosition(1, 10);
-          changeColor(11);
-          cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
           Bill.checkBillByNameAndCCCD(staff, customers, rooms, services);
           changeColor(7);
           break;
      }
-     case 5:
-     {
-          clearFromPosition(1, 10);
-          changeColor(11);
-          cout << "\t\t\t---------- BILL FUNCTIONS: " << function[choice - 1] << " ----------\n";
-          changeColor(7);
-          break;
-     }
-     case 6:
+     case 4:
      {
           clearFromPosition(1, 1);
           adminScreen(staff);
