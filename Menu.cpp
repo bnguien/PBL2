@@ -290,7 +290,7 @@ void introduceUs()
                          break;
                     }
 
-                    if (!staff.getPosition().empty())
+                    if (staff.getPosition() == "Manager" || staff.getPosition() == "Receptionist")
                     {
                          gotoXY(32, 39);
                          changeColor(10);
@@ -301,11 +301,21 @@ void introduceUs()
                          adminScreen(staff);
                          break;
                     }
-                    else
+                    else if (!staff.getPosition().empty())
                     {
                          gotoXY(32, 39);
                          changeColor(12);
                          cout << "Wrong username or password for ADMINISTRATOR account!" << endl;
+                         changeColor(7);
+                         Sleep(900);
+                         clearFromPosition(34, 30);
+                         ++count;
+                    }
+                    else
+                    {
+                         gotoXY(32, 39);
+                         changeColor(12);
+                         cout << "ADMINISTRATOR account is only for MANAGER or RECEPTIONIST!" << endl;
                          changeColor(7);
                          Sleep(900);
                          clearFromPosition(34, 30);
@@ -406,20 +416,21 @@ void noAccountScreen()
      {
      case 1:
           clearFromPosition(1, 1);
-          cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[0] << " ----------\n";
+          cout << "\t\t\t---------- NO ACCOUNT FUNCTIONS: " << function[0] << " ----------\n";
           changeConsoleColor(3);
-          cout << setw(42) << "HERE ARE THE ROOMS WE OFFER" << endl;
+          cout << "\n\t\t\t\t\tHERE ARE THE ROOMS WE OFFER\n"
+               << endl;
           changeConsoleColor(7);
-          cout << setw(37) << "--------------------" << endl;
-          r.printRoom(rooms, services);
+
+          Customer::showAllRooms(rooms);
           break;
      case 2:
           clearFromPosition(1, 1);
           cout << "\t\t---------- NO ACCOUNT FUNCTIONS: " << function[1] << " ----------\n";
           changeConsoleColor(3);
-          cout << setw(42) << "HERE ARE THE ROOMS WE OFFER" << endl;
+          cout << setw(42) << "\n\t\t\t\tHERE ARE THE SERVICES WE OFFER\n"
+               << endl;
           changeConsoleColor(7);
-          cout << setw(37) << "--------------------" << endl;
           displayService(services);
           break;
      case 3:
@@ -490,21 +501,23 @@ void customerScreen(const string &username, const string &password)
      case 1:
           clearFromPosition(1, 10);
           changeColor(12);
-          cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[0] << " ----------\n";
+          cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[0] << " ----------\n";
           changeConsoleColor(3);
-          cout << setw(42) << "HERE ARE THE ROOMS WE OFFER" << endl;
+          cout << "\n\t\t\t\t\tHERE ARE THE ROOMS WE OFFER\n"
+               << endl;
           changeConsoleColor(7);
-          cout << setw(37) << "--------------------" << endl;
-          r.printRoom(rooms, services);
+
+          Customer::showAllRooms(rooms);
           break;
      case 2:
           clearFromPosition(1, 10);
           changeColor(12);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[1] << " ----------\n";
           changeConsoleColor(3);
-          cout << setw(42) << "HERE ARE THE SERVICES WE OFFER" << endl;
+          cout << "\n\t\t\t\tHERE ARE THE SERVICES WE OFFER\n"
+               << endl;
           changeConsoleColor(7);
-          cout << setw(37) << "--------------------" << endl;
+
           displayService(services);
           break;
      case 3:
@@ -595,7 +608,7 @@ void adminScreen(Staff &staff)
          "1. Add New",
          "2. Update Information",
          "3. Find",
-         "4. Book",
+         "4. Book Services",
          "5. Remove",
          "6. Show All"};
      for (int i = 0; i < customerFunc.size(); i++)
@@ -603,7 +616,6 @@ void adminScreen(Staff &staff)
           gotoXY(36, 17 + i);
           cout << customerFunc[i];
      }
-
      vector<string> roomFunc = {
          "1. Change Status",
          "2. Show All",
@@ -618,7 +630,7 @@ void adminScreen(Staff &staff)
          "1. Change Service Price",
          "2. Show All Services",
          "3. Check Bill",
-         };
+     };
      for (int i = 0; i < serBillFunc.size(); i++)
      {
           gotoXY(102, 17 + i);
@@ -636,6 +648,28 @@ void adminScreen(Staff &staff)
           }
           else
           {
+               clearFromPosition(1, 11);
+               changeColor(15);
+               gotoXY(40, 13);
+               cout << "+--------------------------------------------------------+";
+               gotoXY(40, 14);
+               cout << "|                                                        |";
+               gotoXY(40, 15);
+               cout << "|                         ERROR!                         |";
+               gotoXY(40, 16);
+               cout << "|                                                        |";
+               gotoXY(40, 17);
+               cout << "|      STAFF FUNCTION is only for MANAGER's account      |";
+               gotoXY(40, 18);
+               cout << "|                                                        |";
+               gotoXY(40, 19);
+               cout << "+--------------------------------------------------------+";
+               changeColor(7);
+               gotoXY(40, 21);
+               cout << "Wait for 3 seconds ...!";
+               Sleep(3000);
+
+               system("cls");
                adminScreen(staff);
           }
           break;
@@ -657,10 +691,13 @@ void adminScreen(Staff &staff)
 //---FUNCTION OF ADMINISTRATOR---
 void staffFunction(Staff &staff, vector<string> &function)
 {
-     clearFromPosition(30, 11);
+     clearFromPosition(20, 11);
+     gotoXY(30, 11);
      changeColor(12);
      cout << "STAFF FUNCTIONS: Choose the function you want!";
      changeColor(7);
+
+     vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
 
      function.push_back("RETURN");
      int choice = buttonList(40, 12, 28, 2, 2, function, "column");
@@ -676,57 +713,306 @@ void staffFunction(Staff &staff, vector<string> &function)
 
           do
           {
-               string fullName, CCCD, phone, add, gender, day, ID, position, salary;
+               string fullName, CCCD, phone, add, gender, dob, ID, position, salary;
+               Date DOB;
+
                changeColor(2);
-               cout << "Please enter new staff's information!\n";
+               gotoXY(38, 12);
+               cout << "Please enter new staff's information!";
+               changeColor(15);
+
+               gotoXY(25, 14);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 15);
+               cout << "|                         STAFF's INFORMATION                         |";
+               gotoXY(25, 16);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 17);
+               cout << "| Full Name                  |                                        |";
+               gotoXY(25, 18);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 19);
+               cout << "| CCCD                       |                                        |";
+               gotoXY(25, 20);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 21);
+               cout << "| Phone                      |                                        |";
+               gotoXY(25, 22);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 23);
+               cout << "| Address                    |                                        |";
+               gotoXY(25, 24);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 25);
+               cout << "| Gender (Male/ Female)      |                                        |";
+               gotoXY(25, 26);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 27);
+               cout << "| Date of birth (dd/mm/yyyy) |                                        |";
+               gotoXY(25, 28);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 29);
+               cout << "| Position                   |                                        |";
+               gotoXY(25, 30);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 31);
+               cout << "| Salary (only digits)       |                                        |";
+               gotoXY(25, 32);
+               cout << "+---------------------------------------------------------------------+";
+               gotoXY(25, 33);
+               cout << "| Staff ID (automatically)   |                                        |";
+               gotoXY(25, 34);
+               cout << "+---------------------------------------------------------------------+";
+
+               ShowCur(1);
                changeColor(7);
-
-               cin.ignore();
-               cout << "Enter full name:\n\t";
-               getline(cin, fullName);
-
-               cout << "Enter CCCD: \n\t";
-               cin >> CCCD;
-               CCCD = trim(CCCD);
-
-               cout << "Enter phone number:\n\t";
-               cin >> phone;
-               phone = trim(phone);
-
-               cin.ignore();
-               cout << "Enter address:\n\t";
-               getline(cin, add);
-
-               cout << "Enter gender:\n\t";
-               cin >> gender;
-               gender = trim(gender);
-
-               cout << "Enter day of birth (dd/mm/yyyy):\n\t";
-               cin >> day;
-               Date DOB(day);
-
-               cout << "Enter position: (Receptionist, Laundry, Housekeeping, Server)\n\t";
-               cin >> position;
-               position = toLower(position);
-               position[0] = toupper(position[0]);
-
-               cout << "Enter ID: (ID will be automatically generated if you enter existed ID)\n\t";
-               cin >> ID;
-               cout << "Enter salary:\n\t";
-               cin >> salary;
-               Staff newStaff(fullName, CCCD, phone, add, gender, DOB, ID, position, salary);
-
-               if (!staff.addNewStaff(newStaff))
+               do
                {
-                    cout << "\nDo you want to try again? (y/n)";
-                    string ch;
-                    cin >> ch;
-                    ch = toLower(ch);
-                    if (ch == "n")
-                         break;
-               }
-               else
+                    gotoXY(56, 17);
+                    getline(cin, fullName);
+               } while (fullName.empty());
+               fullName = Person::standardizeString(fullName);
+               gotoXY(56, 17);
+               cout << fullName;
+
+               do
+               {
+                    gotoXY(56, 19);
+                    cout << string(CCCD.length(), ' ');
+                    gotoXY(56, 19);
+                    getline(cin, CCCD);
+
+                    if (CCCD.length() != 12)
+                    {
+                         gotoXY(97, 19);
+                         changeConsoleColor(4);
+                         cout << "Exactly 12 digits! Try again!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 19);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
+                    if (!std::all_of(CCCD.begin(), CCCD.end(), ::isdigit))
+                    {
+                         gotoXY(97, 19);
+                         changeConsoleColor(4);
+                         cout << "Only DIGITS! Try again!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 19);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
                     break;
+               } while (true);
+
+               do
+               {
+                    gotoXY(56, 21);
+                    cout << string(phone.length(), ' ');
+                    gotoXY(56, 21);
+                    getline(cin, phone);
+
+                    if (phone.length() != 10)
+                    {
+                         gotoXY(97, 21);
+                         changeConsoleColor(4);
+                         cout << "Exactly 10 digits! Try again!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 21);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
+                    if (!std::all_of(phone.begin(), phone.end(), ::isdigit))
+                    {
+                         gotoXY(97, 21);
+                         changeConsoleColor(4);
+                         cout << "Only DIGITS! Try again!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 21);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
+                    if (phone[0] != '0')
+                    {
+                         gotoXY(97, 21);
+                         changeConsoleColor(4);
+                         cout << "Phone must start with 0! Try again!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 21);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
+                    break;
+               } while (true);
+
+               do
+               {
+                    gotoXY(56, 23);
+                    getline(cin, add);
+               } while (add.empty());
+
+               do
+               {
+                    gotoXY(56, 25);
+                    cout << string(gender.length(), ' ');
+                    gotoXY(56, 25);
+                    getline(cin, gender);
+                    gender = toLower(gender);
+                    gender[0] = toupper(gender[0]);
+                    gotoXY(56, 25);
+                    cout << gender;
+
+                    if (!(gender == "Male" || gender == "Female"))
+                    {
+                         gotoXY(97, 25);
+                         changeConsoleColor(4);
+                         cout << "Gender must be \'Male\' or \'Female\'! Try again!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 25);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
+                    break;
+               } while (true);
+
+               do
+               {
+                    gotoXY(56, 27);
+                    cout << string(dob.length(), ' ');
+                    gotoXY(56, 27);
+                    getline(cin, dob);
+
+                    if (!Date::isValidDateFormat(dob))
+                    {
+                         gotoXY(97, 27);
+                         changeConsoleColor(4);
+                         cout << "Invalid format! Please enter dd/mm/yyyy!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 27);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
+                    DOB = Date(dob);
+
+                    if (Date::getCurrentDate().getYear() - DOB.getYear() < 18)
+                    {
+                         gotoXY(97, 27);
+                         changeConsoleColor(4);
+                         cout << "The staff must be at least 18 years old!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 27);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
+                    break;
+               } while (true);
+
+               do
+               {
+                    gotoXY(56, 29);
+                    cout << string(position.length(), ' ');
+                    gotoXY(56, 29);
+                    getline(cin, position);
+                    position = toLower(position);
+                    position[0] = toupper(position[0]);
+                    gotoXY(56, 29);
+                    cout << position;
+
+                    if (!(position == "Manager" || position == "Receptionist" || position == "Housekeeping" || position == "Laundry" || position == "Server"))
+                    {
+                         gotoXY(97, 29);
+                         changeConsoleColor(4);
+                         cout << "Manager, Receptionist, Housekeeping, Laundry, Server!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 29);
+                         cout << string(80, ' ');
+                         continue;
+                    }
+
+                    break;
+               } while (true);
+
+               do
+               {
+                    gotoXY(56, 31);
+                    cout << string(salary.length(), ' ');
+                    gotoXY(56, 31);
+                    getline(cin, salary);
+
+                    if (!std::all_of(salary.begin(), salary.end(), ::isdigit))
+                    {
+                         gotoXY(97, 31);
+                         changeConsoleColor(4);
+                         cout << "Only DIGITS! Try again!";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(97, 31);
+                         cout << string(50, ' ');
+                         continue;
+                    }
+
+                    salary = Staff::formatSalary(salary);
+                    Sleep(500);
+                    gotoXY(56, 31);
+                    cout << string(salary.length(), ' ');
+                    gotoXY(56, 31);
+                    cout << salary;
+                    break;
+               } while (true);
+
+               gotoXY(56, 33);
+               ID = Staff::generateStaffID(staffs, position);
+               cout << ID;
+
+               ShowCur(0);
+               Staff newStaff(fullName, CCCD, phone, add, gender, DOB, ID, position, salary);
+               vector<string> confirmation = {"Confirm", "Return"};
+               int confirm = buttonList (30, 35, 14, 2, 28, confirmation, "row");
+
+               clearFromPosition(30, 35);
+
+               if (confirm == 1)
+               {
+                    if (!staff.addNewStaff(newStaff))
+                    {
+                         gotoXY(40, 36);
+                         changeConsoleColor(4);
+                         cout << "Do you want to try again?";
+                         changeConsoleColor(7);
+                         vector<string> yN = {"Try again", "Return"};
+                         int ch = buttonList (32, 37, 16, 2, 10, yN, "row");
+
+                         if (ch == 1) 
+                         {
+                              clearFromPosition(38, 12);
+                              continue;
+                         }
+                         else break;
+                    }
+                    else
+                    {
+                         Sleep(5000);
+                         break;
+                    }
+               }
+               else break;
 
           } while (true);
 
@@ -925,7 +1211,8 @@ void staffFunction(Staff &staff, vector<string> &function)
 
 void customerFunction(Staff &staff, vector<string> &function)
 {
-     clearFromPosition(30, 11);
+     clearFromPosition(20, 11);
+     gotoXY(30, 11);
      changeColor(12);
      cout << "CUSTOMER FUNCTIONS: Choose the function you want!";
      changeColor(7);
@@ -1092,30 +1379,73 @@ void customerFunction(Staff &staff, vector<string> &function)
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
           changeColor(7);
 
-          Customer cus;
+          gotoXY(35, 12);
+          changeColor(15);
+          cout << "Please enter the details of the customer who wants to book the service! <(*.*)>";
 
-          cout << "What do you want to book ROOMS(a) or SERVICE(b)? (a/b)";
-          char ch;
+          gotoXY(40, 14);
+          cout << "+----------------------------------------------------------------------+";
+          gotoXY(40, 15);
+          cout << "|                        CUSTOMER'S INFORMATION                        |";
+          gotoXY(40, 16);
+          cout << "+----------------------------------------------------------------------+";
+          gotoXY(40, 17);
+          cout << "| Customer's Full Name    |                                            |";
+          gotoXY(40, 18);
+          cout << "+----------------------------------------------------------------------+";
+          gotoXY(40, 19);
+          cout << "| Customer's CCCD         |                                            |";
+          gotoXY(40, 20);
+          cout << "+----------------------------------------------------------------------+";
+
+          ShowCur(1);
+          string fullName, CCCD;
           do
           {
-               cin >> ch;
-               ch = tolower(ch);
-               // book rooms
-               if (ch == 'a')
+               gotoXY(68, 17);
+               getline(cin, fullName);
+          } while (!fullName.empty());
+
+          do
+          {
+               gotoXY(68, 19);
+               cout << string(CCCD.length(), ' ');
+               gotoXY(68, 19);
+               getline(cin, CCCD);
+
+               if (CCCD.length() != 12)
                {
-                    cus.bookedRoom();
-                    break;
-               }
-               else if (ch == 'b')
-               {
-                    cus.bookServices(username, password);
-                    break;
+                    gotoXY(113, 19);
+                    cout << "Exactly 12 digits! Try again!";
+                    _getch();
+                    gotoXY(113, 19);
+                    cout << string(30, ' ');
+                    continue;
                }
                else
                {
-                    cout << "Invalid choice! Please enter 'a' for ROOMS or 'b' for SERVICES: ";
+                    for (size_t i = 0; i < CCCD.length(); i++)
+                    {
+                         if (!isdigit(CCCD[i]))
+                         {
+                              gotoXY(113, 19);
+                              cout << "Only DIGITS! Try again!";
+                              _getch();
+                              gotoXY(113, 19);
+                              cout << string(30, ' ');
+                              continue;
+                         }
+                    }
+                    break;
                }
           } while (true);
+
+          clearFromPosition(1, 11);
+          string username = createUsername(trim(fullName));
+          string password = trim(CCCD);
+          Customer cus;
+          cus.bookServices(username, password);
+          ShowCur(0);
           break;
      }
      case 5:
@@ -1201,7 +1531,8 @@ void customerFunction(Staff &staff, vector<string> &function)
 
 void roomFunction(Staff &staff, vector<string> &function)
 {
-     clearFromPosition(30, 11);
+     clearFromPosition(20, 11);
+     gotoXY(30, 11);
      changeColor(12);
      cout << "ROOM FUNCTIONS: Choose the function you want!";
      changeColor(7);
@@ -1252,7 +1583,7 @@ void roomFunction(Staff &staff, vector<string> &function)
           clearFromPosition(1, 10);
           changeColor(11);
           // Show All
-          cout << "\t\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n";
+          cout << "\t\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
 
           vector<Room> rooms = Room::readFileRoom("Room.txt");
           vector<Service> services = Service::readFileService("Service.txt");
@@ -1310,7 +1641,8 @@ void roomFunction(Staff &staff, vector<string> &function)
 
 void serBillFunction(Staff &staff, vector<string> &function)
 {
-     clearFromPosition(30, 11);
+     clearFromPosition(20, 11);
+     gotoXY(30, 11);
      changeColor(12);
      cout << "SERVICE & BILL FUNCTIONS: Choose the function you want!";
      changeColor(7);

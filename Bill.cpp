@@ -121,12 +121,14 @@ Date Bill::inputCheckoutDate(const Date &checkInDate)
             continue;
         }
 
-        Date checkoutDate(day, month, year);
-        if (!checkoutDate.isValid())
+        if (!Date::isValid(day, month, year))
         {
             cout << "Invalid date, please enter again." << endl;
             continue;
         }
+        else
+            Date checkoutDate(day, month, year);
+            
         if (checkInDate > checkoutDate)
         {
             cout << "Check-out date must be after check-in date. Please enter again." << endl;

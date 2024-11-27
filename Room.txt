@@ -23,8 +23,8 @@ T102|Triple|650.000/night|Unavailable|None
 T103|Triple|650.000/night|Available|None
 T104|Triple|650.000/night|Available|None
 T105|Triple|650.000/night|Unavailable|None
-T106|Triple|650.000/night|Available|None
-T107|Triple|650.000/night|Available|None
+T106|Triple|650.000/night|Unavailable|None
+T107|Triple|650.000/night|Unavailable|None
 T108|Triple|650.000/night|Available|None
 T109|Triple|650.000/night|Available|None
 T110|Triple|650.000/night|Unavailable|None
@@ -36,7 +36,7 @@ S205|Single|400.000/night|Unavailable|None
 S206|Single|400.000/night|Available|None
 S207|Single|430.000/night|Available|None
 S208|Single|430.000/night|Available|None
-S209|Single|430.000/night|Available|None
+S209|Single|430.000/night|Unavailable|None
 S210|Single|430.000/night|Available|None
 D201|Double|550.000/night|Available|None
 D202|Double|550.000/night|Available|None

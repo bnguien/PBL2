@@ -18,6 +18,8 @@
 #include <stdexcept>
 #include <ctime>
 #include <limits>
+#include <ctime> 
+#include <chrono>
 
 void inline changeConsoleColor(int colorCode)
 {

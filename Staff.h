@@ -38,6 +38,8 @@ public:
      void setSalary(const string &salary);
      string getSalary() const;
 
+     static string formatSalary (const string &salary);
+
      bool operator==(const Staff &staff) const;
      static vector<Staff> readFileStaff(const string &fileName);
      static string generateStaffID(const vector<Staff> &staffs, const string &position);
