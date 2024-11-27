@@ -310,7 +310,7 @@ bool Customer::saveCustomerToFile(const Customer &customer, const string &fileNa
             file << ",";
         }
     }
-    file << "|" << customer.getArrivalDate().toString() << "|" << endl;
+    file << "|" << customer.getArrivalDate().toString() << endl;
 
     file.seekp(0, ios::end);
     file.close();
@@ -322,6 +322,7 @@ void Customer::bookedRoom()
     Room room;
     string fileRoom = "Room.txt";
     vector<Room> rooms = room.readFileRoom(fileRoom);
+
     gotoXY(55, 5);
     changeConsoleColor(6);
     std::cout << "SELECT TYPE OF ROOM" << endl;
@@ -336,22 +337,20 @@ void Customer::bookedRoom()
     }
 
     string selectedRoomType = roomTypeOptions[roomTypeIndex - 1];
-    char roomTypeChar = (selectedRoomType == "Single")   ? 'S'
-                        : (selectedRoomType == "Double") ? 'D'
-                        : (selectedRoomType == "Triple") ? 'T'
-                                                         : '\0';
-
-    system("cls");
     if (selectedRoomType == "Return")
     {
         clearFromPosition(1, 1);
         noAccountScreen();
         return;
     }
+
+    clearFromPosition(1, 2);
     vector<Room> filteredRooms;
     for (const auto &room : rooms)
     {
-        if (!room.getID().empty() && room.getID().front() == roomTypeChar)
+        if (!room.getID().empty() &&
+            room.getType() == selectedRoomType &&
+            room.getStatus() == "Available")
         {
             filteredRooms.push_back(room);
         }
@@ -359,43 +358,24 @@ void Customer::bookedRoom()
 
     if (filteredRooms.empty())
     {
-        std::cout << "No rooms available for the selected type: " << selectedRoomType << endl;
+        changeConsoleColor(4);
+        std::cout << "\nNo rooms available for the selected type: " << selectedRoomType << endl;
+        changeConsoleColor(7);
         return;
     }
 
-    std::cout << "Available rooms of type " << selectedRoomType << ":" << endl;
-    for (const auto &filteredRoom : filteredRooms)
-    {
-        Sleep(100);
-        string border = "+---------------+-----------------------------------+";
-        cout << border << endl;
-        changeConsoleColor(9);
-        cout << "| Room ID       | " << left << setw(34) << filteredRoom.getID() << "|" << endl;
-        cout << border << endl;
-        changeConsoleColor(12);
-        cout << "| Room Type     | " << left << setw(34) << filteredRoom.getType() << "|" << endl;
-        cout << border << endl;
-        changeConsoleColor(8);
-        cout << "| Room Price    | " << left << setw(34) << filteredRoom.getPrice() << "|" << endl;
-        cout << border << endl;
-        if (filteredRoom.checkAvailable())
-        {
-            changeConsoleColor(2);
-        }
-        else
-        {
-            changeConsoleColor(4);
-        }
-        cout << "| Room Status   | " << left << setw(34)
-             << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << "|" << endl;
-        cout << border << endl;
-        changeConsoleColor(7);
-    }
-    changeConsoleColor(7);
+    std::cout << "\n\tAvailable rooms of type " << selectedRoomType << ":" << endl;
+    Customer::showAllRooms(filteredRooms);
+    cout << "\n________________________________________________________________________________________________________________\n";
+
+    vector<string> unavailableRoomIDs;
     vector<string> availableRoomIDs;
+    ShowCur(1);
     while (true)
     {
-        std::cout << "Enter the room IDs you want to book (separated by commas): ";
+        unavailableRoomIDs.clear();
+        availableRoomIDs.clear();
+        std::cout << "\nEnter ALL the room IDs you want to book (separated by commas): ";
         string roomIDsInput;
         getline(cin, roomIDsInput);
 
@@ -406,12 +386,15 @@ void Customer::bookedRoom()
         {
             if (ch == ',')
             {
-
                 if (!currentRoomID.empty())
                 {
                     roomIDs.push_back(currentRoomID);
                     currentRoomID.clear();
                 }
+            }
+            else if (ch == ' ')
+            {
+                continue;
             }
             else
             {
@@ -424,36 +407,22 @@ void Customer::bookedRoom()
             roomIDs.push_back(currentRoomID);
         }
 
-        availableRoomIDs.clear();
-        vector<string> unavailableRoomIDs;
-        for (const string &inputRoomID : roomIDs)
+        for (const auto &roomID : roomIDs)
         {
-            bool roomFound = false;
-            for (const Room &room : filteredRooms)
-            {
-                if (room.getID() == inputRoomID)
-                {
-                    roomFound = true;
-                    if (room.checkAvailable())
-                    {
-                        availableRoomIDs.push_back(inputRoomID);
-                    }
-                    else
-                    {
-                        unavailableRoomIDs.push_back(inputRoomID);
-                    }
-                    break;
-                }
-            }
-            if (!roomFound)
-            {
-                unavailableRoomIDs.push_back(inputRoomID);
-            }
+            bool idFound = false;
+            for (const auto &room : filteredRooms)
+                if (roomID == room.getID())
+                    idFound = true;
+
+            if (idFound)
+                availableRoomIDs.push_back(roomID);
+            else
+                unavailableRoomIDs.push_back(roomID);
         }
 
         if (!unavailableRoomIDs.empty())
         {
-            std::cout << "Rooms ";
+            std::cout << "\nRooms with ID: ";
             for (size_t i = 0; i < unavailableRoomIDs.size(); ++i)
             {
                 std::cout << unavailableRoomIDs[i];
@@ -468,7 +437,7 @@ void Customer::bookedRoom()
 
         if (!availableRoomIDs.empty())
         {
-            std::cout << "Rooms ";
+            std::cout << "\nRooms with ID: ";
             for (size_t i = 0; i < availableRoomIDs.size(); ++i)
             {
                 std::cout << availableRoomIDs[i];
@@ -482,7 +451,22 @@ void Customer::bookedRoom()
         }
         else
         {
-            std::cout << "No available rooms selected. Please try again." << endl;
+            char choice;
+            do
+            {
+                changeConsoleColor(4);
+                std::cout << "\nNo available rooms selected.\n"
+                          << "Would you like to try again? Press \'y\' to continue or \'n\' to exit!" << endl;
+                std::cin >> choice;
+                choice = std::tolower(choice); // Chuyển ký tự thành chữ thường
+                if (choice != 'y' && choice != 'n')
+                {
+                    std::cout << "Invalid choice! Please press 'y' or 'n'." << std::endl;
+                }
+                if (choice == 'n')
+                    return;
+            } while (choice != 'y' && choice != 'n');
+            changeConsoleColor(7);
         }
     }
     system("cls");
@@ -550,11 +534,11 @@ void Customer::bookedRoom()
         if (CCCD.length() != 12)
         {
             changeConsoleColor(4);
-            gotoXY(97, 16);
+            gotoXY(98, 16);
             cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
             changeConsoleColor(7);
             _getch();
-            gotoXY(97, 16);
+            gotoXY(98, 16);
             cout << string(75, ' ');
         }
         else
@@ -565,12 +549,12 @@ void Customer::bookedRoom()
                 if (!isdigit(CCCD[i]))
                 {
                     isDigitOnly = false;
-                    gotoXY(97, 16);
+                    gotoXY(98, 16);
                     changeConsoleColor(4);
                     cout << "CCCD must have only digits!Press enter to try again" << endl;
                     changeConsoleColor(7);
                     _getch();
-                    gotoXY(97, 16);
+                    gotoXY(98, 16);
                     cout << string(75, ' ');
                     break;
                 }
@@ -597,22 +581,22 @@ void Customer::bookedRoom()
 
         if (phone.length() != 10)
         {
-            gotoXY(97, 18);
+            gotoXY(98, 18);
             changeConsoleColor(4);
             cout << "Phone must have exactly 10 digits!Press enter to try again" << endl;
             changeConsoleColor(7);
             _getch();
-            gotoXY(97, 18);
+            gotoXY(98, 18);
             cout << string(75, ' ');
         }
         else if (phone[0] != '0')
         {
-            gotoXY(97, 18);
+            gotoXY(98, 18);
             changeConsoleColor(4);
             cout << "First number must be 0! Press enter to try again" << endl;
             changeConsoleColor(7);
             _getch();
-            gotoXY(97, 18);
+            gotoXY(98, 18);
             cout << string(75, ' ');
         }
         else
@@ -623,11 +607,11 @@ void Customer::bookedRoom()
                 if (!isdigit(phone[i]))
                 {
                     isDigitOnly = false;
-                    gotoXY(97, 18);
+                    gotoXY(98, 18);
                     changeConsoleColor(4);
                     cout << "Phone must have only digits! Press enter to try again" << endl;
                     changeConsoleColor(7);
-                    gotoXY(97, 18);
+                    gotoXY(98, 18);
                     _getch();
                     cout << string(75, ' ');
                     break;
@@ -647,169 +631,151 @@ void Customer::bookedRoom()
 
     } while (!isValidPhone);
 
-    gotoXY(69, 20);
-    std::getline(std::cin, add);
+    do
+    {
+        gotoXY(69, 20);
+        cout << string(27, ' ');
+        gotoXY(69, 20);
+        std::getline(std::cin, add);
+    } while (add.empty());
 
-    gotoXY(69, 22);
-    std::getline(std::cin, gender);
+    do
+    {
+        gotoXY(69, 22);
+        cout << string(27, ' ');
+        gotoXY(69, 22);
+        std::getline(std::cin, gender);
+        gender = toLower(gender);
+
+        if (gender != "male" && gender != "female")
+        {
+            gotoXY(98, 22);
+            changeConsoleColor(4);
+            std::cout << "Gender must be \"Male\" or \"Female\". Press Enter to try again!";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(98, 22);
+            cout << string(75, ' ');
+            continue;
+        }
+        break;
+
+    } while (true);
 
     while (true)
     {
         gotoXY(69, 24);
-        cout << string(25, ' ');
+        cout << string(27, ' ');
         gotoXY(69, 24);
         std::getline(std::cin, DOBstr);
 
         if (DOBstr.empty())
         {
-            gotoXY(97, 24);
+            gotoXY(98, 24);
             changeConsoleColor(4);
             std::cout << "Date of Birth cannot be empty. Press enter to try again (dd/mm/yyyy).";
             changeConsoleColor(7);
             _getch();
-            gotoXY(97, 24);
+            gotoXY(98, 24);
             cout << string(75, ' ');
             continue;
         }
 
-        stringstream ss(DOBstr);
-        string token;
-        int day = 0, month = 0, year = 0;
-        bool validDate = true;
-
-        Date DOBDate(DOBstr);
-        if (!DOBDate.isValidDateFormat(DOBstr))
-        {
-            validDate = false;
-        }
-        else
-        {
-            getline(ss, token, '/');
-            if (DOBDate.isNumber(token))
-            {
-                day = stoi(token);
-            }
-            else
-            {
-                validDate = false;
-            }
-
-            getline(ss, token, '/');
-            if (DOBDate.isNumber(token))
-            {
-                month = stoi(token);
-            }
-            else
-            {
-                validDate = false;
-            }
-
-            getline(ss, token, '/');
-            if (DOBDate.isNumber(token))
-            {
-                year = stoi(token);
-            }
-            else
-            {
-                validDate = false;
-            }
-        }
-
-        if (!validDate || day == 0 || month == 0 || year == 0)
-        {
-            gotoXY(97, 24);
-            changeConsoleColor(4);
-            std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
-            changeConsoleColor(7);
-            _getch();
-            gotoXY(97, 24);
-            cout << string(75, ' ');
-            continue;
-        }
-        else
+        if (Date::isValidDateFormat(DOBstr))
         {
             DOB = Date(DOBstr);
+            if (Date::getCurrentDate().getYear() - DOB.getYear() < 18)
+            {
+                gotoXY(98, 24);
+                changeConsoleColor(4);
+                std::cout << "The customer must be at least 18 years old!";
+                changeConsoleColor(7);
+                Sleep(3000);
+                
+                system("cls");
+                changeConsoleColor(12);
+                gotoXY(40, 5);
+                cout << "+---------------------------------------------------+";
+                gotoXY(40, 6);
+                cout << "|                                                   |";
+                gotoXY(40, 7);
+                cout << "|          Customer is under 18 years old!          |";
+                gotoXY(40, 8);
+                cout << "|                                                   |"; 
+                gotoXY(40, 9);
+                cout << "|   Failed to book new room for customer with CCCD  |";
+                gotoXY(40, 10);
+                cout << "|                    " << setw(31) << setfill(' ') << CCCD << "|";     
+                gotoXY(40, 11);
+                cout << "|                                                   |";  
+                gotoXY(40, 12);
+                cout << "+---------------------------------------------------+" << endl;    
+                changeConsoleColor(7);
+                ShowCur(0);
+                return;
+            }
+
             break;
+        }
+        else
+        {
+            gotoXY(98, 24);
+            changeConsoleColor(4);
+            std::cout << "Invalid date format! Please use dd/mm/yyyy!";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(98, 24);
+            cout << string(75, ' ');
+            continue;
         }
     }
 
     while (true)
     {
         gotoXY(69, 26);
-        cout << string(25, ' ');
+        cout << string(27, ' ');
         gotoXY(69, 26);
         std::getline(std::cin, arrivalDateStr);
 
         if (arrivalDateStr.empty())
         {
-            gotoXY(97, 26);
+            gotoXY(98, 26);
             changeConsoleColor(4);
             std::cout << "Arrival date cannot be empty. Press enter to try again (dd/mm/yyyy).";
             changeConsoleColor(7);
             _getch();
-            gotoXY(97, 26);
+            gotoXY(98, 26);
             cout << string(75, ' ');
             continue;
         }
 
-        stringstream ss(arrivalDateStr);
-        string token;
-        int day = 0, month = 0, year = 0;
-        bool validDate = true;
-
-        Date arrivalDateTemp(arrivalDateStr);
-        if (!arrivalDateTemp.isValidDateFormat(arrivalDateStr))
-        {
-            validDate = false;
-        }
-        else
-        {
-            getline(ss, token, '/');
-            if (arrivalDateTemp.isNumber(token))
-            {
-                day = stoi(token);
-            }
-            else
-            {
-                validDate = false;
-            }
-
-            getline(ss, token, '/');
-            if (arrivalDateTemp.isNumber(token))
-            {
-                month = stoi(token);
-            }
-            else
-            {
-                validDate = false;
-            }
-
-            getline(ss, token, '/');
-            if (arrivalDateTemp.isNumber(token))
-            {
-                year = stoi(token);
-            }
-            else
-            {
-                validDate = false;
-            }
-        }
-
-        if (!validDate || day == 0 || month == 0 || year == 0)
-        {
-            gotoXY(97, 26);
-            changeConsoleColor(4);
-            std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
-            changeConsoleColor(7);
-            _getch();
-            gotoXY(97, 26);
-            cout << string(75, ' ');
-            continue;
-        }
-        else
+        if (Date::isValidDateFormat(arrivalDateStr))
         {
             arrivalDate = Date(arrivalDateStr);
+            if (Date::getCurrentDate() > arrivalDate)
+            {
+                gotoXY(98, 26);
+                changeConsoleColor(4);
+                std::cout << "Arrival date must be after current date: " << Date::getCurrentDate();
+                changeConsoleColor(7);
+                _getch();
+                gotoXY(98, 26);
+                cout << string(75, ' ');
+                continue;
+            }
+
             break;
+        }
+        else
+        {
+            gotoXY(98, 26);
+            changeConsoleColor(4);
+            std::cout << "Invalid date format! Please use dd/mm/yyyy!";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(98, 26);
+            cout << string(75, ' ');
+            continue;
         }
     }
 
@@ -865,6 +831,7 @@ void Customer::bookedRoom()
         gotoXY(25, 36);
         std::cout << "Please login with your username (Your full name without diacritics) and password (your phone number) to see your information." << endl;
     }
+    ShowCur(0);
 }
 
 void Customer::checkInfor(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers, const vector<Service> &services)
@@ -1372,6 +1339,50 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
     }
 
     file.close();
+}
+
+void Customer::showAllRooms(const vector<Room> &rooms)
+{
+    string border1 = "\t+-----+--------+----------+---------------+--------------+";
+    cout << border1 << endl;
+    cout << "\t| STT | RoomID | RoomType |   RoomPrice   |    Status    |" << endl;
+    cout << border1 << endl;
+    int count = 0;
+
+    if (rooms.empty())
+    {
+        changeConsoleColor(4);
+        cout << "\nThe list of rooms is currently empty. Unable to display any rooms!" << endl;
+        changeConsoleColor(7);
+        return;
+    }
+
+    for (const auto &room : rooms)
+    {
+        ++count;
+        cout << "\t| " << setw(3) << setfill('0') << right << count << " |  "
+             << setw(6) << setfill(' ') << left << room.getID() << "|  ";
+        if (room.getType() == "Single")
+            changeConsoleColor(10);
+        else if (room.getType() == "Double")
+            changeConsoleColor(14);
+        else if (room.getType() == "Triple")
+            changeConsoleColor(11);
+        cout << setw(8) << room.getType();
+        changeConsoleColor(7);
+        cout << "| " << setw(14) << room.getPrice() << "| ";
+
+        if (room.getStatus() == "Available")
+            changeConsoleColor(2);
+        else if (room.getStatus() == "Unavailable")
+            changeConsoleColor(4);
+
+        cout << setw(13) << room.getStatus();
+        changeConsoleColor(7);
+        cout << "|" << endl;
+        cout << border1 << endl;
+    }
+    cout << endl;
 }
 
 Customer::~Customer() {}
