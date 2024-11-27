@@ -936,39 +936,52 @@ bool Staff::addNewCustomer(Staff &staff)
                cout << string(75, ' ');
           }
      }
-
-     fullName = Person::standardizeString(fullName);
-     add = Person::standardizeString(add);
-     gender = Person::standardizeString(gender);
-     Person person(fullName, CCCD, phone, add, gender, DOB);
-
-     Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
-     string customerFile = "Customer.txt";
-     if (!Customer::saveCustomerToFile(newCustomer, customerFile))
+     vector<string> Options = {"Cancel", "Confirm"};
+     int optionIndex = buttonList(45, 29, 15, 2, 18, Options, "row");
+     string selectedOption = Options[optionIndex - 1];
+     if (selectedOption == "Cancel")
      {
-          changeConsoleColor(4);
-          cout << "\nFailed to save to our hotel's customer file!" << endl;
-          changeConsoleColor(7);
-          system("pause");
+          clearFromPosition(1, 1);
+          adminScreen(staff);
           return false;
      }
+     else if (selectedOption == "Confirm")
+     {
+          fullName = Person::standardizeString(fullName);
+          add = Person::standardizeString(add);
+          gender = Person::standardizeString(gender);
+          Person person(fullName, CCCD, phone, add, gender, DOB);
 
-     for (auto &roomRef : rooms)
-     {
-          if (find(availableRoomIDs.begin(), availableRoomIDs.end(), roomRef.getID()) != availableRoomIDs.end())
+          Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
+          string customerFile = "Customer.txt";
+          if (!Customer::saveCustomerToFile(newCustomer, customerFile))
           {
-               roomRef.setStatus("Unavailable");
+               gotoXY(25, 35);
+               changeConsoleColor(4);
+               cout << "\nFailed to save to our hotel's customer file!" << endl;
+               changeConsoleColor(7);
+               system("pause");
+               return false;
           }
+
+          for (auto &roomRef : rooms)
+          {
+               if (find(availableRoomIDs.begin(), availableRoomIDs.end(), roomRef.getID()) != availableRoomIDs.end())
+               {
+                    roomRef.setStatus("Unavailable");
+               }
+          }
+          std::cout << endl;
+          room.updateRoomFile(rooms, fileRoom);
+          gotoXY(25, 35);
+          std::cout << "Booking successful for rooms: ";
+          for (const auto &bookedID : availableRoomIDs)
+          {
+               std::cout << bookedID << " ";
+          }
+          std::cout << endl;
+          return true;
      }
-     std::cout << endl;
-     room.updateRoomFile(rooms, fileRoom);
-     std::cout << "Booking successful for rooms: ";
-     for (const auto &bookedID : availableRoomIDs)
-     {
-          std::cout << bookedID << " ";
-     }
-     std::cout << endl;
-     return true;
 }
 
 bool Staff::writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName)
@@ -1341,10 +1354,24 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                               {
                                    if (customer.setPhone(newPhone))
                                    {
-                                        changeConsoleColor(2);
-                                        cout << "Phone number updated successfully.\n";
-                                        changeConsoleColor(7);
-                                        break;
+                                        vector<string> Options = {"Cancel", "Confirm"};
+                                        int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                                        string selectedOption = Options[optionIndex - 1];
+                                        if (selectedOption == "Cancel")
+                                        {
+                                             clearFromPosition(1, 1);
+                                             adminScreen(staff);
+                                             return false;
+                                        }
+                                        else if (selectedOption == "Confirm")
+                                        {
+
+                                             changeConsoleColor(2);
+                                             gotoXY(40, 11);
+                                             cout << "Phone number updated successfully.\n";
+                                             changeConsoleColor(7);
+                                             break;
+                                        }
                                    }
                                    else
                                    {
@@ -1388,9 +1415,23 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                    newAddress = Person::standardizeString(newAddress);
                                    customer.setAdd(newAddress);
                                    changeConsoleColor(2);
-                                   cout << "Address updated successfully.\n";
-                                   changeConsoleColor(7);
-                                   break;
+                                   vector<string> Options = {"Cancel", "Confirm"};
+                                   int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                                   string selectedOption = Options[optionIndex - 1];
+                                   if (selectedOption == "Cancel")
+                                   {
+                                        clearFromPosition(1, 1);
+                                        adminScreen(staff);
+                                        return false;
+                                   }
+                                   else if (selectedOption == "Confirm")
+                                   {
+                                        gotoXY(40, 11);
+                                        changeConsoleColor(2);
+                                        cout << "Address updated successfully.\n";
+                                        changeConsoleColor(7);
+                                        break;
+                                   }
                               }
                          }
                     }
@@ -1420,12 +1461,25 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                               {
                                    try
                                    {
-                                        Date dobDate(newDOB);
-                                        customer.setDOB(dobDate);
-                                        changeConsoleColor(2);
-                                        cout << "Date of Birth updated successfully.\n";
-                                        changeConsoleColor(7);
-                                        break;
+                                        vector<string> Options = {"Cancel", "Confirm"};
+                                        int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                                        string selectedOption = Options[optionIndex - 1];
+                                        if (selectedOption == "Cancel")
+                                        {
+                                             clearFromPosition(1, 1);
+                                             adminScreen(staff);
+                                             return false;
+                                        }
+                                        else if (selectedOption == "Confirm")
+                                        {
+                                             Date dobDate(newDOB);
+                                             customer.setDOB(dobDate);
+                                             changeConsoleColor(2);
+                                             gotoXY(40, 11);
+                                             cout << "Date of Birth updated successfully.\n";
+                                             changeConsoleColor(7);
+                                             break;
+                                        }
                                    }
                                    catch (const std::invalid_argument &e)
                                    {
@@ -1478,33 +1532,33 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
           return false;
      }
      for (const Customer &customer : customers)
-    {
-        file << customer.getFullName() << "|"
-             << customer.getCCCD() << "|"
-             << customer.getPhone() << "|"
-             << customer.getAdd() << "|"
-             << customer.getDOB().toString() << "|"
-             << customer.getGender() << "|";
-        vector<string> roomIDs = customer.getRoomIDs();
-        for (size_t i = 0; i < roomIDs.size(); ++i)
-        {
-            file << roomIDs[i];
-            if (i < roomIDs.size() - 1)
-            {
-                file << ",";
-            }
-        }
-        file << "|" << customer.getArrivalDate().toString() << "|";
-        vector<string> serviceIDs = customer.getServiceIDs();
-        for (size_t i = 0; i < serviceIDs.size(); ++i)
-        {
-            file << serviceIDs[i];
-            if (i < serviceIDs.size() - 1)
-            {
-                file << ",";
-            }
-        }
-        file << endl;
-    }
+     {
+          file << customer.getFullName() << "|"
+               << customer.getCCCD() << "|"
+               << customer.getPhone() << "|"
+               << customer.getAdd() << "|"
+               << customer.getDOB().toString() << "|"
+               << customer.getGender() << "|";
+          vector<string> roomIDs = customer.getRoomIDs();
+          for (size_t i = 0; i < roomIDs.size(); ++i)
+          {
+               file << roomIDs[i];
+               if (i < roomIDs.size() - 1)
+               {
+                    file << ",";
+               }
+          }
+          file << "|" << customer.getArrivalDate().toString() << "|";
+          vector<string> serviceIDs = customer.getServiceIDs();
+          for (size_t i = 0; i < serviceIDs.size(); ++i)
+          {
+               file << serviceIDs[i];
+               if (i < serviceIDs.size() - 1)
+               {
+                    file << ",";
+               }
+          }
+          file << endl;
+     }
      file.close();
 }

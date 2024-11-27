@@ -491,7 +491,7 @@ void Customer::bookedRoom()
     Date DOB, arrivalDate;
     gotoXY(50, 8);
     changeConsoleColor(13);
-    std::cout<<"TELL US YOUR INFORMATION (=^_^=)"<<std::endl;
+    std::cout << "TELL US YOUR INFORMATION (=^_^=)" << std::endl;
     changeConsoleColor(14);
     gotoXY(40, 11);
     std::cout << "+-------------------------------------------------------+" << std::endl;
@@ -703,7 +703,7 @@ void Customer::bookedRoom()
     vector<string> Options = {"Cancel", "Confirm"};
     int optionIndex = buttonList(45, 29, 15, 2, 18, Options, "row");
     string selectedOption = Options[optionIndex - 1];
-    if(selectedOption == "Cancel")
+    if (selectedOption == "Cancel")
     {
         clearFromPosition(1, 1);
         noAccountScreen();
@@ -711,46 +711,46 @@ void Customer::bookedRoom()
     }
     else if (selectedOption == "Confirm")
     {
-    fullName = Person::standardizeString(fullName);
-    add = Person::standardizeString(add);
-    gender = Person::standardizeString(gender);
-    Person person(fullName, CCCD, phone, add, gender, DOB);
+        fullName = Person::standardizeString(fullName);
+        add = Person::standardizeString(add);
+        gender = Person::standardizeString(gender);
+        Person person(fullName, CCCD, phone, add, gender, DOB);
 
-    Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
-    string customerFile = "Customer.txt";
-    if (!saveCustomerToFile(newCustomer, customerFile))
-    {
-        changeConsoleColor(4);
-        gotoXY(25,34);
-        cout << "\nFailed to save to our hotel's customer file!" << endl;
-        changeConsoleColor(7);
-        system("pause");
-        return;
-    }
-
-    for (auto &roomRef : rooms)
-    {
-        if (find(availableRoomIDs.begin(), availableRoomIDs.end(), roomRef.getID()) != availableRoomIDs.end())
+        Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
+        string customerFile = "Customer.txt";
+        if (!saveCustomerToFile(newCustomer, customerFile))
         {
-            roomRef.setStatus("Unavailable");
+            changeConsoleColor(4);
+            gotoXY(25, 34);
+            cout << "\nFailed to save to our hotel's customer file!" << endl;
+            changeConsoleColor(7);
+            system("pause");
+            return;
         }
-    }
-    std::cout << endl;
-    room.updateRoomFile(rooms, fileRoom);
-    gotoXY(25,34);
-    changeColor(2);
-    std::cout << "Booking successful for rooms: ";
-    changeColor(7);
-    for (const auto &bookedID : availableRoomIDs)
-    {
-        std::cout << bookedID << " ";
-    }
-    std::cout << endl;
-    gotoXY(25,35);
-    changeColor(14);
-    std::cout << "You have an account to login to check your information." << endl;
-    gotoXY(25,36);
-    std::cout << "Please login with your username (Your full name without diacritics) and password (your phone number) to see your information." << endl;
+
+        for (auto &roomRef : rooms)
+        {
+            if (find(availableRoomIDs.begin(), availableRoomIDs.end(), roomRef.getID()) != availableRoomIDs.end())
+            {
+                roomRef.setStatus("Unavailable");
+            }
+        }
+        std::cout << endl;
+        room.updateRoomFile(rooms, fileRoom);
+        gotoXY(25, 34);
+        changeColor(2);
+        std::cout << "Booking successful for rooms: ";
+        changeColor(7);
+        for (const auto &bookedID : availableRoomIDs)
+        {
+            std::cout << bookedID << " ";
+        }
+        std::cout << endl;
+        gotoXY(25, 35);
+        changeColor(14);
+        std::cout << "You have an account to login to check your information." << endl;
+        gotoXY(25, 36);
+        std::cout << "Please login with your username (Your full name without diacritics) and password (your phone number) to see your information." << endl;
     }
 }
 
@@ -965,7 +965,7 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
             std::cout << "WHICH INFORMATION WOULD YOU LIKE TO UPDATE" << endl;
             changeConsoleColor(7);
             vector<string> options = {"Change phone number", "Change address", "Change Date of Birth (DOB)", "Return"};
-            int choice = buttonList(40, 15, 34, 2, 2, options, "column");
+            int choice = buttonList(52, 15, 34, 2, 2, options, "column");
 
             if (choice < 1 || choice > options.size())
             {
@@ -1007,10 +1007,24 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                     {
                         if (customer.setPhone(newPhone))
                         {
-                            changeConsoleColor(2);
-                            cout << "Phone number updated successfully.\n";
-                            changeConsoleColor(7);
-                            break;
+                            vector<string> Options = {"Cancel", "Confirm"};
+                            int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                            string selectedOption = Options[optionIndex - 1];
+                            if (selectedOption == "Cancel")
+                            {
+                                clearFromPosition(1, 1);
+                                customerScreen(inputUserName, inputPassword);
+                                return;
+                            }
+                            else if (selectedOption == "Confirm")
+                            {
+
+                                changeConsoleColor(2);
+                                gotoXY(40, 11);
+                                cout << "Phone number updated successfully.\n";
+                                changeConsoleColor(7);
+                                break;
+                            }
                         }
                         else
                         {
@@ -1054,9 +1068,23 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                         newAddress = Person::standardizeString(newAddress);
                         customer.setAdd(newAddress);
                         changeConsoleColor(2);
-                        cout << "Address updated successfully.\n";
-                        changeConsoleColor(7);
-                        break;
+                        vector<string> Options = {"Cancel", "Confirm"};
+                        int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                        string selectedOption = Options[optionIndex - 1];
+                        if (selectedOption == "Cancel")
+                        {
+                            clearFromPosition(1, 1);
+                            customerScreen(inputUserName, inputPassword);
+                            return;
+                        }
+                        else if (selectedOption == "Confirm")
+                        {
+                            gotoXY(40, 11);
+                            changeConsoleColor(2);
+                            cout << "Address updated successfully.\n";
+                            changeConsoleColor(7);
+                            break;
+                        }
                     }
                 }
             }
@@ -1086,12 +1114,25 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                     {
                         try
                         {
-                            Date dobDate(newDOB);
-                            customer.setDOB(dobDate);
-                            changeConsoleColor(2);
-                            cout << "Date of Birth updated successfully.\n";
-                            changeConsoleColor(7);
-                            break;
+                            vector<string> Options = {"Cancel", "Confirm"};
+                            int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                            string selectedOption = Options[optionIndex - 1];
+                            if (selectedOption == "Cancel")
+                            {
+                                clearFromPosition(1, 1);
+                                customerScreen(inputUserName, inputPassword);
+                                return;
+                            }
+                            else if (selectedOption == "Confirm")
+                            {
+                                Date dobDate(newDOB);
+                                customer.setDOB(dobDate);
+                                changeConsoleColor(2);
+                                gotoXY(40, 11);
+                                cout << "Date of Birth updated successfully.\n";
+                                changeConsoleColor(7);
+                                break;
+                            }
                         }
                         catch (const std::invalid_argument &e)
                         {
