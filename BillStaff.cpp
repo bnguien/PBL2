@@ -4,10 +4,11 @@ void BillStaff::addBill(Bill *bill)
 {
     bills.push_back(bill);
 }
-void BillStaff::checkBillByNameAndCCCD(Staff& staff,const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services)
+void BillStaff::checkBillByNameAndCCCD(Staff &staff, const vector<Customer> &customers, const vector<Room> &rooms, const vector<Service> &services)
 {
     std::string customerName;
     std::string CCCD;
+    changeConsoleColor(7);
     std::cout << "Enter customer name: ";
     std::getline(std::cin, customerName);
 
@@ -32,71 +33,170 @@ void BillStaff::checkBillByNameAndCCCD(Staff& staff,const vector<Customer> &cust
             std::cout << "Enter Payment Method: ";
             std::getline(std::cin, paymentMethod);
             system("cls");
+
             string generatedBillID = createID(customer);
             calculateTotalPrice(customer, rooms, services, checkoutDate);
+
+            size_t maxColumnWidth = 39;
+            size_t roomWidth = 0;
+            size_t serviceWidth = 0;
+
+            for (const auto &room : customer.getRoomIDs())
+            {
+                roomWidth += room.size() + 1;
+            }
+
+            for (const auto &serviceID : customer.getServiceIDs())
+            {
+                serviceWidth += Service::getServiceName(serviceID, services).size() + 2;
+            }
+
+            maxColumnWidth = std::max(maxColumnWidth, std::max(roomWidth, serviceWidth));
+
+            const int consoleWidth = 120; 
+            string border = "+---------------+" + string(maxColumnWidth + 2, '-') + "+";
+            size_t tableWidth = border.length();        
+            int startX = (consoleWidth - tableWidth) / 2; 
+            int currentY = 5;                             
+
             changeConsoleColor(10);
-            std::cout << "+---------------------------------------------------------------+" << std::endl;
-            std::cout << "|                       INVOICE INFORMATION                     |" << std::endl;
-            std::cout << "+---------------------------------------------------------------+" << std::endl;
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << "                       INVOICE INFORMATION                     " << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
             changeConsoleColor(7);
 
-            std::cout << "| Customer Name: " << left << setw(47) << customer.getFullName() << "|" << std::endl;
-            std::cout << "| Bill ID: " << left << setw(53) << generatedBillID << "|" << std::endl;
-            std::cout << "| Payment Status: " << left << setw(46) << paymentStatus << "|" << std::endl;
-            std::cout << "| Payment Method: " << left << setw(46) << paymentMethod << "|" << std::endl;
-            std::cout << "| Check-in Date: " << left << setw(47);
+            gotoXY(startX, currentY++);
+            std::cout << "| Full Name     | " << std::left << std::setw(maxColumnWidth) << customer.getFullName() << " |" << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << "| Bill ID       | " << std::left << std::setw(maxColumnWidth) << generatedBillID << " |" << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << "| Payment Status| " << std::left << std::setw(maxColumnWidth) << paymentStatus << " |" << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << "| Payment Method| " << std::left << std::setw(maxColumnWidth) << paymentMethod << " |" << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << "| Check-in Date | " << std::left << std::setw(maxColumnWidth);
             customer.getArrivalDate().display();
-            std::cout << "|" << std::endl;
-            std::cout << "| Check-out Date: " << left << setw(46);
+            std::cout << " |" << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << "| Check-out Date| " << std::left << std::setw(maxColumnWidth);
             checkoutDate.display();
-            std::cout << "|" << std::endl;
-            std::cout << "| Total Bill: " << left << setw(12) << formatCurrency(static_cast<int>(totalPrice)) << " VND" << right << setw(35) << "|" << std::endl;
-            std::cout << "+---------------------------------------------------------------+" << std::endl;
+            std::cout << " |" << std::endl;
 
-            std::cout << "| List of booked rooms                                          |" << std::endl;
-            std::cout << "| ";
-            std::cout << "Room IDs: ";
-            for (const auto &roomID : customer.getRoomIDs())
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << "| Total Bill    | " << std::left << std::setw(maxColumnWidth)
+                      << formatCurrency(static_cast<int>(totalPrice)) + " VND" << " |" << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
+            gotoXY(startX, currentY++);
+            std::cout << "| Room IDs      | ";
+            std::string roomsStr;
+            for (const auto &room : customer.getRoomIDs())
             {
-                std::cout << roomID << " ";
+                roomsStr += room + " ";
             }
-            std::cout << right << setw(48) << "|" << std::endl;
-            std::cout << "+---------------------------------------------------------------+" << std::endl;
+            std::cout << std::left << std::setw(maxColumnWidth) << roomsStr << " |" << std::endl;
 
-            std::cout << "| List of used services                                         |" << std::endl;
+            gotoXY(startX, currentY++);
+            std::cout << border << std::endl;
+
             if (customer.getServiceIDs().empty())
             {
-                std::cout << "| No services booked                                            |" << std::endl;
+                gotoXY(startX, currentY++);
+                std::cout << "| Service       | " << std::left << std::setw(maxColumnWidth) << "No services booked" << " |" << std::endl;
+
+                gotoXY(startX, currentY++);
+                std::cout << border << std::endl;
             }
             else
             {
-                std::cout << "| Service IDs: ";
-                for (const auto &serviceID : customer.getServiceIDs())
+                gotoXY(startX, currentY++);
+                std::cout << "| ServiceIDs    | ";
+                std::string serviceIDsStr;
+                for (size_t i = 0; i < customer.getServiceIDs().size(); ++i)
                 {
-                    std::cout << serviceID << " ";
+                    serviceIDsStr += customer.getServiceIDs()[i];
+                    if (i < customer.getServiceIDs().size() - 1)
+                    {
+                        serviceIDsStr += ", ";
+                    }
                 }
-                std::cout << right << setw(42) << "|" << std::endl;
+                std::cout << std::left << std::setw(maxColumnWidth) << serviceIDsStr << " |" << std::endl;
+
+                gotoXY(startX, currentY++);
+                std::cout << border << std::endl;
+
+                gotoXY(startX, currentY++);
+                std::cout << "| ServiceNames  | ";
+                std::string servicesStr;
+                for (size_t i = 0; i < customer.getServiceIDs().size(); ++i)
+                {
+                    servicesStr += Service::getServiceName(customer.getServiceIDs()[i], services);
+                    if (i < customer.getServiceIDs().size() - 1)
+                    {
+                        servicesStr += ", ";
+                    }
+                }
+                std::cout << std::left << std::setw(maxColumnWidth) << servicesStr << " |" << std::endl;
+
+                gotoXY(startX, currentY++);
+                std::cout << border << std::endl;
             }
-            std::cout << "+---------------------------------------------------------------+" << std::endl;
 
             changeConsoleColor(7);
             std::string paymentConfirmation;
+            gotoXY(startX, currentY++);
             std::cout << "Has the customer paid? (yes/no): ";
             std::getline(std::cin, paymentConfirmation);
 
             if (paymentConfirmation == "yes" || paymentConfirmation == "Yes")
             {
-                if(staff.removeCustomerByCCCD(staff,CCCD))
+                if (staff.removeCustomerByCCCD(staff, CCCD))
                 {
-                std::cout << "Customer information has been removed successfully." << std::endl;
+                    gotoXY(startX, currentY++);
+                    changeConsoleColor(3);
+                    std::cout << "Customer information has been removed successfully." << std::endl;
                 }
             }
             else if (paymentConfirmation == "no" || paymentConfirmation == "No")
             {
+                gotoXY(startX, currentY++);
+                changeConsoleColor(4);
                 std::cout << "The customer has not paid yet." << std::endl;
             }
             else
             {
+                gotoXY(startX, currentY++);
+                changeConsoleColor(4);
                 std::cout << "Invalid input. Please enter 'yes' or 'no'." << std::endl;
             }
 
@@ -106,6 +206,7 @@ void BillStaff::checkBillByNameAndCCCD(Staff& staff,const vector<Customer> &cust
 
     if (!found)
     {
+        changeConsoleColor(4);
         std::cout << "No customer found with the given name and CCCD number." << std::endl;
     }
 }

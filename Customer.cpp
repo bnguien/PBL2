@@ -125,70 +125,142 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
 
 void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
 {
+    size_t maxColumnWidth = 39;
+    for (const auto &customer : customers)
+    {
+        size_t roomWidth = 0;
+        for (const auto &room : customer.getRoomIDs())
+        {
+            roomWidth += room.size() + 1;
+        }
+        maxColumnWidth = std::max(maxColumnWidth, roomWidth);
+
+        size_t serviceWidth = 0;
+        for (const auto &serviceID : customer.getServiceIDs())
+        {
+            serviceWidth += Service::getServiceName(serviceID, services).size() + 2;
+        }
+        maxColumnWidth = std::max(maxColumnWidth, serviceWidth);
+    }
+    const int consoleWidth = 120;
+
+    gotoXY(40, 10);
+    changeConsoleColor(14);
     std::cout << "\n"
               << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
-
+    changeConsoleColor(7);
     for (const auto &customer : customers)
     {
         Sleep(1000);
-        string border = "+---------------+----------------------------------------+";
-        std::cout << border << endl;
-        std::cout << "| Full Name     | " << left << setw(39) << customer.getFullName() << "|" << endl;
-        std::cout << border << endl;
-        std::cout << "| CCCD          | " << left << setw(39) << customer.getCCCD() << "|" << endl;
-        std::cout << border << endl;
-        std::cout << "| Phone         | " << left << setw(39) << customer.getPhone() << "|" << endl;
-        std::cout << border << endl;
-        std::cout << "| Address       | " << left << setw(39) << customer.getAdd() << "|" << endl;
-        std::cout << border << endl;
-        std::cout << "| Gender        | " << left << setw(39) << customer.getGender() << "|" << endl;
-        std::cout << border << endl;
-        std::cout << "| Date of birth | " << left << setw(39);
-        customer.getDOB().display();
-        std::cout << "|" << endl;
+        string border = "+---------------+" + string(maxColumnWidth + 2, '-') + "+";
+        size_t tableWidth = border.length();
+        int startX = (consoleWidth - tableWidth) / 2;
+        int currentY = 12;
+        gotoXY(startX, currentY++);
         std::cout << border << endl;
 
+        gotoXY(startX, currentY++);
+        std::cout << "| Full Name     | " << left << setw(maxColumnWidth) << customer.getFullName() << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << border << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << "| CCCD          | " << left << setw(maxColumnWidth) << customer.getCCCD() << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << border << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << "| Phone         | " << left << setw(maxColumnWidth) << customer.getPhone() << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << border << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << "| Address       | " << left << setw(maxColumnWidth) << customer.getAdd() << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << border << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << "| Gender        | " << left << setw(maxColumnWidth) << customer.getGender() << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << border << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << "| Date of birth | " << left << setw(maxColumnWidth);
+        customer.getDOB().display();
+        std::cout << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        std::cout << border << endl;
+
+        gotoXY(startX, currentY++);
         std::cout << "| Room IDs      | ";
-        cout << left << setw(39);
+        std::string roomsStr;
         for (const auto &room : customer.getRoomIDs())
         {
-            std::cout << room << " ";
+            roomsStr += room + " ";
         }
-        cout << "|" << endl;
+        std::cout << left << setw(maxColumnWidth) << roomsStr << " |" << endl;
+
+        gotoXY(startX, currentY++);
         std::cout << border << endl;
 
-        std::cout << "| Arrival Date  | " << left << setw(39);
+        gotoXY(startX, currentY++);
+        std::cout << "| Arrival Date  | " << left << setw(maxColumnWidth);
         customer.getArrivalDate().display();
-        std::cout << "|" << endl;
+        std::cout << " |" << endl;
+
+        gotoXY(startX, currentY++);
         std::cout << border << endl;
 
         if (customer.getServiceIDs().empty())
         {
-            std::cout << "| Service       | " << left << setw(39);
-            std::cout << "No services booked";
-            std::cout << "|" << endl;
+            gotoXY(startX, currentY++);
+            std::cout << "| Service       | " << left << setw(maxColumnWidth) << "No services booked" << " |" << endl;
+
+            gotoXY(startX, currentY++);
             std::cout << border << endl;
         }
         else
         {
+            gotoXY(startX, currentY++);
             std::cout << "| ServiceIDs    | ";
-            for (const auto &serviceID : customer.getServiceIDs())
+            std::string serviceIDsStr;
+            for (size_t i = 0; i < customer.getServiceIDs().size(); ++i)
             {
-                std::cout << serviceID << ",";
+                serviceIDsStr += customer.getServiceIDs()[i];
+                if (i < customer.getServiceIDs().size() - 1)
+                {
+                    serviceIDsStr += ", ";
+                }
             }
+            std::cout << left << setw(maxColumnWidth) << serviceIDsStr << " |" << endl;
 
-            std::cout << right << setw(32) << "|" << endl;
+            gotoXY(startX, currentY++);
             std::cout << border << endl;
 
+            gotoXY(startX, currentY++);
             std::cout << "| ServiceNames  | ";
-            for (const auto &serviceID : customer.getServiceIDs())
+            std::string servicesStr;
+            for (size_t i = 0; i < customer.getServiceIDs().size(); ++i)
             {
-                std::string serviceName = Service::getServiceName(serviceID, services);
-                std::cout << serviceName << ", ";
+                servicesStr += Service::getServiceName(customer.getServiceIDs()[i], services);
+                if (i < customer.getServiceIDs().size() - 1)
+                {
+                    servicesStr += ", ";
+                }
             }
-            std::cout << right << setw(27) << "|" << endl;
+            std::cout << left << setw(maxColumnWidth) << servicesStr << " |" << endl;
+
+            gotoXY(startX, currentY++);
             std::cout << border << endl;
         }
+
+        gotoXY(startX, currentY++);
         std::cout << endl;
     }
 }
@@ -417,7 +489,9 @@ void Customer::bookedRoom()
 
     string fullName, CCCD, phone, add, gender, DOBstr, arrivalDateStr;
     Date DOB, arrivalDate;
-
+    gotoXY(50, 8);
+    changeConsoleColor(13);
+    std::cout<<"TELL US YOUR INFORMATION (=^_^=)"<<std::endl;
     changeConsoleColor(14);
     gotoXY(40, 11);
     std::cout << "+-------------------------------------------------------+" << std::endl;
@@ -626,6 +700,17 @@ void Customer::bookedRoom()
             cout << string(75, ' ');
         }
     }
+    vector<string> Options = {"Cancel", "Confirm"};
+    int optionIndex = buttonList(45, 29, 15, 2, 18, Options, "row");
+    string selectedOption = Options[optionIndex - 1];
+    if(selectedOption == "Cancel")
+    {
+        clearFromPosition(1, 1);
+        noAccountScreen();
+        return;
+    }
+    else if (selectedOption == "Confirm")
+    {
     fullName = Person::standardizeString(fullName);
     add = Person::standardizeString(add);
     gender = Person::standardizeString(gender);
@@ -636,6 +721,7 @@ void Customer::bookedRoom()
     if (!saveCustomerToFile(newCustomer, customerFile))
     {
         changeConsoleColor(4);
+        gotoXY(25,34);
         cout << "\nFailed to save to our hotel's customer file!" << endl;
         changeConsoleColor(7);
         system("pause");
@@ -651,14 +737,21 @@ void Customer::bookedRoom()
     }
     std::cout << endl;
     room.updateRoomFile(rooms, fileRoom);
+    gotoXY(25,34);
+    changeColor(2);
     std::cout << "Booking successful for rooms: ";
+    changeColor(7);
     for (const auto &bookedID : availableRoomIDs)
     {
         std::cout << bookedID << " ";
     }
     std::cout << endl;
+    gotoXY(25,35);
+    changeColor(14);
     std::cout << "You have an account to login to check your information." << endl;
+    gotoXY(25,36);
     std::cout << "Please login with your username (Your full name without diacritics) and password (your phone number) to see your information." << endl;
+    }
 }
 
 void Customer::checkInfor(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers, const vector<Service> &services)
