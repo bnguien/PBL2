@@ -17,7 +17,6 @@ public:
     ~Date() {}
 
     void display() const;
-    bool isLeapYear(int year) const;
     bool setDay(const int &day);
     int getDay() const;
     bool setMonth(const int &month);
@@ -25,12 +24,14 @@ public:
     bool setYear(const int &year);
     int getYear() const;
     string toString() const;
-    static string getCurrentDate();
     int daysInMonth(int month, int year) const;
+
     static int daysBetween(const Date &start, const Date &end);
-    bool isValid() const;
-    bool isValidDateFormat(const string &dateStr);
-    bool isNumber(const string &str);
+    static Date getCurrentDate();
+    static bool isValid(int day, int month, int year);
+    static bool isValidDateFormat(const string &dateStr);
+    static bool isLeapYear(int year);
+    static bool isNumber(const string &str);
 
     bool operator==(const Date &other) const;
     bool operator>(const Date &other) const;
