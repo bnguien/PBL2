@@ -4,43 +4,99 @@ using namespace std;
 
 Date::Date(int day, int month, int year)
 {
-    setYear(year);
-    setMonth(month);
-    setDay(day);
+    if (!isValid(day, month, year))
+    {
+        changeConsoleColor(4);
+        cout << "\nInvalid day, month, year!" << endl;
+        changeConsoleColor(7);
+        this->day = 1;
+        this->month = 1;
+        this->year = 1;
+    }
+    else
+    {
+        this->day = day;
+        this->month = month;
+        this->year = year;
+    }
 }
 
-Date::Date(const string &dateStr) {
-    stringstream ss(dateStr);
-    string token;
-    getline(ss, token, '/');
-    if (isNumber(token)) {
-        day = stoi(token);
-    } else {
-        day = 0; 
+Date::Date(const string &dateStr)
+{
+    if (!isValidDateFormat(dateStr))
+    {
+        changeConsoleColor(4);
+        cout << "Invalid date format!\n";
+        changeConsoleColor(7);
+        this->day = 1;
+        this->month = 1;
+        this->year = 1;
     }
-    getline(ss, token, '/');
-    if (isNumber(token)) {
-        month = stoi(token);
-    } else {
-        month = 0;
-    }
-    getline(ss, token, '/');
-    if (isNumber(token)) {
-        year = stoi(token);
-    } else {
-        year = 0;
-    }
-    if (day == 0 || month == 0 || year == 0) {
-    } 
-}
-bool Date::isValidDateFormat(const string &dateStr) {
-    if (dateStr.size() != 10) return false;
-    if (dateStr[2] != '/' || dateStr[5] != '/') return false;
-    for (int i = 0; i < dateStr.size(); i++) {
-        if (i != 2 && i != 5 && !isdigit(dateStr[i])) {
-            return false;
+    else
+    {
+        std::stringstream ss(dateStr);
+        std::string token;
+        getline(ss, token, '/');
+        day = std::stoi(token);
+
+        getline(ss, token, '/');
+        month = std::stoi(token);
+
+        getline(ss, token, '/');
+        year = std::stoi(token);
+        
+        if (!isValid(day, month, year))
+        {
+            changeConsoleColor(4);
+            cout << "\nInvalid day, month, year!" << endl;
+            changeConsoleColor(7);
+            this->day = 1;
+            this->month = 1;
+            this->year = 1;
+        }
+        else
+        {
+            this->day = day;
+            this->month = month;
+            this->year = year;
         }
     }
+}
+
+bool Date::isValidDateFormat(const string &dateStr)
+{
+    if (dateStr.length() != 10)
+        return false;
+    if (dateStr[2] != '/' || dateStr[5] != '/')
+        return false;
+
+    int day, month, year;
+    std::string dayStr = dateStr.substr(0, 2);
+    std::string monthStr = dateStr.substr(3, 2);
+    std::string yearStr = dateStr.substr(6, 4);
+
+    if (!isNumber(dayStr) || !isNumber(monthStr) || !isNumber(yearStr))
+        return false;
+
+    day = std::stoi(dayStr);
+    month = std::stoi(monthStr);
+    year = std::stoi(yearStr);
+
+    return isValid(day, month, year);
+}
+
+bool Date::isValid(int day, int month, int year)
+{
+    if (year <= 0)
+        return false;
+    if (month < 1 || month > 12)
+        return false;
+
+    int daysInMonth[] = {31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    if (day < 1 || day > daysInMonth[month - 1])
+        return false;
+
     return true;
 }
 
@@ -56,24 +112,9 @@ bool Date::isNumber(const string &str)
     return true;
 }
 
-bool Date::isLeapYear(int year) const
+bool Date::isLeapYear(int year)
 {
     return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-}
-
-bool Date::isValid() const
-{
-    if (year <= 0)
-        return false;
-    if (month < 1 || month > 12)
-        return false;
-
-    int daysInMonth[] = {31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-    if (day < 1 || day > daysInMonth[month - 1])
-        return false;
-
-    return true;
 }
 
 bool Date::setDay(const int &day)
@@ -164,13 +205,19 @@ string Date::toString() const
     return ss.str();
 }
 
-string Date::getCurrentDate()
+Date Date::getCurrentDate()
 {
-    time_t now = time(nullptr);
-    char buffer[80];
-    strftime(buffer, sizeof(buffer), "%d-%m-%Y", localtime(&now));
-    return string(buffer);
+    auto now = std::chrono::system_clock::now();
+    std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
+    std::tm localTime = *std::localtime(&nowTime);
+
+    int day = localTime.tm_mday;
+    int month = localTime.tm_mon + 1;
+    int year = localTime.tm_year + 1900;
+
+    return Date(day, month, year);
 }
+
 int Date::daysInMonth(int month, int year) const
 {
     switch (month)
