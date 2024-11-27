@@ -9,45 +9,51 @@ Date::Date(int day, int month, int year)
     setDay(day);
 }
 
-Date::Date(const string &dateStr)
-{
+Date::Date(const string &dateStr) {
     stringstream ss(dateStr);
     string token;
-
     getline(ss, token, '/');
-    try
-    {
+    if (isNumber(token)) {
         day = stoi(token);
+    } else {
+        day = 0; 
     }
-    catch (const invalid_argument &e)
-    {
-        throw invalid_argument("Invalid input for day: " + token);
-    }
-
     getline(ss, token, '/');
-    try
-    {
+    if (isNumber(token)) {
         month = stoi(token);
+    } else {
+        month = 0;
     }
-    catch (const invalid_argument &e)
-    {
-        throw invalid_argument("Invalid input for month: " + token);
-    }
-
     getline(ss, token, '/');
-    try
-    {
+    if (isNumber(token)) {
         year = stoi(token);
+    } else {
+        year = 0;
     }
-    catch (const invalid_argument &e)
-    {
-        throw invalid_argument("Invalid input for year: " + token);
+    if (day == 0 || month == 0 || year == 0) {
+    } 
+}
+bool Date::isValidDateFormat(const string &dateStr) {
+    if (dateStr.size() != 10) return false;
+    if (dateStr[2] != '/' || dateStr[5] != '/') return false;
+    for (int i = 0; i < dateStr.size(); i++) {
+        if (i != 2 && i != 5 && !isdigit(dateStr[i])) {
+            return false;
+        }
     }
+    return true;
+}
 
-    if (!setMonth(month) || !setYear(year) || !setDay(day))
+bool Date::isNumber(const string &str)
+{
+    for (char c : str)
     {
-        throw invalid_argument("Invalid date: " + dateStr);
+        if (!isdigit(c))
+        {
+            return false;
+        }
     }
+    return true;
 }
 
 bool Date::isLeapYear(int year) const
@@ -76,7 +82,6 @@ bool Date::setDay(const int &day)
 
     if (month < 1 || month > 12)
     {
-        cout << "Invalid month" << endl;
         return false;
     }
 
@@ -87,7 +92,6 @@ bool Date::setDay(const int &day)
 
     if (day < 1 || day > daysInMonth[month - 1])
     {
-        cout << "Invalid day for the given month" << endl;
         return false;
     }
     this->day = day;
@@ -103,7 +107,6 @@ bool Date::setMonth(const int &month)
 {
     if (month < 1 || month > 12)
     {
-        cout << "Invalid month" << endl;
         return false;
     }
     this->month = month;
@@ -119,14 +122,12 @@ bool Date::setYear(const int &year)
 {
     if (year < 1)
     {
-        cout << "Invalid year" << endl;
         return false;
     }
     this->year = year;
 
     if (month == 2 && day == 29 && !isLeapYear(year))
     {
-        cout << "Invalid day for non-leap year" << endl;
         return false;
     }
     return true;
@@ -242,9 +243,11 @@ bool Date::operator==(const Date &other) const
 }
 bool Date::operator>(const Date &other) const
 {
-        if (year != other.year) return year > other.year;
-        if (month != other.month) return month > other.month;
-        return day > other.day;
+    if (year != other.year)
+        return year > other.year;
+    if (month != other.month)
+        return month > other.month;
+    return day > other.day;
 }
 
 ostream &operator<<(ostream &os, const Date &date)
