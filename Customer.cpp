@@ -1128,14 +1128,24 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                         }
                         else
                         {
-                            changeColor(4);
-                            _getch();
-                            gotoXY(10, 7);
-                            cout << string(100, ' ');
-                            gotoXY(30, 5);
-                            cout << string(75, ' ');
-                            gotoXY(1, 7);
-                            cout << string(150, ' ');
+                            system("cls");
+                            gotoXY(1, 1);
+                            changeConsoleColor(3);
+                            std::cout << "HOTEL DEL LUNA" << endl;
+                            changeConsoleColor(7);
+                            std::cout << "______________" << endl;
+                            changeConsoleColor(14);
+                            gotoXY(40, 5);
+                            std::cout << "|=========================================================|";
+                            gotoXY(40, 6);
+                            std::cout << "|                                                         |";
+                            gotoXY(40, 7);
+                            std::cout << "|=========================================================|";
+                            gotoXY(53, 6);
+                            changeColor(2);
+                            std::cout << "Phone number updated successfully";
+                            changeConsoleColor(7);
+                            break;
                         }
                     }
                     changeConsoleColor(7);
@@ -1179,9 +1189,22 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                         }
                         else if (selectedOption == "Confirm")
                         {
-                            gotoXY(40, 11);
-                            changeConsoleColor(2);
-                            cout << "Address updated successfully.\n";
+                            system("cls");
+                            gotoXY(1, 1);
+                            changeConsoleColor(3);
+                            std::cout << "HOTEL DEL LUNA" << endl;
+                            changeConsoleColor(7);
+                            std::cout << "______________" << endl;
+                            changeConsoleColor(14);
+                            gotoXY(40, 5);
+                            std::cout << "|==========================================|";
+                            gotoXY(40, 6);
+                            std::cout << "|                                          |";
+                            gotoXY(40, 7);
+                            std::cout << "|==========================================|";
+                            gotoXY(47, 6);
+                            changeColor(2);
+                            std::cout << "Address updated successfully";
                             changeConsoleColor(7);
                             break;
                         }
@@ -1246,9 +1269,22 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                             }
                             else if (selectedOption == "Confirm")
                             {
-                                changeConsoleColor(2);
-                                gotoXY(40, 11);
-                                cout << "Date of Birth updated successfully.\n";
+                                system("cls");
+                                gotoXY(1, 1);
+                                changeConsoleColor(3);
+                                std::cout << "HOTEL DEL LUNA" << endl;
+                                changeConsoleColor(7);
+                                std::cout << "______________" << endl;
+                                changeConsoleColor(14);
+                                gotoXY(40, 5);
+                                std::cout << "|==================================================|";
+                                gotoXY(40, 6);
+                                std::cout << "|                                                  |";
+                                gotoXY(40, 7);
+                                std::cout << "|==================================================|";
+                                gotoXY(49, 6);
+                                changeColor(2);
+                                std::cout << "Date of birth updated successfully";
                                 changeConsoleColor(7);
                                 break;
                             }
