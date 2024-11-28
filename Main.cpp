@@ -285,7 +285,7 @@ int main()
                                 }
                                 case 2:
                                 {
-                                    cus.bookServices(inputUsername, inputPasswordStr);
+                                    cus.bookServices(inputUsername, inputPasswordStr, customers);
                                     break;
                                 }
                                 case 3:
