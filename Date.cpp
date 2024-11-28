@@ -299,8 +299,8 @@ bool Date::operator>(const Date &other) const
 
 ostream &operator<<(ostream &os, const Date &date)
 {
-    os << setw(2) << setfill('0') << date.getDay() << "/"
-       << setw(2) << setfill('0') << date.getMonth() << "/"
+    os << right << setw(2) << setfill('0') << date.getDay() << "/"
+       << right << setw(2) << setfill('0') << date.getMonth() << "/"
        << date.getYear();
     return os;
 }
