@@ -147,7 +147,7 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
     gotoXY(40, 10);
     changeConsoleColor(14);
     std::cout << "\n"
-              << setw(13) << "CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
+              << "                                                         CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
     changeConsoleColor(7);
     for (const auto &customer : customers)
     {
@@ -1220,20 +1220,18 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                             changeConsoleColor(7);
                             _getch();
                             gotoXY(10, 7);
+                            cout << string(150, ' ');
                             continue;
                         }
 
-                        Date dobDate(newDOB);
-                        customer.setDOB(dobDate);
-                        if (!dobDate.isValidDateFormat(newDOB))
+                        if (!Date::isValidDateFormat(newDOB))
                         {
                             _getch();
                             gotoXY(52, 5);
                             cout << string(75, ' ');
-                            gotoXY(1, 7);
+                            gotoXY(1, 6);
                             cout << string(150, ' ');
-                            gotoXY(1, 8);
-                            cout << string(150, ' ');
+                            gotoXY(52, 5);
                         }
                         else
                         {
