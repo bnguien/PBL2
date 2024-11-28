@@ -1363,7 +1363,7 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
      {
           gotoXY(35, 12);
           changeConsoleColor(9);
-          cout << "ENTER CUSTOMER'S NAME AND CUSTOMER'S ID CARD(CCCD)" << endl;
+          std::cout << "ENTER CUSTOMER'S NAME AND CUSTOMER'S ID CARD(CCCD)" << endl;
           changeConsoleColor(14);
           gotoXY(25, 14);
           std::cout << "|---------------------------------------------------------------------|" << std::endl;
@@ -1389,11 +1389,11 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                {
                     changeConsoleColor(4);
                     gotoXY(97, 17);
-                    cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
+                    std::cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
                     changeConsoleColor(7);
                     _getch();
                     gotoXY(97, 17);
-                    cout << string(75, ' ');
+                    std::cout << string(75, ' ');
                }
                else
                {
@@ -1405,11 +1405,11 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                               isDigitOnly = false;
                               gotoXY(97, 17);
                               changeConsoleColor(4);
-                              cout << "CCCD must have only digits!Press enter to try again" << endl;
+                              std::cout << "CCCD must have only digits!Press enter to try again" << endl;
                               changeConsoleColor(7);
                               _getch();
                               gotoXY(97, 17);
-                              cout << string(75, ' ');
+                              std::cout << string(75, ' ');
                               break;
                          }
                     }
@@ -1422,7 +1422,7 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                if (!isValidCCCD)
                {
                     gotoXY(55, 17);
-                    cout << string(inputCCCD.length(), ' ');
+                    std::cout << string(inputCCCD.length(), ' ');
                }
 
           } while (!isValidCCCD);
@@ -1436,9 +1436,9 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                     system("cls");
                     gotoXY(1, 1);
                     changeConsoleColor(3);
-                    cout << "HOTEL DEL LUNA" << endl;
+                    std::cout << "HOTEL DEL LUNA" << endl;
                     changeConsoleColor(7);
-                    cout << "______________" << endl;
+                    std::cout << "______________" << endl;
                     gotoXY(37, 5);
                     changeConsoleColor(6);
                     std::cout << "WHICH CUSTOMER'S INFORMATION WOULD YOU LIKE TO UPDATE" << endl;
@@ -1448,7 +1448,7 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
 
                     if (choice < 1 || choice > options.size())
                     {
-                         cout << "Invalid selection!\n";
+                         std::cout << "Invalid selection!\n";
                          return false;
                     }
 
@@ -1456,9 +1456,9 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                     system("cls");
                     gotoXY(1, 1);
                     changeConsoleColor(3);
-                    cout << "HOTEL DEL LUNA" << endl;
+                    std::cout << "HOTEL DEL LUNA" << endl;
                     changeConsoleColor(7);
-                    cout << "______________" << endl;
+                    std::cout << "______________" << endl;
                     if (selectedOption == "Change phone number")
                     {
                          string newPhone;
@@ -1466,20 +1466,20 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                          {
                               gotoXY(10, 5);
                               changeConsoleColor(9);
-                              cout << "Enter the new phone number: ";
+                              std::cout << "Enter the new phone number: ";
                               changeConsoleColor(7);
                               getline(cin, newPhone);
                               if (customer.getPhone() == newPhone)
                               {
                                    gotoXY(10, 7);
                                    changeConsoleColor(4);
-                                   cout << "The new phone number is the same as the old one. Please enter a different phone number." << endl;
+                                   std::cout << "The new phone number is the same as the old one. Please enter a different phone number." << endl;
                                    changeConsoleColor(7);
                                    _getch();
                                    gotoXY(30, 5);
-                                   cout << string(75, ' ');
+                                   std::cout << string(75, ' ');
                                    gotoXY(10, 7);
-                                   cout << string(150, ' ');
+                                   std::cout << string(150, ' ');
                               }
                               else
                               {
@@ -1496,12 +1496,24 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                         }
                                         else if (selectedOption == "Confirm")
                                         {
-
-                                             changeConsoleColor(2);
-                                             gotoXY(40, 11);
-                                             cout << "Phone number updated successfully.\n";
-                                             changeConsoleColor(7);
-                                             break;
+                                        system("cls");
+                                        gotoXY(1, 1);
+                                        changeConsoleColor(3);
+                                        std::cout << "HOTEL DEL LUNA" << endl;
+                                        changeConsoleColor(7);
+                                        std::cout << "______________" << endl;
+                                        changeConsoleColor(14);
+                                        gotoXY(40, 5);
+                                        std::cout << "|=========================================================|";
+                                        gotoXY(40, 6);
+                                        std::cout << "|                                                         |";
+                                        gotoXY(40, 7);
+                                        std::cout << "|=========================================================|" ;
+                                        gotoXY(53,6);
+                                        changeColor(2);
+                                        std::cout<<"Phone number updated successfully";
+                                        changeConsoleColor(7);
+                                        break;
                                         }
                                    }
                                    else
@@ -1509,11 +1521,11 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                         changeColor(4);
                                         _getch();
                                         gotoXY(10, 7);
-                                        cout << string(100, ' ');
+                                        std::cout << string(100, ' ');
                                         gotoXY(30, 5);
-                                        cout << string(75, ' ');
+                                        std::cout << string(75, ' ');
                                         gotoXY(1, 7);
-                                        cout << string(150, ' ');
+                                        std::cout << string(150, ' ');
                                    }
                               }
                               changeConsoleColor(7);
@@ -1526,20 +1538,20 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                               gotoXY(10, 5);
                               string newAddress;
                               changeConsoleColor(9);
-                              cout << "Enter the new address: ";
+                              std::cout << "Enter the new address: ";
                               changeConsoleColor(7);
                               getline(cin, newAddress);
                               if (customer.getAdd() == newAddress)
                               {
                                    gotoXY(10, 7);
                                    changeConsoleColor(4);
-                                   cout << "The new address is the same as the old one. Please enter a different address." << endl;
+                                   std::cout << "The new address is the same as the old one. Please enter a different address." << endl;
                                    changeConsoleColor(7);
                                    _getch();
                                    gotoXY(30, 5);
-                                   cout << string(75, ' ');
+                                   std::cout << string(75, ' ');
                                    gotoXY(10, 7);
-                                   cout << string(150, ' ');
+                                   std::cout << string(150, ' ');
                               }
                               else
                               {
@@ -1557,9 +1569,22 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                    }
                                    else if (selectedOption == "Confirm")
                                    {
-                                        gotoXY(40, 11);
-                                        changeConsoleColor(2);
-                                        cout << "Address updated successfully.\n";
+                                        system("cls");
+                                        gotoXY(1, 1);
+                                        changeConsoleColor(3);
+                                        std::cout << "HOTEL DEL LUNA" << endl;
+                                        changeConsoleColor(7);
+                                        std::cout << "______________" << endl;
+                                        changeConsoleColor(14);
+                                        gotoXY(40, 5);
+                                        std::cout << "|==========================================|";
+                                        gotoXY(40, 6);
+                                        std::cout << "|                                          |";
+                                        gotoXY(40, 7);
+                                        std::cout << "|==========================================|" ;
+                                        gotoXY(47,6);
+                                        changeColor(2);
+                                        std::cout<<"Address updated successfully";
                                         changeConsoleColor(7);
                                         break;
                                    }
@@ -1570,7 +1595,7 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                     {
                          gotoXY(10, 5);
                          changeConsoleColor(9);
-                         cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
+                         std::cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
                          changeConsoleColor(7);
                          string newDOB;
                          while (true)
@@ -1580,13 +1605,13 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                               {
                                    gotoXY(10, 7);
                                    changeConsoleColor(4);
-                                   cout << "The new date of birth is the same as the old one. Please enter a different date of birth." << endl;
+                                   std::cout << "The new date of birth is the same as the old one. Please enter a different date of birth." << endl;
                                    changeConsoleColor(7);
                                    _getch();
                                    gotoXY(52, 5);
-                                   cout << string(75, ' ');
+                                   std::cout << string(75, ' ');
                                    gotoXY(10, 7);
-                                   cout << string(150, ' ');
+                                   std::cout << string(150, ' ');
                               }
                               else
                               {
@@ -1594,74 +1619,24 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                    {
                                         changeConsoleColor(4);
                                         gotoXY(10, 7);
-                                        cout << "Date of Birth cannot be empty!" << endl;
+                                        std::cout << "Date of Birth cannot be empty!" << endl;
                                         changeConsoleColor(7);
                                         _getch();
                                         gotoXY(10, 7);
                                         continue;
                                    }
-
-                                   stringstream ss(newDOB);
-                                   string token;
-                                   int day = 0, month = 0, year = 0;
-                                   bool validDate = true;
-
-                                   Date DobDate(newDOB);
-                                   if (!DobDate.isValidDateFormat(newDOB))
-                                   {
-                                        validDate = false;
-                                   }
-                                   else
-                                   {
-                                        getline(ss, token, '/');
-                                        if (DobDate.isNumber(token))
-                                        {
-                                             day = stoi(token);
-                                        }
-                                        else
-                                        {
-                                             validDate = false;
-                                        }
-
-                                        getline(ss, token, '/');
-                                        if (DobDate.isNumber(token))
-                                        {
-                                             month = stoi(token);
-                                        }
-                                        else
-                                        {
-                                             validDate = false;
-                                        }
-
-                                        getline(ss, token, '/');
-                                        if (DobDate.isNumber(token))
-                                        {
-                                             year = stoi(token);
-                                        }
-                                        else
-                                        {
-                                             validDate = false;
-                                        }
-                                   }
-
-                                   if (!validDate || day == 0 || month == 0 || year == 0)
-                                   {
-                                        changeConsoleColor(4);
-                                        gotoXY(10, 7);
-                                        cout << "Invalid date format. Please enter a valid Date of Birth (DD/MM/YYYY): ";
-                                        changeConsoleColor(7);
-                                        _getch();
-                                        gotoXY(52, 5);
-                                        cout << string(150, ' ');
-                                        gotoXY(10, 7);
-                                        cout << string(150, ' ');
-                                        gotoXY(52, 5);
-                                        continue;
-                                   }
-
-                                   Date dobDate(newDOB);
-                                   customer.setDOB(dobDate);
-
+                              }
+                              if (!Date::isValidDateFormat(newDOB))
+                              {
+                                   _getch();
+                                   gotoXY(52, 5);
+                                   std::cout << string(75, ' ');
+                                   gotoXY(1, 6);
+                                   std::cout << string(150, ' ');
+                                   gotoXY(52, 5);
+                              }
+                              else
+                              {
                                    vector<string> Options = {"Cancel", "Confirm"};
                                    int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
                                    string selectedOption = Options[optionIndex - 1];
@@ -1673,81 +1648,91 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                    }
                                    else if (selectedOption == "Confirm")
                                    {
-                                        changeConsoleColor(2);
-                                        gotoXY(40, 11);
-                                        cout << "Date of Birth updated successfully.\n";
+                                        system("cls");
+                                        gotoXY(1, 1);
+                                        changeConsoleColor(3);
+                                        std::cout << "HOTEL DEL LUNA" << endl;
+                                        changeConsoleColor(7);
+                                        std::cout << "______________" << endl;
+                                        changeConsoleColor(14);
+                                        gotoXY(40, 5);
+                                        std::cout << "|==================================================|";
+                                        gotoXY(40, 6);
+                                        std::cout << "|                                                  |";
+                                        gotoXY(40, 7);
+                                        std::cout << "|==================================================|" ;
+                                        gotoXY(49,6);
+                                        changeColor(2);
+                                        std::cout<<"Date of birth updated successfully";
                                         changeConsoleColor(7);
                                         break;
                                    }
                               }
                          }
                     }
-                    else if (selectedOption == "Return")
+                    else
                     {
                          clearFromPosition(1, 1);
                          adminScreen(staff);
+                         return false;
                     }
-
-                    break;
                }
           }
+
           if (!customerFound)
           {
+               gotoXY(97, 15);
                changeConsoleColor(4);
-               gotoXY(25, 20);
-               cout << "Customer not found. Please try again!" << endl;
+               std::cout << "Customer not found. Press enter to try again or ESC to cancel.";
                changeConsoleColor(7);
-               _getch();
-               gotoXY(55, 15);
-               cout << string(75, ' ');
-               gotoXY(55, 17);
-               cout << string(75, ' ');
-               gotoXY(25, 20);
-               cout << string(75, ' ');
-          }
-          else
-          {
-               break;
-          }
-     }
-     ofstream file(fileName, ios::trunc);
-     if (!file.is_open())
-     {
-          cout << "Cannot open file!" << endl;
-          return false;
-     }
-     for (const Customer &customer : customers)
-     {
-          file << customer.getFullName() << "|"
-               << customer.getCCCD() << "|"
-               << customer.getPhone() << "|"
-               << customer.getAdd() << "|"
-               << customer.getDOB().toString() << "|"
-               << customer.getGender() << "|";
-          vector<string> roomIDs = customer.getRoomIDs();
-          for (size_t i = 0; i < roomIDs.size(); ++i)
-          {
-               file << roomIDs[i];
-               if (i < roomIDs.size() - 1)
+               int key = _getch();
+               if (key == 27)
                {
-                    file << ",";
+                    clearFromPosition(1, 1);
+                    adminScreen(staff);
+                    return false;
                }
           }
-          file << "|" << customer.getArrivalDate().toString() << "|";
-          vector<string> serviceIDs = customer.getServiceIDs();
-          for (size_t i = 0; i < serviceIDs.size(); ++i)
-          {
-               file << serviceIDs[i];
-               if (i < serviceIDs.size() - 1)
-               {
-                    file << ",";
-               }
-          }
-          file << endl;
-     }
 
-     file.close();
-     return true;
+          ofstream file(fileName, ios::trunc);
+          if (!file.is_open())
+          {
+               cout << "Cannot open file!" << endl;
+               return false;
+          }
+          for (const Customer &customer : customers)
+          {
+               file << customer.getFullName() << "|"
+                    << customer.getCCCD() << "|"
+                    << customer.getPhone() << "|"
+                    << customer.getAdd() << "|"
+                    << customer.getDOB().toString() << "|"
+                    << customer.getGender() << "|";
+               vector<string> roomIDs = customer.getRoomIDs();
+               for (size_t i = 0; i < roomIDs.size(); ++i)
+               {
+                    file << roomIDs[i];
+                    if (i < roomIDs.size() - 1)
+                    {
+                         file << ",";
+                    }
+               }
+               file << "|" << customer.getArrivalDate().toString() << "|";
+               vector<string> serviceIDs = customer.getServiceIDs();
+               for (size_t i = 0; i < serviceIDs.size(); ++i)
+               {
+                    file << serviceIDs[i];
+                    if (i < serviceIDs.size() - 1)
+                    {
+                         file << ",";
+                    }
+               }
+               file << endl;
+          }
+
+          file.close();
+          return true;
+     }
 }
 
 void Staff::displayCustomer(const vector<Customer> customers)
