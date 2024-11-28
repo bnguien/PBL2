@@ -850,7 +850,7 @@ void Customer::checkInfor(const string &inputUserName, const string &inputPasswo
 }
 
 // Chuc nang khi login customer
-void Customer::bookServices(const string &inputUserName, const string &inputPassword)
+void Customer::bookServices(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers)
 {
     Service service;
     string fileService = "Service.txt";
@@ -896,22 +896,42 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
         }
 
         roomFound = false;
-        for (const auto &room : rooms)
+
+        for (const auto &customer : customers)
         {
-            if (room.getID() == roomID)
+            if (createUsername(customer.getFullName()) == inputUserName && customer.getCCCD() == inputPassword)
             {
-                roomFound = true;
-                break;
+                roomID.erase(remove(roomID.begin(), roomID.end(), ' '), roomID.end());
+                std::transform(roomID.begin(), roomID.end(), roomID.begin(), ::tolower);
+
+                for (auto id : customer.getRoomIDs())
+                {
+                    id.erase(remove(id.begin(), id.end(), ' '), id.end());
+                    std::transform(id.begin(), id.end(), id.begin(), ::tolower);
+
+                    if (id == roomID)
+                    {
+                        roomFound = true;
+                        break;
+                    }
+                }
+
+                if (roomFound)
+                    break;
             }
         }
+
         if (!roomFound)
         {
             changeConsoleColor(4);
-            std::cout << "\nRoom ID not found. Please check and try again." << endl;
+            std::cout << "\nRoom ID not found for the logged-in customer. Please try again." << endl;
             changeConsoleColor(7);
         }
         else
         {
+            changeConsoleColor(2);
+            std::cout << "Room ID is valid. Proceeding with service booking..." << endl;
+            changeConsoleColor(7);
             break;
         }
     }
