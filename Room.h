@@ -36,6 +36,8 @@ public:
      static void printRoom(const vector<Room> &rooms, const vector<Service> &services);
      static bool updateRoomFile(const vector<Room> &rooms, const string &fileRoom);
      void addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs);
+
+     static vector<string> returnSerIDs (const string &roomID);
      ~Room() {}
 };
 
