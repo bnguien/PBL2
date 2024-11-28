@@ -1547,7 +1547,7 @@ void roomFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Change Status
           cout << "\t\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n";
-
+          changeColor(7);
           do
           {
                string ID;
@@ -1584,7 +1584,7 @@ void roomFunction(Staff &staff, vector<string> &function)
           changeColor(11);
           // Show All
           cout << "\t\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
-
+          changeColor(7);
           vector<Room> rooms = Room::readFileRoom("Room.txt");
           vector<Service> services = Service::readFileService("Service.txt");
 
