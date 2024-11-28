@@ -285,7 +285,7 @@ bool Staff::addNewStaff(Staff &newStaff)
 
      cout << "Successfully added new staff member with CCCD "
           << newStaff.getCCCD() << "!\n";
-     
+
      return true;
 }
 
@@ -1748,4 +1748,69 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
 
      file.close();
      return true;
+}
+
+void Staff::displayCustomer(const vector<Customer> customers)
+{
+     string border1 = "+-----+--------------------------------+--------------+------------+-----------------------+------------+--------+--------------+---------+----------------+";
+     string border2 = "|     |                                |              |            |                       |            |        |              |---------+----------------+";
+     string border3 = "|     |                                |              |            |                       |            |        |              |         | ";
+     string border4 = "|     |                                |              |            |                       |            |        |              | ";
+     cout << border1 << endl;
+     cout << "| STT |              NAME              |     CCCD     | PHONE NUM. |        ADDRESS        |  BIRTHDAY  | GENDER | ARRIVAL DATE | ROOM ID |   SERVICE ID   |";
+     cout << border1 << endl;
+
+     int count = 0;
+     for (const auto &customer : customers)
+     {
+          ++count;
+          cout << "| " << setw(3) << setfill('0') << right << count << " | "
+               << setw(31) << setfill(' ') << left << customer.getFullName() << "| "
+               << setw(13) << customer.getCCCD() << "| "
+               << setw(11) << customer.getPhone() << "| "
+               << setw(22) << customer.getAdd() << "| "
+               << customer.getDOB() << " | ";
+
+          if (customer.getGender() == "Male")
+               changeConsoleColor(11);
+          else if (customer.getGender() == "Female")
+               changeConsoleColor(12);
+
+          cout << setw(7) << setfill(' ') << customer.getGender();
+          changeConsoleColor(7);
+          cout << "|  " << customer.getArrivalDate() << "  | ";
+
+          vector<string> roomIDs = customer.getRoomIDs();
+          for (size_t i = 0; i < roomIDs.size(); i++)
+          {
+               cout << setw(8) << setfill(' ') << roomIDs[i] << "| ";
+               string service = "";
+               vector<string> serIDs = Room::returnSerIDs(roomIDs[i]);
+
+               for (size_t j = 0; j < serIDs.size() - 1; j++)
+               {
+                    if (service.length() + serIDs[j].length() + 2 <= 15)
+                    {
+                         service += serIDs[j];
+                         if (!service.empty())
+                              service += ", ";
+                    }
+                    else
+                    {
+                         cout << service << "|" << endl;
+                         cout << border3;
+                         service.clear();
+                    }
+               }
+               service += serIDs[serIDs.size() - 1];
+               cout << setw(15) << service << "|" << endl;
+
+               if (i < roomIDs.size() - 1)
+               {
+                    cout << border2 << endl;
+                    cout << border4;
+               }
+          }
+          cout << border1 << endl;
+     }
 }

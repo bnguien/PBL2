@@ -1495,7 +1495,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                changeConsoleColor(7);
           }
           else
-               customers[0].displayCustomer(customers, services);
+               Staff::displayCustomer(customers);
           break;
      }
      case 7:

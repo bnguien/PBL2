@@ -67,6 +67,8 @@ public:
      bool changeRoomStatus(const string &roomID);
      bool changeServicePrice(const string &serID, const string &price);
 
+     static void displayCustomer (const vector<Customer> customers);
+
      ~Staff() {}
 };
 
