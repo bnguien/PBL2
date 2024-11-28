@@ -525,7 +525,7 @@ void customerScreen(const string &username, const string &password)
           changeColor(12);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[2] << " ----------\n";
           changeColor(7);
-          cus.bookServices(username, password);
+          cus.bookServices(username, password , customers);
           break;
      case 4:
           clearFromPosition(1, 10);
@@ -1444,7 +1444,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           string username = createUsername(trim(fullName));
           string password = trim(CCCD);
           Customer cus;
-          cus.bookServices(username, password);
+          cus.bookServices(username, password, customers);
           ShowCur(0);
           break;
      }
