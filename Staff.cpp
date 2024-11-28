@@ -1776,14 +1776,14 @@ void Staff::displayCustomer(const vector<Customer> customers)
           else if (customer.getGender() == "Female")
                changeConsoleColor(12);
 
-          cout << setw(7) << setfill(' ') << customer.getGender();
+          cout << left << setw(7) << setfill(' ') << customer.getGender();
           changeConsoleColor(7);
           cout << "|  " << customer.getArrivalDate() << "  | ";
 
           vector<string> roomIDs = customer.getRoomIDs();
           for (size_t i = 0; i < roomIDs.size(); i++)
           {
-               cout << setw(8) << setfill(' ') << roomIDs[i] << "| ";
+               cout << left << setw(8) << setfill(' ') << roomIDs[i] << "| ";
                string service = "";
                vector<string> serIDs = Room::returnSerIDs(roomIDs[i]);
 
