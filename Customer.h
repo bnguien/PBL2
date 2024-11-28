@@ -64,7 +64,7 @@ public:
     static bool saveCustomerToFile(const Customer &customer, const string &fileName);
     static vector<Customer> readFileCustomer(const string &fileName);
     void bookedRoom();
-    void bookServices(const string &inputUserName, const string &inputPassword);
+    void bookServices(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers);
     void addServicesToCustomerFile(const string &inputUserName, const string &inputPassword, const vector<Service> &services, const vector<string> &serviceIDs);
     void checkInfor(const string &inputUserName, const string &inputPassword,const vector<Customer> &customers,const vector<Service> &services);
     void updateCustomerInfo(const string &inputUserName, const string &inputPassword, vector<Customer> &customers, const string &fileName) ;
