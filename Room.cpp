@@ -270,3 +270,14 @@ void Room::addServiceByRoomID(const string &roomID, const vector<string> &servic
         cout << "Room ID not found." << endl;
     }
 }
+
+vector<string> Room::returnSerIDs (const string &roomID)
+{
+    vector<Room> rooms = Room::readFileRoom("Room.txt");
+    for (const auto &room : rooms)
+    {
+        if (room.getID() == roomID)
+            return room.getServiceIDs();
+    }
+    return {};
+}
