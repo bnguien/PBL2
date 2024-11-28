@@ -691,7 +691,7 @@ void Customer::bookedRoom()
                 std::cout << "The customer must be at least 18 years old!";
                 changeConsoleColor(7);
                 Sleep(3000);
-                
+
                 system("cls");
                 changeConsoleColor(12);
                 gotoXY(40, 5);
@@ -701,15 +701,15 @@ void Customer::bookedRoom()
                 gotoXY(40, 7);
                 cout << "|          Customer is under 18 years old!          |";
                 gotoXY(40, 8);
-                cout << "|                                                   |"; 
+                cout << "|                                                   |";
                 gotoXY(40, 9);
                 cout << "|   Failed to book new room for customer with CCCD  |";
                 gotoXY(40, 10);
-                cout << "|                    " << setw(31) << setfill(' ') << CCCD << "|";     
+                cout << "|                    " << setw(31) << setfill(' ') << CCCD << "|";
                 gotoXY(40, 11);
-                cout << "|                                                   |";  
+                cout << "|                                                   |";
                 gotoXY(40, 12);
-                cout << "+---------------------------------------------------+" << endl;    
+                cout << "+---------------------------------------------------+" << endl;
                 changeConsoleColor(7);
                 ShowCur(0);
                 return;
@@ -1203,83 +1203,37 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                             continue;
                         }
 
-                        stringstream ss(newDOB);
-                        string token;
-                        int day = 0, month = 0, year = 0;
-                        bool validDate = true;
-
-                        Date DobDate(newDOB);
-                        if (!DobDate.isValidDateFormat(newDOB))
+                        Date dobDate(newDOB);
+                        customer.setDOB(dobDate);
+                        if (!dobDate.isValidDateFormat(newDOB))
                         {
-                            validDate = false;
+                            _getch();
+                            gotoXY(52, 5);
+                            cout << string(75, ' ');
+                            gotoXY(1, 7);
+                            cout << string(150, ' ');
+                            gotoXY(1, 8);
+                            cout << string(150, ' ');
                         }
                         else
                         {
-                            getline(ss, token, '/');
-                            if (DobDate.isNumber(token))
+                            vector<string> Options = {"Cancel", "Confirm"};
+                            int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                            string selectedOption = Options[optionIndex - 1];
+                            if (selectedOption == "Cancel")
                             {
-                                day = stoi(token);
+                                clearFromPosition(1, 1);
+                                customerScreen(inputUserName, inputPassword);
+                                return;
                             }
-                            else
+                            else if (selectedOption == "Confirm")
                             {
-                                validDate = false;
+                                changeConsoleColor(2);
+                                gotoXY(40, 11);
+                                cout << "Date of Birth updated successfully.\n";
+                                changeConsoleColor(7);
+                                break;
                             }
-
-                            getline(ss, token, '/');
-                            if (DobDate.isNumber(token))
-                            {
-                                month = stoi(token);
-                            }
-                            else
-                            {
-                                validDate = false;
-                            }
-
-                            getline(ss, token, '/');
-                            if (DobDate.isNumber(token))
-                            {
-                                year = stoi(token);
-                            }
-                            else
-                            {
-                                validDate = false;
-                            }
-                        }
-
-                        if (!validDate || day == 0 || month == 0 || year == 0)
-                        {
-                            changeConsoleColor(4);
-                            gotoXY(10, 7);
-                            cout << "Invalid date format. Please enter a valid Date of Birth (DD/MM/YYYY): ";
-                            changeConsoleColor(7);
-                            _getch();
-                            gotoXY(52, 5);
-                            cout << string(150, ' ');
-                            gotoXY(10, 7);
-                            cout << string(150, ' ');
-                            gotoXY(52, 5);
-                            continue;
-                        }
-
-                        Date dobDate(newDOB);
-                        customer.setDOB(dobDate);
-
-                        vector<string> Options = {"Cancel", "Confirm"};
-                        int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
-                        string selectedOption = Options[optionIndex - 1];
-                        if (selectedOption == "Cancel")
-                        {
-                            clearFromPosition(1, 1);
-                            customerScreen(inputUserName, inputPassword);
-                            return;
-                        }
-                        else if (selectedOption == "Confirm")
-                        {
-                            changeConsoleColor(2);
-                            gotoXY(40, 11);
-                            cout << "Date of Birth updated successfully.\n";
-                            changeConsoleColor(7);
-                            break;
                         }
                     }
                 }
