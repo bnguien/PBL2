@@ -322,35 +322,22 @@ void Customer::bookedRoom()
     Room room;
     string fileRoom = "Room.txt";
     vector<Room> rooms = room.readFileRoom(fileRoom);
-
-    gotoXY(55, 5);
-    changeConsoleColor(6);
-    std::cout << "SELECT TYPE OF ROOM" << endl;
-    changeConsoleColor(7);
-    vector<string> roomTypeOptions = {"Single", "Double", "Triple", "Return"};
-    int roomTypeIndex = buttonList(6, 8, 15, 2, 18, roomTypeOptions, "row");
-
-    if (roomTypeIndex < 0 || roomTypeIndex > roomTypeOptions.size())
-    {
-        std::cout << "Invalid selection!" << endl;
-        return;
-    }
-
-    string selectedRoomType = roomTypeOptions[roomTypeIndex - 1];
-    if (selectedRoomType == "Return")
-    {
-        clearFromPosition(1, 1);
-        noAccountScreen();
-        return;
-    }
-
-    clearFromPosition(1, 2);
     vector<Room> filteredRooms;
+    changeColor(6);
+    system("cls");
+    string filename = "title.txt"; 
+    ifstream inputFile(filename); 
+    string line;
+   
+    while (getline(inputFile, line)) {
+        cout << line << endl;  
+    }
+    inputFile.close(); 
+    changeColor(7);
+
     for (const auto &room : rooms)
     {
-        if (!room.getID().empty() &&
-            room.getType() == selectedRoomType &&
-            room.getStatus() == "Available")
+        if (!room.getID().empty() && room.getStatus() == "Available")
         {
             filteredRooms.push_back(room);
         }
@@ -359,15 +346,14 @@ void Customer::bookedRoom()
     if (filteredRooms.empty())
     {
         changeConsoleColor(4);
-        std::cout << "\nNo rooms available for the selected type: " << selectedRoomType << endl;
+        std::cout << "\nNo available rooms at the moment." << endl;
         changeConsoleColor(7);
         return;
     }
 
-    std::cout << "\n\tAvailable rooms of type " << selectedRoomType << ":" << endl;
     Customer::showAllRooms(filteredRooms);
-    cout << "\n________________________________________________________________________________________________________________\n";
 
+    cout << "\n________________________________________________________________________________________________________________\n";
     vector<string> unavailableRoomIDs;
     vector<string> availableRoomIDs;
     ShowCur(1);
