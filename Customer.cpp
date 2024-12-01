@@ -325,14 +325,8 @@ void Customer::bookedRoom()
     vector<Room> filteredRooms;
     changeColor(6);
     system("cls");
-    string filename = "title.txt"; 
-    ifstream inputFile(filename); 
-    string line;
-   
-    while (getline(inputFile, line)) {
-        cout << line << endl;  
-    }
-    inputFile.close(); 
+    string filename = "title.txt";
+    read_lines(filename, 1, 11);    
     changeColor(7);
 
     for (const auto &room : rooms)
@@ -459,9 +453,10 @@ void Customer::bookedRoom()
 
     string fullName, CCCD, phone, add, gender, DOBstr, arrivalDateStr;
     Date DOB, arrivalDate;
-    gotoXY(50, 8);
-    changeConsoleColor(13);
-    std::cout << "TELL US YOUR INFORMATION (=^_^=)" << std::endl;
+    changeConsoleColor(9);
+    system("cls");
+    gotoXY(25, 0);
+    read_lines(filename, 14, 23);
     changeConsoleColor(14);
     gotoXY(40, 11);
     std::cout << "+-------------------------------------------------------+" << std::endl;
@@ -848,23 +843,23 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
     string border = "*===================================================*";
     changeConsoleColor(1);
     std::cout << "\n";
-    gotoXY(20,12);
-    std::cout<< border;
-    gotoXY(30,13);
+    gotoXY(20, 12);
+    std::cout << border;
+    gotoXY(30, 13);
     std::cout << "*" << setw(38);
     changeConsoleColor(4);
-    gotoXY(32,13);
+    gotoXY(32, 13);
     std::cout << setw(20) << "WELCOME TO HOTEL DEL LUNA";
     changeConsoleColor(1);
-    gotoXY(58,13);
+    gotoXY(58, 13);
     std::cout << "*" << endl;
-    gotoXY(20,14);
+    gotoXY(20, 14);
     std::cout << border << endl;
     changeConsoleColor(3);
     std::cout << "\n";
-    gotoXY(30,15);
+    gotoXY(30, 15);
     std::cout << "HERE ARE THE SERVICES WE OFFER" << endl;
-    gotoXY(37,16);
+    gotoXY(37, 16);
     std::cout << setw(37) << "--------------------" << endl;
     changeConsoleColor(7);
 
@@ -953,43 +948,43 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
     char c;
     do
     {
-    std::cout << "Enter ServiceID (eg., F01, S01, D01, L01) you want to book: ";
-    getline(cin, serviceID);
+        std::cout << "Enter ServiceID (eg., F01, S01, D01, L01) you want to book: ";
+        getline(cin, serviceID);
 
-    bool serviceFound = false;
-    for (const auto &service : services)
-    {
-        if (service.getID() == serviceID)
+        bool serviceFound = false;
+        for (const auto &service : services)
         {
-            changeColor(2);
-            std::cout <<"Press Enter to confirm or ESC to cancel.\n";
-            changeColor(7);
-            char key = _getch();
-            
-            if (key == 13)
+            if (service.getID() == serviceID)
             {
-                serviceIDs.push_back(serviceID);
-            }
-            else if (key == 27)
-            {
-                clearFromPosition(1, 1);
-                customerScreen(inputUserName, inputPassword);
-                return;
-            }
-            else
-            {
-                std::cout << "Invalid key. Operation canceled.\n";
-            }
+                changeColor(2);
+                std::cout << "Press Enter to confirm or ESC to cancel.\n";
+                changeColor(7);
+                char key = _getch();
 
-            serviceFound = true;
-            break;
+                if (key == 13)
+                {
+                    serviceIDs.push_back(serviceID);
+                }
+                else if (key == 27)
+                {
+                    clearFromPosition(1, 1);
+                    customerScreen(inputUserName, inputPassword);
+                    return;
+                }
+                else
+                {
+                    std::cout << "Invalid key. Operation canceled.\n";
+                }
+
+                serviceFound = true;
+                break;
+            }
         }
-    }
 
-    if (!serviceFound)
-    {
-        std::cout << "ServiceID " << serviceID << " not found. Please try again.\n";
-    }
+        if (!serviceFound)
+        {
+            std::cout << "ServiceID " << serviceID << " not found. Please try again.\n";
+        }
         if (serviceFound)
         {
             std::cout << "Would you like to enjoy more of our services? Press (Y/N)" << endl;

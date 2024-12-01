@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <iomanip>
 #include <ctime>
+#include <fstream>
 #include "Vector.h"
 
 using namespace std;
@@ -411,4 +412,20 @@ void clearFromPosition(int x, int y)
         }
     }
     gotoXY(x, y); // Đưa con trỏ về lại vị trí ban đầu sau khi xóa
+}
+void read_lines(const string& filename, int start, int end) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Cannot open file" << endl;
+        return;
+    }
+    string line;
+    int current_line = 1;
+    while (getline(file, line)) {
+        if (current_line >= start && current_line <= end) {
+            cout << line << endl;
+        }
+        current_line++;
+    }
+    file.close();
 }
