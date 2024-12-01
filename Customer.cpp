@@ -861,28 +861,54 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
     vector<Room> rooms = room.readFileRoom(fileRoom);
     string border = "*===================================================*";
     changeConsoleColor(1);
-    std::cout << "\n"
-              << border << endl;
-    std::cout << "*" << right << setw(38);
+    std::cout << "\n";
+    gotoXY(20,12);
+    std::cout<< border;
+    gotoXY(30,13);
+    std::cout << "*" << setw(38);
     changeConsoleColor(4);
-    std::cout << "WELCOME TO HOTEL DEL LUNA" << setw(14);
+    gotoXY(32,13);
+    std::cout << setw(20) << "WELCOME TO HOTEL DEL LUNA";
     changeConsoleColor(1);
+    gotoXY(58,13);
     std::cout << "*" << endl;
+    gotoXY(20,14);
     std::cout << border << endl;
     changeConsoleColor(3);
-    std::cout << "\n"
-              << setw(42) << "HERE ARE THE SERVICES WE OFFER" << endl;
+    std::cout << "\n";
+    gotoXY(30,15);
+    std::cout << "HERE ARE THE SERVICES WE OFFER" << endl;
+    gotoXY(37,16);
     std::cout << setw(37) << "--------------------" << endl;
     changeConsoleColor(7);
 
     displayService(services);
-    std::cout << setw(37) << "--------------------" << endl;
+    std::cout << left << setw(37) << "--------------------" << endl;
 
     string roomID;
     bool roomFound = false;
 
     while (true)
     {
+        for (const auto &customer : customers)
+        {
+            if (createUsername(customer.getFullName()) == inputUserName && customer.getCCCD() == inputPassword)
+            {
+                changeColor(2);
+                std::cout << "Customer's ID room(s): ";
+                std::string roomsStr;
+                changeColor(7);
+                for (const auto &room : customer.getRoomIDs())
+                {
+                    roomsStr += room + " ";
+                }
+
+                std::cout << roomsStr << endl;
+                changeColor(14);
+                std::cout << "Enter to continue.....";
+                changeColor(7);
+            }
+        }
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         std::cout << "Enter the Room ID (eg., S101, D201, T301) to book services: ";
         cin.clear();
@@ -941,20 +967,43 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
     char c;
     do
     {
-        std::cout << "Enter ServiceID (eg., F01, S01, D01, L01) you want to book: ";
-        getline(cin, serviceID);
+    std::cout << "Enter ServiceID (eg., F01, S01, D01, L01) you want to book: ";
+    getline(cin, serviceID);
 
-        bool serviceFound = false;
-        for (const auto &service : services)
+    bool serviceFound = false;
+    for (const auto &service : services)
+    {
+        if (service.getID() == serviceID)
         {
-            if (service.getID() == serviceID)
+            changeColor(2);
+            std::cout <<"Press Enter to confirm or ESC to cancel.\n";
+            changeColor(7);
+            char key = _getch();
+            
+            if (key == 13)
             {
                 serviceIDs.push_back(serviceID);
-                serviceFound = true;
-                break;
             }
-        }
+            else if (key == 27)
+            {
+                clearFromPosition(1, 1);
+                customerScreen(inputUserName, inputPassword);
+                return;
+            }
+            else
+            {
+                std::cout << "Invalid key. Operation canceled.\n";
+            }
 
+            serviceFound = true;
+            break;
+        }
+    }
+
+    if (!serviceFound)
+    {
+        std::cout << "ServiceID " << serviceID << " not found. Please try again.\n";
+    }
         if (serviceFound)
         {
             std::cout << "Would you like to enjoy more of our services? Press (Y/N)" << endl;
