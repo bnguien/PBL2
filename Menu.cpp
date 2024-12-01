@@ -418,7 +418,7 @@ void noAccountScreen()
           clearFromPosition(1, 1);
           cout << "\t\t\t---------- NO ACCOUNT FUNCTIONS: " << function[0] << " ----------\n";
           changeConsoleColor(3);
-          cout << "\n\t\t\t\t\tHERE ARE THE ROOMS WE OFFER\n"
+          cout << "\n\t\t\tHERE ARE THE ROOMS WE OFFER\n"
                << endl;
           changeConsoleColor(7);
 
@@ -503,7 +503,7 @@ void customerScreen(const string &username, const string &password)
           changeColor(12);
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[0] << " ----------\n";
           changeConsoleColor(3);
-          cout << "\n\t\t\t\t\tHERE ARE THE ROOMS WE OFFER\n"
+          cout << "\n\t\t\tHERE ARE THE ROOMS WE OFFER\n"
                << endl;
           changeConsoleColor(7);
 
