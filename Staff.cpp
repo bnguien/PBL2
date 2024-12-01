@@ -577,36 +577,18 @@ bool Staff::addNewCustomer(Staff &staff)
      Room room;
      string fileRoom = "Room.txt";
      vector<Room> rooms = room.readFileRoom(fileRoom);
-     gotoXY(55, 15);
-     changeConsoleColor(6);
-     std::cout << "SELECT TYPE OF ROOM" << endl;
-     changeConsoleColor(7);
-     vector<string> roomTypeOptions = {"Single", "Double", "Triple", "Return"};
-     int roomTypeIndex = buttonList(6, 17, 15, 2, 18, roomTypeOptions, "row");
-
-     if (roomTypeIndex < 0 || roomTypeIndex > roomTypeOptions.size())
-     {
-          std::cout << "Invalid selection!" << endl;
-          return false;
-     }
-
-     string selectedRoomType = roomTypeOptions[roomTypeIndex - 1];
-     char roomTypeChar = (selectedRoomType == "Single")   ? 'S'
-                         : (selectedRoomType == "Double") ? 'D'
-                         : (selectedRoomType == "Triple") ? 'T'
-                                                          : '\0';
-
-     system("cls");
-     if (selectedRoomType == "Return")
-     {
-          clearFromPosition(1, 1);
-          adminScreen(staff);
-          return false;
-     }
      vector<Room> filteredRooms;
+     changeColor(6);
+     system("cls");
+     string filename = "title.txt";
+     ifstream inputFile(filename);
+     read_lines(filename, 25, 31);
+     inputFile.close();
+     changeColor(7);
+
      for (const auto &room : rooms)
      {
-          if (!room.getID().empty() && room.getID().front() == roomTypeChar)
+          if (!room.getID().empty() && room.getStatus() == "Available")
           {
                filteredRooms.push_back(room);
           }
@@ -614,43 +596,20 @@ bool Staff::addNewCustomer(Staff &staff)
 
      if (filteredRooms.empty())
      {
-          std::cout << "No rooms available for the selected type: " << selectedRoomType << endl;
+          changeConsoleColor(4);
+          std::cout << "\nNo available rooms at the moment." << endl;
+          changeConsoleColor(7);
           return false;
      }
 
-     std::cout << "Available rooms of type " << selectedRoomType << ":" << endl;
-     for (const auto &filteredRoom : filteredRooms)
-     {
-          Sleep(100);
-          string border = "+---------------+-----------------------------------+";
-          cout << border << endl;
-          changeConsoleColor(9);
-          cout << "| Room ID       | " << left << setw(34) << filteredRoom.getID() << "|" << endl;
-          cout << border << endl;
-          changeConsoleColor(12);
-          cout << "| Room Type     | " << left << setw(34) << filteredRoom.getType() << "|" << endl;
-          cout << border << endl;
-          changeConsoleColor(8);
-          cout << "| Room Price    | " << left << setw(34) << filteredRoom.getPrice() << "|" << endl;
-          cout << border << endl;
-          if (filteredRoom.checkAvailable())
-          {
-               changeConsoleColor(2);
-          }
-          else
-          {
-               changeConsoleColor(4);
-          }
-          cout << "| Room Status   | " << left << setw(34)
-               << (filteredRoom.checkAvailable() ? "Available" : "Unavailable") << "|" << endl;
-          cout << border << endl;
-          changeConsoleColor(7);
-     }
-     changeConsoleColor(7);
+     Customer::showAllRooms(filteredRooms);
+
+     cout << "\n________________________________________________________________________________________________________________\n";
+     vector<string> unavailableRoomIDs;
      vector<string> availableRoomIDs;
      while (true)
      {
-          std::cout << "Enter the room IDs you want to book (separated by commas): ";
+          std::cout << "Enter the room IDs that the customer wants to book (separated by commas): ";
           string roomIDsInput;
           getline(cin, roomIDsInput);
 
@@ -1496,24 +1455,24 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                         }
                                         else if (selectedOption == "Confirm")
                                         {
-                                        system("cls");
-                                        gotoXY(1, 1);
-                                        changeConsoleColor(3);
-                                        std::cout << "HOTEL DEL LUNA" << endl;
-                                        changeConsoleColor(7);
-                                        std::cout << "______________" << endl;
-                                        changeConsoleColor(14);
-                                        gotoXY(40, 5);
-                                        std::cout << "|=========================================================|";
-                                        gotoXY(40, 6);
-                                        std::cout << "|                                                         |";
-                                        gotoXY(40, 7);
-                                        std::cout << "|=========================================================|" ;
-                                        gotoXY(53,6);
-                                        changeColor(2);
-                                        std::cout<<"Phone number updated successfully";
-                                        changeConsoleColor(7);
-                                        break;
+                                             system("cls");
+                                             gotoXY(1, 1);
+                                             changeConsoleColor(3);
+                                             std::cout << "HOTEL DEL LUNA" << endl;
+                                             changeConsoleColor(7);
+                                             std::cout << "______________" << endl;
+                                             changeConsoleColor(14);
+                                             gotoXY(40, 5);
+                                             std::cout << "|=========================================================|";
+                                             gotoXY(40, 6);
+                                             std::cout << "|                                                         |";
+                                             gotoXY(40, 7);
+                                             std::cout << "|=========================================================|";
+                                             gotoXY(53, 6);
+                                             changeColor(2);
+                                             std::cout << "Phone number updated successfully";
+                                             changeConsoleColor(7);
+                                             break;
                                         }
                                    }
                                    else
@@ -1581,10 +1540,10 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                         gotoXY(40, 6);
                                         std::cout << "|                                          |";
                                         gotoXY(40, 7);
-                                        std::cout << "|==========================================|" ;
-                                        gotoXY(47,6);
+                                        std::cout << "|==========================================|";
+                                        gotoXY(47, 6);
                                         changeColor(2);
-                                        std::cout<<"Address updated successfully";
+                                        std::cout << "Address updated successfully";
                                         changeConsoleColor(7);
                                         break;
                                    }
@@ -1660,10 +1619,10 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                         gotoXY(40, 6);
                                         std::cout << "|                                                  |";
                                         gotoXY(40, 7);
-                                        std::cout << "|==================================================|" ;
-                                        gotoXY(49,6);
+                                        std::cout << "|==================================================|";
+                                        gotoXY(49, 6);
                                         changeColor(2);
-                                        std::cout<<"Date of birth updated successfully";
+                                        std::cout << "Date of birth updated successfully";
                                         changeConsoleColor(7);
                                         break;
                                    }
