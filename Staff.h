@@ -39,17 +39,18 @@ public:
      string getSalary() const;
 
      static string formatSalary (const string &salary);
+     static void showList (const vector<Staff> staffs);
 
      bool operator==(const Staff &staff) const;
      static vector<Staff> readFileStaff(const string &fileName);
      static string generateStaffID(const vector<Staff> &staffs, const string &position);
-     void displayStaff(const vector<Staff> &staffs);
+     void displayStaff();
      bool findCustomerByAttribute(const Staff &staff, const string &attributeName, const string &attributeValue);
      bool hasAccess(const Staff &staff) const ;
 
      void updateStaffFile(const vector<Staff> &staffs, const string &fileName);
      bool addNewStaff(Staff &newStaff);
-     bool updateStaff(const string &type, const string &infor, const string &ID);
+     bool updateStaff(vector<Staff> &staffs, const int &index);
      bool removeStaff(Staff &staffToRemove);
      bool removeStaffByCCCD(const string &CCCDToRemove);
 
