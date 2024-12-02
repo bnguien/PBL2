@@ -525,7 +525,7 @@ void customerScreen(const string &username, const string &password)
           changeColor(12);
           cout << "\t\t---------- CUSTOMER FUNCTIONS: " << function[2] << " ----------\n";
           changeColor(7);
-          cus.bookServices(username, password , customers);
+          cus.bookServices(username, password, customers);
           break;
      case 4:
           clearFromPosition(1, 10);
@@ -703,11 +703,11 @@ void staffFunction(Staff &staff, vector<string> &function)
      int choice = buttonList(40, 12, 28, 2, 2, function, "column");
      switch (choice)
      {
-     case 1:
+     case 1: // Add new staff
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          // Add new staff
+
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
           changeColor(7);
 
@@ -984,7 +984,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                ShowCur(0);
                Staff newStaff(fullName, CCCD, phone, add, gender, DOB, ID, position, salary);
                vector<string> confirmation = {"Confirm", "Return"};
-               int confirm = buttonList (30, 35, 14, 2, 28, confirmation, "row");
+               int confirm = buttonList(30, 35, 14, 2, 28, confirmation, "row");
 
                clearFromPosition(30, 35);
 
@@ -997,14 +997,15 @@ void staffFunction(Staff &staff, vector<string> &function)
                          cout << "Do you want to try again?";
                          changeConsoleColor(7);
                          vector<string> yN = {"Try again", "Return"};
-                         int ch = buttonList (32, 37, 16, 2, 10, yN, "row");
+                         int ch = buttonList(32, 37, 16, 2, 10, yN, "row");
 
-                         if (ch == 1) 
+                         if (ch == 1)
                          {
                               clearFromPosition(38, 12);
                               continue;
                          }
-                         else break;
+                         else
+                              break;
                     }
                     else
                     {
@@ -1012,57 +1013,117 @@ void staffFunction(Staff &staff, vector<string> &function)
                          break;
                     }
                }
-               else break;
+               else
+                    break;
 
           } while (true);
 
           break;
      }
 
-     case 2:
+     case 2: // Update Information
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          // Update Information
+
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
           changeColor(7);
 
-          string continueChoice;
+          boxTwoLine(10, 13, 17, 2, 11, 75, "Staff's ID");
+          boxTwoLine(28, 13, 17, 2, 11, 150, " ");
+
+          string id;
+          int index;
           do
           {
-               string ID, type, infor;
-               cout << "Enter Staff's ID you want to update information:\n\t";
-               cin >> ID;
+               gotoXY(32, 14);
+               cout << string(id.length(), ' ');
+               gotoXY(32, 14);
+               ShowCur(1);
+               changeConsoleColor(7);
+               cin >> id;
 
-               cout << "Enter type of information (Phone, Position, Salary):\n\t";
-               cin >> type;
-
-               type = toLower(type);
-               if (type != "phone" && type != "position" && type != "salary")
+               changeConsoleColor(3);
+               gotoXY(48, 14);
+               ShowCur(0);
+               if (id.length() != 3)
                {
-                    changeColor(4);
-                    cout << "Invalid type entered: " << type
-                         << ". Please use Phone, Position, or Salary.\n";
-                    changeColor(7);
-                    continue;
+                    cout << "ID has exactly 3 characters! Press Enter ...";
+                    _getch();
+                    gotoXY(48, 14);
+                    cout << string(60, ' ');
                }
-
-               type[0] = toupper(type[0]);
-
-               cout << "Enter new value for " << type << ":\n\t";
-               cin >> infor;
-
-               if (!staff.updateStaff(type, infor, ID))
+               else if (!(isalpha(id[0]) && isdigit(id[1]) && isdigit(id[2])))
                {
-                    cout << "\nDo you want to try again? (y/n): ";
-                    cin >> continueChoice;
-                    continueChoice = toLower(continueChoice);
+                    cout << "Invalid ID format! Valid format ex.: M01.  Press Enter ...";
+                    _getch();
+                    gotoXY(48, 14);
+                    cout << string(60, ' ');
                }
                else
-                    break;
+               {
+                    changeConsoleColor(7);
+                    id[0] = toupper(id[0]);
+                    gotoXY(32, 14);
+                    cout << id;
+                    vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
+                    bool found = false;
+                    for (int i = 0; i < staffs.size(); i++)
+                    {
+                         if (staffs[i].getID() == id)
+                         {
+                              found = true;
+                              index = i;
+                              break;
+                         }
+                    }
 
-          } while (continueChoice == "y");
+                    if (found == false)
+                    {
+                         gotoXY(20, 17);
+                         changeConsoleColor(4);
+                         cout << "Cannot found staff's ID: " << id << ". Do you want to try again?";
+                         vector<string> choose = {"Try again", "Cancel"};
+                         int x = buttonList(10, 19, 16, 2, 3, choose, "row");
+                         if (x == 1)
+                         {
+                              clearFromPosition(20, 17);
+                         }
+                         else
+                         {
+                              adminScreen(staff);
+                              break;
+                         }
+                    }
+                    else
+                         break;
+               }
+          } while (true);
 
+          gotoXY(20, 17);
+          changeConsoleColor(2);
+          cout << "The staff's ID was successfully found.! Wait for a second!";
+          changeConsoleColor(7);
+          Sleep(1000);
+
+          if (!staff.updateStaff(staffs, index))
+          {
+               changeConsoleColor(4);
+               gotoXY(65, 30);
+               cout << "+-----------------------------------+";
+               gotoXY(65, 31);
+               cout << "|                                   |";
+               gotoXY(65, 32);
+               cout << "|               ERROR               |";
+               gotoXY(65, 33);
+               cout << "|   Failed to update information!   |";
+               gotoXY(65, 34);
+               cout << "|                                   |";
+               gotoXY(65, 35);
+               cout << "+-----------------------------------+";
+          }
+
+          gotoXY(1, 35);
           break;
      }
 
@@ -1165,16 +1226,17 @@ void staffFunction(Staff &staff, vector<string> &function)
           break;
      }
 
-     case 4:
+     case 4: // Show All
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          // Show All
-          cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
+
+          cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
           changeColor(7);
 
           vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
-          staff.displayStaff(staffs);
+          Staff::showList(staffs);
+
           break;
      }
 

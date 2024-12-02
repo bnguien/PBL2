@@ -42,7 +42,7 @@ string Staff::getPosition() const
 
 void Staff::setSalary(const string &salary)
 {
-     this->salary = formatSalary(salary);
+     this->salary = salary;
 }
 string Staff::getSalary() const
 {
@@ -111,58 +111,148 @@ vector<Staff> Staff ::readFileStaff(const string &fileName)
      return staffs;
 }
 
-void Staff::displayStaff(const vector<Staff> &staffs)
+void Staff::showList(const vector<Staff> staffs)
 {
-     cout << "\n"
-          << setw(13) << "STAFFS' INFORMATION IN OUR HOTEL" << endl;
-     for (const auto &staff : staffs)
+     string title = R"(
+                _____     _____   ______   _________        ___   ________       ______   _________     _       ________  ________   ______   
+               |_   _|   |_   _|.' ____ \ |  _   _  |     .'   `.|_   __  |    .' ____ \ |  _   _  |   / \     |_   __  ||_   __  |.' ____ \  
+                 | |       | |  | (___ \_||_/ | | \_|    /  .-.  \ | |_ \_|    | (___ \_||_/ | | \_|  / _ \      | |_ \_|  | |_ \_|| (___ \_| 
+                 | |   _   | |   _.____`.     | |        | |   | | |  _|        _.____`.     | |     / ___ \     |  _|     |  _|    _.____`.  
+                _| |__/ | _| |_ | \____) |   _| |_       \  `-'  /_| |_        | \____) |   _| |_  _/ /   \ \_  _| |_     _| |_    | \____) | 
+               |________||_____| \______.'  |_____|       `.___.'|_____|        \______.'  |_____||____| |____||_____|   |_____|    \______.' 
+
+     )";
+     string border = "+-----+-----+-------------------------------+--------------+------------+-----------------------+--------+------------+--------------+--------------------+";
+     changeConsoleColor(14);
+     cout << title << endl;
+     cout << border << endl;
+     cout << "| STT | ID. |           FULL NAME           |     CCCD     | PHONE NUM. |        ADDRESS        | GENDER |  BIRTHDAY  |   POSITION   |       SALARY       |" << endl;
+     cout << border << endl;
+
+     changeConsoleColor(7);
+     int count = 0;
+     for (const auto staff : staffs)
      {
-          Sleep(1000);
-          string border = "+---------------+----------------------------------------+";
-          if (staff.getPosition() == "Manager")
-               changeConsoleColor(4);
-          else
-               changeConsoleColor(7);
-          cout << border << endl;
-          cout << "| Full Name     | " << left << setw(39) << staff.getFullName() << "|" << endl;
-          cout << border << endl;
-          cout << "| CCCD          | " << left << setw(39) << staff.getCCCD() << "|" << endl;
-          changeConsoleColor(7);
-          cout << border << endl;
-          cout << "| Phone         | " << left << setw(39) << staff.getPhone() << "|" << endl;
-          cout << border << endl;
-          cout << "| Address       | " << left << setw(39) << staff.getAdd() << "|" << endl;
-          if (staff.getGender() == "Nam")
-               changeConsoleColor(1);
-          else
+          ++count;
+          cout << "| " << right << setw(3) << setfill('0') << count << " | ";
+          char id = staff.getID()[0];
+          if (id == 'M')
                changeConsoleColor(12);
-          cout << border << endl;
-          cout << "| Gender        | " << left << setw(39) << staff.getGender() << "|" << endl;
-          cout << border << endl;
-          cout << "| Date of birth | " << left << setw(39);
-          staff.getDOB().display();
-          cout << "|" << endl;
+          else if (id == 'R')
+               changeConsoleColor(11);
+          else if (id == 'H')
+               changeConsoleColor(14);
+          else if (id == 'L')
+               changeConsoleColor(13);
+          else if (id == 'S')
+               changeConsoleColor(10);
 
-          if (staff.getPosition() == "Manager")
-               changeConsoleColor(2);
-          else if (staff.getPosition() == "Receptionist")
+          cout << staff.getID();
+          changeConsoleColor(7);
+          cout << " | ";
+          cout << left << setw(29) << setfill(' ') << staff.getFullName() << " | "
+               << staff.getCCCD() << " | " << staff.getPhone() << " | "
+               << setw(21) << staff.getAdd() << " | ";
+
+          string gender = staff.getGender();
+          if (gender == "Female")
+          {
+               changeConsoleColor(4);
+               cout << gender << " ";
+          }
+          else if (gender == "Male")
+          {
                changeConsoleColor(3);
-          else if (staff.getPosition() == "Housekeeping")
-               changeConsoleColor(5);
-          else if (staff.getPosition() == "Laundry")
-               changeConsoleColor(6);
-          else
-               changeConsoleColor(8);
+               cout << " " << gender << "  ";
+          }
+          changeConsoleColor(7);
 
+          cout << "| " << staff.getDOB() << " | ";
+          string position = staff.getPosition();
+          if (position == "Manager")
+               changeConsoleColor(12);
+          else if (position == "Receptionist")
+               changeConsoleColor(11);
+          else if (position == "Housekeeping")
+               changeConsoleColor(14);
+          else if (position == "Laundry")
+               changeConsoleColor(13);
+          else if (position == "Server")
+               changeConsoleColor(10);
+
+          cout << left << setw(12) << position;
+          changeConsoleColor(7);
+          cout << " | " << setw(18) << staff.getSalary() << " |" << endl;
           cout << border << endl;
-          cout << "| Staff ID      | " << left << setw(39) << staff.getID() << "|" << endl;
-          cout << border << endl;
-          cout << "| Staff Position| " << left << setw(39) << staff.getPosition() << "|" << endl;
-          cout << border << endl;
-          cout << "| Staff Salary  | " << left << setw(39) << staff.getSalary() << "|" << endl;
-          cout << border << endl;
-          cout << endl;
      }
+     cout << endl;
+}
+
+void Staff::displayStaff()
+{
+     Sleep(1000);
+     string border = "\t+---------------+------------------------------+";
+
+     cout << border << endl;
+     cout << "\t| Full Name     | " << left << setw(28) << getFullName() << " |" << endl;
+     cout << border << endl;
+     cout << "\t| CCCD          | " << left << setw(28) << getCCCD() << " |" << endl;
+     changeConsoleColor(7);
+     cout << border << endl;
+     cout << "\t| Phone         | " << left << setw(28) << getPhone() << " |" << endl;
+     cout << border << endl;
+     cout << "\t| Address       | " << left << setw(28) << getAdd() << " |" << endl;
+
+     cout << border << endl;
+     cout << "\t| Gender        | ";
+     if (getGender() == "Male")
+          changeConsoleColor(3);
+     else
+          changeConsoleColor(4);
+     cout << left << setw(28) << getGender();
+     changeConsoleColor(7);
+     cout << " |\n"
+          << border << endl;
+
+     cout << "\t| Date of birth | " << left << getDOB() << "                   |" << endl;
+     cout << border << endl;
+     cout << "\t| Staff ID      | ";
+
+     if (getPosition() == "Manager")
+          changeConsoleColor(2);
+     else if (getPosition() == "Receptionist")
+          changeConsoleColor(3);
+     else if (getPosition() == "Housekeeping")
+          changeConsoleColor(5);
+     else if (getPosition() == "Laundry")
+          changeConsoleColor(6);
+     else
+          changeConsoleColor(8);
+
+     cout << left << setw(28) << getID();
+     changeConsoleColor(7);
+     cout << " |\n"
+          << border << endl;
+
+     cout << "\t| Staff Position| ";
+     if (getPosition() == "Manager")
+          changeConsoleColor(2);
+     else if (getPosition() == "Receptionist")
+          changeConsoleColor(3);
+     else if (getPosition() == "Housekeeping")
+          changeConsoleColor(5);
+     else if (getPosition() == "Laundry")
+          changeConsoleColor(6);
+     else
+          changeConsoleColor(8);
+     cout << left << setw(28) << getPosition();
+     changeConsoleColor(7);
+     cout << " |\n"
+          << border << endl;
+
+     cout << "\t| Staff Salary  | " << left << setw(28) << getSalary() << " |" << endl;
+     cout << border << endl;
+     cout << endl;
 }
 
 void Staff::updateStaffFile(const vector<Staff> &staffs, const string &fileName)
@@ -490,7 +580,7 @@ bool Staff::changeRoomStatus(const string &roomID)
      return true;
 }
 
-bool Staff::updateStaff(const string &type, const string &infor, const string &ID)
+bool Staff::updateStaff(vector<Staff> &staffs, const int &index)
 {
      if (this->position != "Manager")
      {
@@ -500,50 +590,192 @@ bool Staff::updateStaff(const string &type, const string &infor, const string &I
           return false;
      }
 
-     string staffFile = "Staff.txt";
-     vector<Staff> staffs = readFileStaff(staffFile);
-     bool check = false;
+     clearFromPosition(1, 16);
 
-     for (auto &staff : staffs)
+     staffs[index].displayStaff();
+     changeConsoleColor(14);
+
+     gotoXY(60, 16);
+     cout << "+--------------------------------------------------------+";
+     gotoXY(60, 17);
+     cout << "|                   UPDATE INFORMATION                   |";
+     gotoXY(60, 18);
+     cout << "|   (Enter \'-\' if you do not want to make any changes)   |";
+     gotoXY(60, 19);
+     cout << "+------------------------------+-------------------------+";
+     gotoXY(60, 20);
+     cout << "| Phone Num. (10 digits only)  |                         |";
+     gotoXY(60, 21);
+     cout << "+------------------------------+-------------------------+";
+     gotoXY(60, 22);
+     cout << "| Position                     |                         |";
+     gotoXY(60, 23);
+     cout << "+------------------------------+-------------------------+";
+     gotoXY(60, 24);
+     cout << "| Salary (Only digits)         |                         |";
+     gotoXY(60, 25);
+     cout << "+------------------------------+-------------------------+";
+
+     changeConsoleColor(7);
+     string phone, position, id, salary;
+     do
      {
-          if (staff.getID() == ID)
+          ShowCur(1);
+          changeConsoleColor(7);
+          gotoXY(93, 20);
+          cout << string(phone.length(), ' ');
+          gotoXY(93, 20);
+          cin >> phone;
+          if (phone == "-")
+               break;
+
+          if (phone.length() != 10)
           {
-               if (type == "Phone")
-               {
-                    check = staff.setPhone(infor);
-               }
-               else if (type == "Position")
-               {
-                    check = staff.setPosition(infor);
-               }
-               else if (type == "Salary")
-               {
-                    staff.setSalary(infor);
-                    check = true;
-               }
-               else
-               {
-                    cout << "Invalid update type: " << type << endl;
-                    return false;
-               }
+               gotoXY(119, 20);
+               ShowCur(0);
+               changeConsoleColor(12);
+               cout << "Exactly 10 digits. Press Enter...";
+               _getch();
+               gotoXY(119, 20);
+               cout << string(40, ' ');
+          }
+          else if (!std::all_of(phone.begin(), phone.end(), ::isdigit))
+          {
+               gotoXY(119, 20);
+               ShowCur(0);
+               changeConsoleColor(12);
+               cout << "Only digits allowed. Press Enter...";
+               _getch();
+               gotoXY(119, 20);
+               cout << string(40, ' ');
+          }
+          else
+          {
+               changeConsoleColor(7);
                break;
           }
-     }
+     } while (true);
 
-     if (!check)
+     do
      {
-          changeConsoleColor(12);
-          cout << "Failed to update Staff's information. Invalid ID: " << ID << endl;
+          ShowCur(1);
           changeConsoleColor(7);
+          gotoXY(93, 22);
+          cout << string(position.length(), ' ');
+          gotoXY(93, 22);
+          cin >> position;
+          if (position == "-")
+               break;
+          position = toLower(position);
+          position[0] = toupper(position[0]);
+
+          if (position != "Manager" &&
+              position != "Receptionist" &&
+              position != "Housekeeping" &&
+              position != "Laundry" &&
+              position != "Server")
+          {
+               gotoXY(119, 22);
+               ShowCur(0);
+               changeConsoleColor(12);
+               cout << "Invalid position. Press Enter...";
+               _getch();
+               gotoXY(119, 22);
+               cout << string(40, ' ');
+          }
+          else
+          {
+               changeConsoleColor(7);
+               gotoXY(93, 22);
+               cout << string(position.length(), ' ');
+               gotoXY(93, 22);
+               cout << position;
+               break;
+          }
+     } while (true);
+
+     do
+     {
+          ShowCur(1);
+          gotoXY(93, 24);
+          cout << string(salary.length(), ' ');
+          gotoXY(93, 24);
+          changeConsoleColor(7);
+          cin >> salary;
+          if (salary == "-")
+               break;
+
+          if (!std::all_of(salary.begin(), salary.end(), ::isdigit))
+          {
+               gotoXY(119, 24);
+               ShowCur(0);
+               changeConsoleColor(12);
+               cout << "Only digits. Press Enter...";
+               _getch();
+               gotoXY(119, 24);
+               cout << string(40, ' ');
+          }
+          else
+          {
+               changeConsoleColor(7);
+               gotoXY(93, 24);
+               cout << string(salary.length(), ' ');
+               gotoXY(93, 24);
+               salary = Staff::formatSalary(salary);
+               cout << salary;
+               break;
+          }
+     } while (true);
+
+     gotoXY(60, 27);
+     ShowCur(0);
+     vector<string> content = {"Confirm", "Cancel"};
+     if (buttonList(68, 27, 14, 2, 16, content, "row") == 2)
+     {
           return false;
      }
+     else
+     {
+          if (phone == "-" && position == "-" && salary == "-")
+          {
+               gotoXY(65, 30);
+               cout << "Nothing to update!";
+               return true;
+          }
+          if (phone != "-")
+               staffs[index].setPhone(phone);
+          if (position != "-" && position != staffs[index].getPosition())
+          {
+               staffs[index].setPosition(position);
+               staffs[index].setID(Staff::generateStaffID(staffs, position));
+          }
+          if (salary != "-")
+               staffs[index].setSalary(salary);
+     }
 
-     staffs[0].updateStaffFile(staffs, staffFile);
+     ofstream file("Staff.txt", ios::trunc);
+     for (const auto &staff : staffs)
+     {
+          file << staff.getFullName() << "|"
+               << staff.getCCCD() << "|"
+               << staff.getPhone() << "|"
+               << staff.getAdd() << "|"
+               << staff.getGender() << "|"
+               << staff.getDOB().toString() << "|"
+               << staff.getID() << "|"
+               << staff.getPosition() << "|"
+               << staff.getSalary() << endl;
+     }
+     file.close();
 
+     Sleep(900);
+     gotoXY(65, 30);
      changeConsoleColor(2);
-     cout << "Successfully updated Staff's " << type << " to \""
-          << infor << "\" for ID: " << ID << endl;
+     cout << "Updated information successfully! Review new information ...";
+     gotoXY(1, 16);
      changeConsoleColor(7);
+     staffs[index].displayStaff();
+     _getch();
 
      return true;
 }
