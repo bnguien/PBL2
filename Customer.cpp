@@ -143,15 +143,16 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         maxColumnWidth = std::max(maxColumnWidth, serviceWidth);
     }
     const int consoleWidth = 120;
-
-    gotoXY(40, 10);
-    changeConsoleColor(14);
-    std::cout << "\n"
-              << "                                                         CUSTOMERS' INFORMATION IN OUR HOTEL" << endl;
-    changeConsoleColor(7);
+   
+     system("cls");
+     changeColor(12);
+     string filename = "title.txt";
+     ifstream inputFile(filename);
+     read_lines(filename, 33, 42);
+     inputFile.close();
+     changeColor(7);
     for (const auto &customer : customers)
     {
-        Sleep(1000);
         string border = "+---------------+" + string(maxColumnWidth + 2, '-') + "+";
         size_t tableWidth = border.length();
         int startX = (consoleWidth - tableWidth) / 2;
