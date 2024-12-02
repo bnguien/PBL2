@@ -299,8 +299,14 @@ bool Date::operator>(const Date &other) const
 
 ostream &operator<<(ostream &os, const Date &date)
 {
+    std::ios oldState(nullptr);
+    oldState.copyfmt(os);
+
     os << right << setw(2) << setfill('0') << date.getDay() << "/"
        << right << setw(2) << setfill('0') << date.getMonth() << "/"
        << date.getYear();
+
+    os.copyfmt(oldState);
+
     return os;
 }
