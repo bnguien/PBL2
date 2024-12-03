@@ -122,11 +122,11 @@ void Staff::showList(const vector<Staff> staffs)
                |________||_____| \______.'  |_____|       `.___.'|_____|        \______.'  |_____||____| |____||_____|   |_____|    \______.' 
 
      )";
-     string border = "+-----+-----+-------------------------------+--------------+------------+-----------------------+--------+------------+--------------+--------------------+";
+     string border = "+-----+------+-------------------------------+--------------+------------+-----------------------+--------+------------+--------------+--------------------+";
      changeConsoleColor(14);
      cout << title << endl;
      cout << border << endl;
-     cout << "| STT | ID. |           FULL NAME           |     CCCD     | PHONE NUM. |        ADDRESS        | GENDER |  BIRTHDAY  |   POSITION   |       SALARY       |" << endl;
+     cout << "| STT |  ID  |           FULL NAME           |     CCCD     | PHONE NUM. |        ADDRESS        | GENDER |  BIRTHDAY  |   POSITION   |       SALARY       |" << endl;
      cout << border << endl;
 
      changeConsoleColor(7);
@@ -308,33 +308,33 @@ void Staff::updateStaffFile(const vector<Staff> &staffs, const string &fileName)
 // Function danh cho Manager (=admin)
 string Staff::generateStaffID(const vector<Staff> &staffs, const string &position)
 {
-     if (position.empty())
+     if (position.empty() 
+     || (position != "Manager" 
+     && position != "Receptionist"
+     && position != "Laundry"
+     && position != "Server"
+     && position != "Housekeeping"))
      {
           cout << "Invalid position information!" << endl;
           return "";
      }
 
-     vector<Staff> temp;
-     for (const auto &staff : staffs)
+     vector<int> numberID;
+     for (const auto staff : staffs)
      {
           if (staff.getPosition() == position)
-               temp.push_back(staff);
+          {
+               numberID.push_back(stoi(staff.getID().substr(1,3)));
+          }
      }
-     if (temp.empty())
-     {
-          return string(1, position[0]) + "01";
-     }
-     else
-     {
-          string lastID = temp[temp.size() - 1].getID();
-
-          int lastNumber = stoi(lastID.substr(1));
-          lastNumber++;
-
-          stringstream newID;
-          newID << position[0] << setw(2) << setfill('0') << lastNumber;
-          return newID.str();
-     }
+     int max = numberID[0];
+     for (size_t i = 1; i < numberID.size(); i++)
+          if (numberID[i] > max)
+               max = numberID[i];
+     max++;
+     stringstream id;
+     id << position[0] << setw(3) << setfill('0') << to_string(max);
+     return id.str();
 }
 
 bool Staff::addNewStaff(Staff &newStaff)
