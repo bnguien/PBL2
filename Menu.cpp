@@ -700,7 +700,7 @@ void staffFunction(Staff &staff, vector<string> &function)
      vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
 
      function.push_back("RETURN");
-     int choice = buttonList(40, 12, 28, 2, 2, function, "column");
+     int choice = buttonList(40, 13, 28, 2, 2, function, "column");
      switch (choice)
      {
      case 1: // Add new staff
@@ -1070,7 +1070,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     gotoXY(48, 14);
                     cout << string(60, ' ');
                }
-               else if (!(isalpha(id[0]) && isdigit(id[1]) && isdigit(id[2])))
+               else if (!(isalpha(id[0]) && isdigit(id[1]) && isdigit(id[2]) && isdigit(id[3])))
                {
                     cout << "Invalid ID format! Valid format ex.: M001.  Press Enter ...";
                     _getch();
@@ -1153,94 +1153,30 @@ void staffFunction(Staff &staff, vector<string> &function)
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
 
+          boxTwoLine(10, 12, 29, 2, 14, 75, "Staff's CCCD to remove");
+          boxTwoLine(42, 12, 25, 2, 14, 150, " ");
+          
+          string CCCD;
           do
           {
-               cout << "-------------------------------------------";
-               char type;
-               cout << "\nDo you want to remove a staff(a) or by staff's CCCD?(b) (a/b)";
-               do
+               gotoXY(46, 13);
+               cout << string(CCCD.length(), ' ');
+               ShowCur(1);
+               changeColor(7);
+               gotoXY(46, 13);
+               cin >> CCCD;
+               if (CCCD.length() != 12 || !std::all_of(CCCD.begin(), CCCD.end(), ::isdigit))
                {
-                    cin >> type;
-                    type = tolower(type);
-               } while (type != 'a' && type != 'b');
-
-               if (type == 'a')
-               {
-                    changeColor(2);
-                    cout << "Please enter staff's information that you want to remove!\n";
-                    changeColor(7);
-                    string fullName, CCCD, phone, add, gender, day;
-                    string ID, position, salary;
-
-                    cin.ignore();
-                    cout << "Enter full name:\n\t";
-                    getline(cin, fullName);
-
-                    cout << "Enter CCCD: \n\t";
-                    cin >> CCCD;
-                    CCCD = trim(CCCD);
-
-                    cout << "Enter phone number:\n\t";
-                    cin >> phone;
-                    phone = trim(phone);
-
-                    cin.ignore();
-                    cout << "Enter address:\n\t";
-                    cin >> add;
-
-                    cout << "Enter gender:\n\t";
-                    cin >> gender;
-                    gender = trim(gender);
-
-                    cout << "Enter day of birth (dd/mm/yyyy):\n\t";
-                    cin >> day;
-                    Date DOB(day);
-
-                    cout << "Enter position: (Receptionist, Laundry, Housekeeping, Server)\n\t";
-                    cin >> position;
-                    position = toLower(position);
-                    position[0] = toupper(position[0]);
-
-                    cout << "Enter ID:\n\t";
-                    cin >> ID;
-                    cout << "Enter salary: ";
-                    cin >> salary;
-
-                    Staff staffToRemove(fullName, CCCD, phone, add, gender, DOB, ID, position, salary);
-
-                    if (!staff.removeStaff(staff))
-                    {
-                         cout << "\nDo you want to try again? (y/n)";
-                         string ch;
-                         cin >> ch;
-                         ch = toLower(ch);
-                         if (ch == "n")
-                              break;
-                    }
-                    else
-                         break;
+                    ShowCur(0);
+                    gotoXY(70, 13);
+                    changeColor(4);
+                    cout << "Exactly 12 digits! Press Enter ...";
+                    _getch();
+                    gotoXY(70, 13);
+                    cout << string(40, ' ');
                }
-               else if (type == 'b')
-               {
-                    string CCCD;
-                    cout << "Enter staff's CCCD you want to remove:\n\t";
-                    cin >> CCCD;
-                    CCCD = trim(CCCD);
-
-                    if (!staff.removeStaffByCCCD(CCCD))
-                    {
-                         cout << "\nDo you want to try again? (y/n)";
-                         string ch;
-                         cin >> ch;
-                         ch = toLower(ch);
-                         if (ch == "n")
-                              break;
-                    }
-                    else
-                         break;
-               }
-          } while (true);
-
+          } while(true);
+          _getch();
           break;
      }
 
