@@ -719,7 +719,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                changeColor(2);
                gotoXY(38, 12);
                cout << "Please enter new staff's information!";
-               changeColor(15);
+               changeColor(14);
 
                gotoXY(25, 14);
                cout << "+---------------------------------------------------------------------+";
@@ -764,10 +764,10 @@ void staffFunction(Staff &staff, vector<string> &function)
                gotoXY(25, 34);
                cout << "+---------------------------------------------------------------------+";
 
-               ShowCur(1);
                changeColor(7);
                do
                {
+                    ShowCur(1);
                     gotoXY(56, 17);
                     getline(cin, fullName);
                } while (fullName.empty());
@@ -777,6 +777,7 @@ void staffFunction(Staff &staff, vector<string> &function)
 
                do
                {
+                    ShowCur(1);
                     gotoXY(56, 19);
                     cout << string(CCCD.length(), ' ');
                     gotoXY(56, 19);
@@ -785,6 +786,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (CCCD.length() != 12)
                     {
                          gotoXY(97, 19);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Exactly 12 digits! Try again!";
                          changeConsoleColor(7);
@@ -797,6 +799,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (!std::all_of(CCCD.begin(), CCCD.end(), ::isdigit))
                     {
                          gotoXY(97, 19);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Only DIGITS! Try again!";
                          changeConsoleColor(7);
@@ -811,6 +814,7 @@ void staffFunction(Staff &staff, vector<string> &function)
 
                do
                {
+                    ShowCur(1);
                     gotoXY(56, 21);
                     cout << string(phone.length(), ' ');
                     gotoXY(56, 21);
@@ -819,6 +823,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (phone.length() != 10)
                     {
                          gotoXY(97, 21);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Exactly 10 digits! Try again!";
                          changeConsoleColor(7);
@@ -831,6 +836,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (!std::all_of(phone.begin(), phone.end(), ::isdigit))
                     {
                          gotoXY(97, 21);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Only DIGITS! Try again!";
                          changeConsoleColor(7);
@@ -843,6 +849,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (phone[0] != '0')
                     {
                          gotoXY(97, 21);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Phone must start with 0! Try again!";
                          changeConsoleColor(7);
@@ -857,12 +864,14 @@ void staffFunction(Staff &staff, vector<string> &function)
 
                do
                {
+                    ShowCur(1);
                     gotoXY(56, 23);
                     getline(cin, add);
                } while (add.empty());
 
                do
                {
+                    ShowCur(1);
                     gotoXY(56, 25);
                     cout << string(gender.length(), ' ');
                     gotoXY(56, 25);
@@ -875,6 +884,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (!(gender == "Male" || gender == "Female"))
                     {
                          gotoXY(97, 25);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Gender must be \'Male\' or \'Female\'! Try again!";
                          changeConsoleColor(7);
@@ -889,6 +899,7 @@ void staffFunction(Staff &staff, vector<string> &function)
 
                do
                {
+                    ShowCur(1);
                     gotoXY(56, 27);
                     cout << string(dob.length(), ' ');
                     gotoXY(56, 27);
@@ -897,6 +908,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (!Date::isValidDateFormat(dob))
                     {
                          gotoXY(97, 27);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Invalid format! Please enter dd/mm/yyyy!";
                          changeConsoleColor(7);
@@ -911,6 +923,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (Date::getCurrentDate().getYear() - DOB.getYear() < 18)
                     {
                          gotoXY(97, 27);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "The staff must be at least 18 years old!";
                          changeConsoleColor(7);
@@ -925,6 +938,7 @@ void staffFunction(Staff &staff, vector<string> &function)
 
                do
                {
+                    ShowCur(1);
                     gotoXY(56, 29);
                     cout << string(position.length(), ' ');
                     gotoXY(56, 29);
@@ -937,6 +951,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (!(position == "Manager" || position == "Receptionist" || position == "Housekeeping" || position == "Laundry" || position == "Server"))
                     {
                          gotoXY(97, 29);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Manager, Receptionist, Housekeeping, Laundry, Server!";
                          changeConsoleColor(7);
@@ -951,6 +966,7 @@ void staffFunction(Staff &staff, vector<string> &function)
 
                do
                {
+                    ShowCur(1);
                     gotoXY(56, 31);
                     cout << string(salary.length(), ' ');
                     gotoXY(56, 31);
@@ -959,6 +975,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     if (!std::all_of(salary.begin(), salary.end(), ::isdigit))
                     {
                          gotoXY(97, 31);
+                         ShowCur(0);
                          changeConsoleColor(4);
                          cout << "Only DIGITS! Try again!";
                          changeConsoleColor(7);
@@ -996,7 +1013,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                          changeConsoleColor(4);
                          cout << "Do you want to try again?";
                          changeConsoleColor(7);
-                         vector<string> yN = {"Try again", "Return"};
+                         vector<string> yN = {"Try again", "Cancel"};
                          int ch = buttonList(32, 37, 16, 2, 10, yN, "row");
 
                          if (ch == 1)
@@ -1046,16 +1063,16 @@ void staffFunction(Staff &staff, vector<string> &function)
                changeConsoleColor(3);
                gotoXY(48, 14);
                ShowCur(0);
-               if (id.length() != 3)
+               if (id.length() != 4)
                {
-                    cout << "ID has exactly 3 characters! Press Enter ...";
+                    cout << "ID has exactly 4 characters! Press Enter ...";
                     _getch();
                     gotoXY(48, 14);
                     cout << string(60, ' ');
                }
                else if (!(isalpha(id[0]) && isdigit(id[1]) && isdigit(id[2])))
                {
-                    cout << "Invalid ID format! Valid format ex.: M01.  Press Enter ...";
+                    cout << "Invalid ID format! Valid format ex.: M001.  Press Enter ...";
                     _getch();
                     gotoXY(48, 14);
                     cout << string(60, ' ');
@@ -1091,6 +1108,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                          }
                          else
                          {
+                              clearFromPosition(1, 1);
                               adminScreen(staff);
                               break;
                          }
@@ -1127,11 +1145,11 @@ void staffFunction(Staff &staff, vector<string> &function)
           break;
      }
 
-     case 3:
+     case 3: // Remove staff
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          // Remove staff
+          
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
 
