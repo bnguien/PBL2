@@ -51,7 +51,7 @@ public:
      void updateStaffFile(const vector<Staff> &staffs, const string &fileName);
      bool addNewStaff(Staff &newStaff);
      bool updateStaff(vector<Staff> &staffs, const int &index);
-     void removeStaffByCCCD(const string &CCCDToRemove);
+     bool removeStaffByCCCD(vector<Staff> &staffs);
 
      int cusExists(const vector<Customer> &customers, const Customer &newCus);
      bool writeRemainingCus(const vector<Customer> &remainingCustomers, const string &fileName);

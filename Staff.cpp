@@ -2,6 +2,7 @@
 #include "Customer.h"
 #include "Room.h"
 #include "Service.h"
+#include "Login.h"
 void adminScreen(Staff &staff);
 
 void Staff::setID(const string &ID)
@@ -308,12 +309,7 @@ void Staff::updateStaffFile(const vector<Staff> &staffs, const string &fileName)
 // Function danh cho Manager (=admin)
 string Staff::generateStaffID(const vector<Staff> &staffs, const string &position)
 {
-     if (position.empty() 
-     || (position != "Manager" 
-     && position != "Receptionist"
-     && position != "Laundry"
-     && position != "Server"
-     && position != "Housekeeping"))
+     if (position.empty() || (position != "Manager" && position != "Receptionist" && position != "Laundry" && position != "Server" && position != "Housekeeping"))
      {
           cout << "Invalid position information!" << endl;
           return "";
@@ -324,7 +320,7 @@ string Staff::generateStaffID(const vector<Staff> &staffs, const string &positio
      {
           if (staff.getPosition() == position)
           {
-               numberID.push_back(stoi(staff.getID().substr(1,3)));
+               numberID.push_back(stoi(staff.getID().substr(1, 3)));
           }
      }
      int max = numberID[0];
@@ -379,9 +375,99 @@ bool Staff::addNewStaff(Staff &newStaff)
      return true;
 }
 
-void Staff::removeStaffByCCCD(const string &CCCDToRemove)
+bool Staff::removeStaffByCCCD(vector<Staff> &staffs)
 {
-     
+     if (this->position != "Manager")
+     {
+          changeConsoleColor(4);
+          cout << "\nAccess Denied: Only Managers can add new staff members!" << endl;
+          changeConsoleColor(7);
+          return false;
+     }
+
+     boxTwoLine(10, 12, 29, 2, 14, 75, "Staff's CCCD to remove");
+     boxTwoLine(42, 12, 25, 2, 14, 150, " ");
+
+     string CCCD;
+     do
+     {
+          gotoXY(46, 13);
+          cout << string(CCCD.length(), ' ');
+          ShowCur(1);
+          gotoXY(46, 13);
+          cin >> CCCD;
+          if (CCCD.length() != 12 || !std::all_of(CCCD.begin(), CCCD.end(), ::isdigit))
+          {
+               ShowCur(0);
+               gotoXY(70, 13);
+               changeColor(4);
+               cout << "Exactly 12 digits! Press Enter ...";
+               _getch();
+               changeColor(7);
+               gotoXY(70, 13);
+               cout << string(40, ' ');
+          }
+          else 
+          {
+               ShowCur(0);
+               break;
+          }
+     } while (true);
+
+     if (staffs.empty())
+     {
+          changeConsoleColor(12);
+          gotoXY(40, 15);
+          cout << "+--------------------------------------------------+";
+          gotoXY(40, 16);
+          cout << "|                                                  |";
+          gotoXY(40, 17);
+          cout << "|             List of staffs is empty!             |";
+          gotoXY(40, 18);
+          cout << "|  Failed to remove STAFF with CCCD: " << CCCD << "  |";
+          gotoXY(40, 19);
+          cout << "|                                                  |";
+          gotoXY(40, 20);
+          cout << "+--------------------------------------------------+";
+          gotoXY(53, 21);
+          changeConsoleColor(7);
+          cout << "Press Enter to continue ...";
+          _getch();
+          return false;
+     }
+
+     int index = -1;
+     for (size_t i = 0; i < staffs.size(); i++)
+     {
+          if (staffs[i].getCCCD() == CCCD)
+          {
+               index = i;
+               break;
+          }
+     }
+
+     if (index == -1)
+          return false;
+     else
+     {
+          gotoXY(1, 15);
+          staffs[index].displayStaff();
+          vector<string> content = {"Confirm", "Cancel"};
+          if (buttonList(60, 18, 14, 2, 7, content, "row"))
+          {     
+               for (size_t i = 0; i < staffs.size() - 1; i++)
+               {
+                    if (i >= index)
+                    {
+                         staffs[i] = staffs[i+1];
+                    }
+               }
+               staffs.pop_back();
+               return true;
+          }
+          else
+               return false;
+     }
 }
 
 bool Staff::changeRoomStatus(const string &roomID)
@@ -1416,15 +1502,15 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
           std::cout << "ENTER CUSTOMER'S NAME AND CUSTOMER'S ID CARD(CCCD)" << endl;
           changeConsoleColor(14);
           gotoXY(25, 14);
-          std::cout << "|---------------------------------------------------------------------|" << std::endl;
+          std::cout << "+----------------------------+----------------------------------------+" << std::endl;
           gotoXY(25, 15);
           std::cout << "|  Customer's Name           |                                        |" << std::endl;
           gotoXY(25, 16);
-          std::cout << "|---------------------------------------------------------------------|" << std::endl;
+          std::cout << "+----------------------------+----------------------------------------+" << std::endl;
           gotoXY(25, 17);
           std::cout << "|  Customer's CCCD (ID card) |                                        |" << std::endl;
           gotoXY(25, 18);
-          std::cout << "|---------------------------------------------------------------------|" << std::endl;
+          std::cout << "+----------------------------+----------------------------------------+" << std::endl;
           string inputName, inputCCCD;
           changeConsoleColor(7);
           gotoXY(55, 15);
