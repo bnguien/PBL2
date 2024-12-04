@@ -1000,7 +1000,7 @@ void staffFunction(Staff &staff, vector<string> &function)
 
                ShowCur(0);
                Staff newStaff(fullName, CCCD, phone, add, gender, DOB, ID, position, salary);
-               vector<string> confirmation = {"Confirm", "Return"};
+               vector<string> confirmation = {"Confirm", "Cancel"};
                int confirm = buttonList(30, 35, 14, 2, 28, confirmation, "row");
 
                clearFromPosition(30, 35);
@@ -1099,19 +1099,11 @@ void staffFunction(Staff &staff, vector<string> &function)
                     {
                          gotoXY(20, 17);
                          changeConsoleColor(4);
-                         cout << "Cannot found staff's ID: " << id << ". Do you want to try again?";
-                         vector<string> choose = {"Try again", "Cancel"};
-                         int x = buttonList(10, 19, 16, 2, 3, choose, "row");
-                         if (x == 1)
-                         {
-                              clearFromPosition(20, 17);
-                         }
-                         else
-                         {
-                              clearFromPosition(1, 1);
-                              adminScreen(staff);
-                              break;
-                         }
+                         cout << "Cannot found staff's ID: " << id << ". Press Enter to continue ...";
+
+                         _getch();
+                         clearFromPosition(1, 10);
+                         staffFunction(staff, function);
                     }
                     else
                          break;
@@ -1149,34 +1141,51 @@ void staffFunction(Staff &staff, vector<string> &function)
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          
+
           cout << "\t\t\t---------- STAFF FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
 
-          boxTwoLine(10, 12, 29, 2, 14, 75, "Staff's CCCD to remove");
-          boxTwoLine(42, 12, 25, 2, 14, 150, " ");
-          
-          string CCCD;
-          do
+          vector<Staff> staffs = Staff::readFileStaff("Staff.txt");
+          if (!staff.removeStaffByCCCD(staffs))
           {
-               gotoXY(46, 13);
-               cout << string(CCCD.length(), ' ');
-               ShowCur(1);
-               changeColor(7);
-               gotoXY(46, 13);
-               cin >> CCCD;
-               if (CCCD.length() != 12 || !std::all_of(CCCD.begin(), CCCD.end(), ::isdigit))
+               clearFromPosition(1, 11);
+               changeConsoleColor(4);
+               gotoXY(40, 13);
+               cout << "+--------------------------------+";
+               gotoXY(40, 14);
+               cout << "|     Failed to remove staff     |";
+               gotoXY(40, 15);
+               cout << "|   Press Enter to continue...   |";
+               gotoXY(40, 16);
+               cout << "+--------------------------------+";
+
+               changeConsoleColor(7);
+               _getch();
+               clearFromPosition(1, 10);
+               staffFunction(staff, function);
+          }
+          else
+          {
+               clearFromPosition(1, 12);
+               Staff::showList(staffs);
+
+               cout << "\n\tSuccessfully remove staff!" << endl;
+               _getch();
+               ofstream file("Staff.txt", ios::trunc);
+               for (const auto &staff : staffs)
                {
-                    ShowCur(0);
-                    gotoXY(70, 13);
-                    changeColor(4);
-                    cout << "Exactly 12 digits! Press Enter ...";
-                    _getch();
-                    gotoXY(70, 13);
-                    cout << string(40, ' ');
+                    file << staff.getFullName() << "|"
+                         << staff.getCCCD() << "|"
+                         << staff.getPhone() << "|"
+                         << staff.getAdd() << "|"
+                         << staff.getGender() << "|"
+                         << staff.getDOB().toString() << "|"
+                         << staff.getID() << "|"
+                         << staff.getPosition() << "|"
+                         << staff.getSalary() << endl;
                }
-          } while(true);
-          _getch();
+               file.close();
+          }
           break;
      }
 
