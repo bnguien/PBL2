@@ -1532,7 +1532,7 @@ bool Staff::findCustomer(vector<Customer> &findCus)
 
           for (auto cus : customers)
           {
-               if (cus.getLastName().find(att) != string::npos)
+               if (toLower(cus.getLastName()).find(att) != string::npos)
                     findCus.push_back(cus);
           }
           break;
