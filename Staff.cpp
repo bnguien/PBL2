@@ -407,7 +407,7 @@ bool Staff::removeStaffByCCCD(vector<Staff> &staffs)
                gotoXY(70, 13);
                cout << string(40, ' ');
           }
-          else 
+          else
           {
                ShowCur(0);
                break;
@@ -454,12 +454,12 @@ bool Staff::removeStaffByCCCD(vector<Staff> &staffs)
           staffs[index].displayStaff();
           vector<string> content = {"Confirm", "Cancel"};
           if (buttonList(60, 18, 14, 2, 7, content, "row"))
-          {     
+          {
                for (size_t i = 0; i < staffs.size() - 1; i++)
                {
                     if (i >= index)
                     {
-                         staffs[i] = staffs[i+1];
+                         staffs[i] = staffs[i + 1];
                     }
                }
                staffs.pop_back();
@@ -1358,107 +1358,189 @@ bool Staff::removeCustomerByCCCD(const Staff &staff, const string &CCCDToRemove)
           return false;
 }
 
-bool Staff::findCustomerByCCCD(const Staff &staff, const string &CCCD)
+bool Staff::findCustomer(vector<Customer> &findCus)
 {
-     string customerFile = "Customer.txt";
-     if (hasAccess(staff))
+     vector<string> content = {"Find by CCCD",
+                               "Find by First Name",
+                               "Find by Last Name",
+                               "Find by Full Name",
+                               "Find by A Letter"};
+
+     vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+     if (customers.empty())
+          return false;
+     
+     string attribute;
+     string nameType;
+     char att;
+     int button = buttonList(5, 12, 25, 2, 6, content, "row");
+     switch (button)
      {
-          vector<Customer> customers = Customer::readFileCustomer(customerFile);
-          Customer tempCustomer;
-          tempCustomer.setCCCD(CCCD);
-          int index = cusExists(customers, tempCustomer);
+     case 1: // Find by CCCD
+          boxTwoLine(30, 16, 11, 2, 14, 235, "CCCD");
+          boxTwoLine(46, 16, 19, 2, 14, 235, " ");
 
-          if (index < 0)
+          do
           {
-               changeConsoleColor(4);
-               cout << "Cannot find this customer's information!" << endl;
-               changeConsoleColor(7);
-               return false;
-          }
-
-          vector<Customer> tempCustomers;
-          tempCustomers.push_back(tempCustomer);
-          vector<Service> services = Service::readFileService("Service.txt");
-          tempCustomer.displayCustomer(tempCustomers, services);
-          return true;
-     }
-     return false;
-}
-
-bool Staff::findCustomerByAttribute(const Staff &staff, const string &attributeName, const string &attributeValue)
-{
-     if (hasAccess(staff))
-     {
-          vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
-          vector<Customer> customerList;
-
-          for (auto &customer : customers)
-          {
-               if ((attributeName == "firstName" && customer.getFirstName() == attributeValue) ||
-                   (attributeName == "lastName" && customer.getLastName() == attributeValue))
+               gotoXY(50, 17);
+               cout << string(attribute.length(), ' ');
+               gotoXY(50, 17);
+               ShowCur(1);
+               changeConsoleColor(11);
+               cin >> attribute;
+               ShowCur(0);
+               if (attribute.length() != 12 &&
+                   !(std::all_of(attribute.begin(), attribute.end(), ::isdigit)))
                {
-                    customerList.push_back(customer);
+                    gotoXY(67, 17);
+                    changeColor(4);
+                    cout << "Exactly 12 digits. Press Enter...";
+                    _getch();
+                    gotoXY(67, 17);
+                    cout << string(65, ' ');
+               }
+               else
+               {
+                    changeColor(7);
+                    break;
+               }
+          } while (true);
+
+          for (const auto &cus : customers)
+          {
+               if (cus.getCCCD() == attribute)
+               {
+                    findCus.push_back(cus);
                }
           }
+          break;
 
-          if (!customerList.empty())
+     case 2: // FirstName
+     case 3: // Last Name
+          nameType = (button == 2) ? "First Name" : "Last Name";
+          boxTwoLine(30, 16, 17, 2, 14, 235, nameType);
+          boxTwoLine(49, 16, 19, 2, 14, 235, " ");
+
+          do
           {
-               vector<Service> services = Service::readFileService("Service.txt");
-               customers[0].displayCustomer(customerList, services);
-               return true;
-          }
-          else
+               gotoXY(53, 17);
+               cout << string(attribute.length(), ' ');
+               gotoXY(53, 17);
+               changeColor(11);
+               ShowCur(1);
+               cin >> attribute;
+               ShowCur(0);
+
+               if (!std::all_of(attribute.begin(), attribute.end(), ::isalpha))
+               {
+                    gotoXY(70, 17);
+                    changeColor(4);
+                    cout << "Only alphabetic characters. Press Enter...";
+                    _getch();
+                    gotoXY(70, 17);
+                    cout << string(65, ' ');
+               }
+               else
+               {
+                    attribute = toLower(attribute);
+                    attribute[0] = toupper(attribute[0]);
+                    changeColor(7);
+                    break;
+               }
+          } while (true);
+
+          for (auto cus : customers)
           {
-               changeConsoleColor(4);
-               cout << "No customer found with the " << attributeName << ": " << attributeValue << endl;
-               changeConsoleColor(7);
-               return false;
+               if ((button == 2 && cus.getFirstName() == attribute) ||
+                    (button == 3 && cus.getLastName() == attribute))
+                    findCus.push_back(cus);
           }
+          break;
+
+     case 4: // Find by Full Name
+          boxTwoLine(30, 16, 17, 2, 14, 235, "Full Name");
+          boxTwoLine(49, 16, 30, 2, 14, 235, " ");
+
+          do
+          {
+               gotoXY(53, 17);
+               cout << string(attribute.length(), ' ');
+               gotoXY(53, 17);
+               changeColor(11);
+               ShowCur(1);
+               getline(cin, attribute);
+               attribute = Person::standardizeString(attribute);
+               gotoXY(53, 17);
+               cout << attribute;
+               ShowCur(0);
+
+               if (!std::all_of(attribute.begin(), attribute.end(), [](char c) { return ::isalpha(c) || ::isspace(c); }))
+               {
+                    gotoXY(81, 17);
+                    changeColor(4);
+                    cout << "Only alphabetic characters. Press Enter...";
+                    _getch();
+                    gotoXY(81, 17);
+                    cout << string(65, ' ');
+               }
+               else
+               {
+                    changeColor(7);
+                    break;
+               }
+          } while (true);
+
+          for (const auto &cus : customers)
+          {
+               if (cus.getFullName() == attribute)
+                    findCus.push_back(cus);
+          }
+          break;
+
+     case 5: // Find By A Letter
+          boxTwoLine(30, 16, 17, 2, 14, 235, "Letter");
+          boxTwoLine(49, 16, 19, 2, 14, 235, " ");
+
+          do
+          {
+               gotoXY(53, 17);
+               cout << " ";
+               gotoXY(53, 17);
+               changeColor(11);
+               ShowCur(1);
+               cin >> att;
+               att = tolower(att);
+               gotoXY(53, 17);
+               cout << att;
+               ShowCur(0);
+
+               if (!isalpha(att))
+               {
+                    gotoXY(70, 17);
+                    changeColor(4);
+                    cout << "Only alphabetic letter. Press Enter...";
+                    _getch();
+                    gotoXY(70, 17);
+                    cout << string(65, ' ');
+               }
+               else
+               {
+                    changeColor(7);
+                    break;
+               }
+          } while (true);
+
+          for (auto cus : customers)
+          {
+               if (toLower(cus.getLastName()).find(att) != string::npos)
+                    findCus.push_back(cus);
+          }
+          break;
      }
-
-     return false;
-}
-
-bool Staff::findCustomerByFirstName(const Staff &staff, const string &firstName)
-{
-     return findCustomerByAttribute(staff, "firstName", firstName);
-}
-
-bool Staff::findCustomerByLastName(const Staff &staff, const string &lastName)
-{
-     return findCustomerByAttribute(staff, "lastName", lastName);
-}
-
-bool Staff::findCustomerByLetter(const Staff &staff, const char &letter)
-{
-     string customerFile = "Customer.txt";
-     if (hasAccess(staff))
+     if (findCus.empty())
           return false;
-     {
-          vector<Customer> customers = Customer::readFileCustomer(customerFile);
-          vector<Customer> customerList;
-
-          for (const auto &customer : customers)
-          {
-               if (tolower(customer.getFullName().find(tolower(letter)) != string::npos) ||
-                   toupper(customer.getFullName().find(toupper(letter)) != string::npos))
-                    customerList.push_back(customer);
-          }
-
-          if (!customerList.empty())
-          {
-               vector<Service> services = Service::readFileService("Service.txt");
-               customers[0].displayCustomer(customerList, services);
-               return true;
-          }
-          else
-          {
-               changeConsoleColor(4);
-               cout << "No customer found with the character '" << toupper(letter) << "' in their name." << endl;
-               changeConsoleColor(7);
-               return false;
-          }
-     }
+     else
+          return true;
 }
 
 bool Staff::changeServicePrice(const string &serID, const string &price)

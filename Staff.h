@@ -45,7 +45,6 @@ public:
      static vector<Staff> readFileStaff(const string &fileName);
      static string generateStaffID(const vector<Staff> &staffs, const string &position);
      void displayStaff();
-     bool findCustomerByAttribute(const Staff &staff, const string &attributeName, const string &attributeValue);
      bool hasAccess(const Staff &staff) const ;
 
      void updateStaffFile(const vector<Staff> &staffs, const string &fileName);
@@ -59,10 +58,7 @@ public:
      bool updateCustomer (Staff &staff, const string &fileName, vector<Customer> &customers);
      bool removeCustomerByCCCD(const Staff &staff,const string &CCCDToRemove);
 
-     bool findCustomerByCCCD(const Staff &staff, const string &CCCD);
-     bool findCustomerByFirstName(const Staff &staff,const string &firstName);
-     bool findCustomerByLastName(const Staff &staff,const string &lastName);
-     bool findCustomerByLetter(const Staff &staff,const char &letter);
+     bool findCustomer(vector<Customer> &findCus);
 
      bool changeRoomStatus(const string &roomID);
      bool changeServicePrice(const string &serID, const string &price);
