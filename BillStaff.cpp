@@ -19,7 +19,7 @@ void BillStaff::checkBillByNameAndCCCD(Staff &staff, const vector<Customer> &cus
         gotoXY(20, 13);
         std::cout << "|----------------------------------------------------------|";
         gotoXY(20, 14);
-        std::cout << "|Customer name              |                              |";
+        std::cout << "|Customer's name            |                              |";
         gotoXY(20, 15);
         std::cout << "|----------------------------------------------------------|";
         gotoXY(20, 16);
