@@ -1212,7 +1212,7 @@ void staffFunction(Staff &staff, vector<string> &function)
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore();
+     _getch();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -1290,109 +1290,35 @@ void customerFunction(Staff &staff, vector<string> &function)
 
           break;
      }
-     case 3:
+     case 3: // Find
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          // Find
+          
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
 
-          changeColor(2);
-          cout << "Choose what you want to find by:\n\t1. By CCCD\n\t2. By First Name\n\t3. By Last Name\n\t4. By Letter" << endl;
-          changeColor(7);
-          int choose;
-          cin >> choose;
-          switch (choose)
+          vector<Customer> findCus;
+          if(staff.findCustomer(findCus))
           {
-          case 1:
-               do
-               {
-                    string CCCD;
-                    getline(cin, CCCD);
-                    if (!staff.findCustomerByCCCD(staff, CCCD))
-                    {
-                         cout << "\nDo you want to try again? (y/n)";
-                         string ch;
-                         cin >> ch;
-                         ch = toLower(ch);
-                         if (ch == "n")
-                              break;
-                    }
-                    else
-                         break;
-
-               } while (true);
-               break;
-          case 2:
-               do
-               {
-                    string firstName;
-                    cin.ignore();
-                    cout << "Enter customer's first name:\n\t";
-                    getline(cin, firstName);
-
-                    if (!staff.findCustomerByFirstName(staff, firstName))
-                    {
-                         cout << "\nDo you want to try again? (y/n)";
-                         string ch;
-                         cin >> ch;
-                         ch = toLower(ch);
-                         if (ch == "n")
-                              break;
-                    }
-                    else
-                         break;
-
-               } while (true);
-               break;
-          case 3:
-               do
-               {
-                    string lastName;
-                    cin.ignore();
-                    cout << "Enter customer's first name:\n\t";
-                    getline(cin, lastName);
-
-                    if (!staff.findCustomerByLastName(staff, lastName))
-                    {
-                         cout << "\nDo you want to try again? (y/n)";
-                         string ch;
-                         cin >> ch;
-                         ch = toLower(ch);
-                         if (ch == "n")
-                              break;
-                    }
-                    else
-                         break;
-
-               } while (true);
-               break;
-          case 4:
-               do
-               {
-                    char letter;
-                    cin.ignore();
-                    cout << "Enter letter in customer's name:\n\t";
-                    cin >> letter;
-
-                    if (!staff.findCustomerByLetter(staff, letter))
-                    {
-                         cout << "\nDo you want to try again? (y/n)";
-                         string ch;
-                         cin >> ch;
-                         ch = toLower(ch);
-                         if (ch == "n")
-                              break;
-                    }
-                    else
-                         break;
-
-               } while (true);
-               break;
-          default:
+               gotoXY(1, 21);
+               staff.displayCustomer(findCus);
+               _getch();
+          }
+          else
+          {
                changeColor(4);
-               cout << "Please enter valid choice!\n";
+               gotoXY(40, 21);
+               cout << "+-------------------------------------+";
+               gotoXY(40, 22);
+               cout << "|                                     |";
+               gotoXY(40, 23);
+               cout << "|      Failed to find Customers!      |";
+               gotoXY(40, 24);
+               cout << "|                                     |";
+               gotoXY(40, 25);
+               cout << "+-------------------------------------+";
                changeColor(7);
+               _getch();
           }
           break;
      }
@@ -1532,7 +1458,7 @@ void customerFunction(Staff &staff, vector<string> &function)
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore();
+     _getch();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -1642,7 +1568,7 @@ void roomFunction(Staff &staff, vector<string> &function)
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore();
+     _getch();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
@@ -1749,7 +1675,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
      }
 
      cout << "\nPress Enter to continue..." << endl;
-     cin.ignore();
+     _getch();
      Sleep(900);
      system("cls");
      gotoXY(25, 4);
