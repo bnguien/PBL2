@@ -121,12 +121,8 @@ Date Bill::inputCheckoutDate(const Date &checkInDate)
         changeColor(7);
         getline(cin, dateStr);
         stringstream ss(dateStr);
-        ss >> day >> month >> year;
-
-        if (cin.fail())
+        if (!(ss >> day >> month >> year)|| !ss.eof())
         {
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             gotoXY(83, 20);
             changeColor(4);
             cout << "Invalid input format. Please enter numeric values (DD MM YYYY)." << endl;
@@ -136,7 +132,7 @@ Date Bill::inputCheckoutDate(const Date &checkInDate)
             changeColor(7);
             continue;
         }
-
+        
         if (!Date::isValid(day, month, year))
         {
             gotoXY(83, 20);
@@ -204,6 +200,7 @@ void Bill::checkBillInfo(const string &inputUserName, const string &inputPasswor
             customer.getArrivalDate().display();
             changeColor(7);
             checkoutDate = inputCheckoutDate(customer.getArrivalDate());
+            gotoXY(83, 20);
             vector<string> Options = {"Cancel", "Confirm"};
             int optionIndex = buttonList(26, 22, 15, 2, 18, Options, "row");
             string selectedOption = Options[optionIndex - 1];
