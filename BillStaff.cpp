@@ -35,37 +35,48 @@ void BillStaff::checkBillByNameAndCCCD(Staff &staff, const vector<Customer> &cus
         do
         {
             gotoXY(50, 16);
-            changeColor(7);
             std::getline(std::cin, CCCD);
 
             if (CCCD.length() != 12)
             {
                 changeConsoleColor(4);
-                gotoXY(83, 16);
-                std::cout << "CCCD must have exactly 12 digits! Press enter to try again.";
+                gotoXY(84, 16);
+                cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
                 changeConsoleColor(7);
                 _getch();
-                gotoXY(83, 16);
-                std::cout << string(75, ' ');
+                gotoXY(84, 16);
+                cout << string(75, ' ');
             }
             else
             {
-                bool isDigitOnly = std::all_of(CCCD.begin(), CCCD.end(), ::isdigit);
-                if (!isDigitOnly)
+                bool isDigitOnly = true;
+                for (size_t i = 0; i < CCCD.length(); i++)
                 {
-                    gotoXY(83, 16);
-                    changeConsoleColor(4);
-                    std::cout << "CCCD must contain only digits! Press enter to try again.";
-                    changeConsoleColor(7);
-                    _getch();
-                    gotoXY(83, 16);
-                    std::cout << string(75, ' ');
+                    if (!isdigit(CCCD[i]))
+                    {
+                        isDigitOnly = false;
+                        gotoXY(84, 16);
+                        changeConsoleColor(4);
+                        cout << "CCCD must have only digits!Press enter to try again" << endl;
+                        changeConsoleColor(7);
+                        _getch();
+                        gotoXY(84, 16);
+                        cout << string(75, ' ');
+                        break;
+                    }
                 }
-                else
+                if (isDigitOnly)
                 {
                     isValidCCCD = true;
                 }
             }
+
+            if (!isValidCCCD)
+            {
+                gotoXY(50, 16);
+                cout << string(CCCD.length(), ' ');
+            }
+
         } while (!isValidCCCD);
 
         std::string lowerCustomerName = toLower(customerName);
@@ -87,10 +98,12 @@ void BillStaff::checkBillByNameAndCCCD(Staff &staff, const vector<Customer> &cus
                 checkoutDate = inputCheckoutDate(customer.getArrivalDate());
                 std::string paymentMethod;
                 gotoXY(20, 22);
+                changeColor(14);
                 std::cout << "|Enter Payment Method       |                              |";
                 gotoXY(20, 23);
                 std::cout << "|----------------------------------------------------------|";
                 gotoXY(50, 22);
+                changeColor(7);
                 std::getline(std::cin, paymentMethod);
                 system("cls");
 
@@ -251,7 +264,6 @@ void BillStaff::checkBillByNameAndCCCD(Staff &staff, const vector<Customer> &cus
                 {
                     gotoXY(startX, currentY++);
                     changeConsoleColor(4);
-                    std::cout << "The customer has not paid yet." << std::endl;
                 }
                 else
                 {
@@ -289,7 +301,7 @@ void BillStaff::checkBillByNameAndCCCD(Staff &staff, const vector<Customer> &cus
             {
                 clearFromPosition(1, 1);
                 adminScreen(staff);
-                return ;
+                return;
             }
         }
 
