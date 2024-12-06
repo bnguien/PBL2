@@ -926,21 +926,22 @@ bool Staff::addNewCustomer(Staff &staff)
      std::cout << "+-------------------------------------------------------+" << std::endl;
 
      changeConsoleColor(15);
+
      do
-    {
-        gotoXY(69, 14);
-        std::getline(std::cin, fullName);
-        if (fullName.empty())
-        {
-            changeConsoleColor(4);
-            gotoXY(99, 14);
-            std::cout << "Customer's name cannot be empty. Please try again.";
-            changeConsoleColor(7);
-            _getch();
-            gotoXY(99, 14);
-            std::cout << string(75, ' ');
-        }
-    } while (fullName.empty());
+     {
+          gotoXY(69, 14);
+          std::getline(std::cin, fullName);
+          if (fullName.empty())
+          {
+               changeConsoleColor(4);
+               gotoXY(99, 14);
+               std::cout << "Customer's name cannot be empty. Please try again.";
+               changeConsoleColor(7);
+               _getch();
+               gotoXY(99, 14);
+               std::cout << string(75, ' ');
+          }
+     } while (fullName.empty());
 
      bool isValidCCCD = false;
 
@@ -1511,49 +1512,116 @@ bool Staff::findCustomer(vector<Customer> &findCus)
           break;
 
      case 5: // Find By A Letter
-          boxTwoLine(30, 16, 17, 2, 14, 235, "Letter");
-          boxTwoLine(49, 16, 19, 2, 14, 235, " ");
+          vector<string> options = {
+              "Find by First Name",
+              "Find by Last Name",
+          };
+          int choice = buttonList(18, 17, 25, 2, 2, options, "row");
 
-          do
+          switch (choice)
           {
-               gotoXY(53, 17);
-               cout << " ";
-               gotoXY(53, 17);
-               changeColor(11);
-               ShowCur(1);
-               cin >> att;
-               att = tolower(att);
-               gotoXY(53, 17);
-               cout << att;
-               ShowCur(0);
-
-               if (!isalpha(att))
+          case 1:
+               boxTwoLine(78, 17, 17, 2, 14, 235, "Letter");
+               boxTwoLine(97, 17, 19, 2, 14, 235, " ");
+               do
                {
-                    gotoXY(70, 17);
+                    gotoXY(101, 18);
+                    cout << " ";
+                    gotoXY(101, 18);
+                    changeColor(11);
+                    ShowCur(1);
+                    cin >> att;
+                    att = tolower(att);
+                    gotoXY(101, 18);
+                    cout << att;
+                    ShowCur(0);
+
+                    if (!isalpha(att))
+                    {
+                         gotoXY(70, 19);
+                         changeColor(4);
+                         cout << "Only alphabetic letters. Press Enter...";
+                         _getch();
+                         gotoXY(70, 19);
+                         cout << string(65, ' ');
+                    }
+                    else
+                    {
+                         changeColor(7);
+                         break;
+                    }
+               } while (true);
+
+               for (auto cus : customers)
+               {
+                    string fullName = toLower(cus.getFirstName());
+                    size_t firstSpace = fullName.find(' ');
+
+                    string lastName = (firstSpace != string::npos) ? fullName.substr(0, firstSpace) : fullName;
+                    if (lastName[0] == att)
+                    {
+                         findCus.push_back(cus);
+                    }
+               }
+
+               if (findCus.empty())
+               {
                     changeColor(4);
-                    cout << "Only alphabetic letter. Press Enter...";
-                    _getch();
-                    gotoXY(70, 17);
-                    cout << string(65, ' ');
-               }
-               else
-               {
+                    gotoXY(70, 19);
+                    cout << "No customers found with last name starting with '" << att << "'.";
                     changeColor(7);
-                    break;
+                    _getch();
                }
-          } while (true);
+               break;
+          case 2:
+               boxTwoLine(78, 17, 17, 2, 14, 235, "Letter");
+               boxTwoLine(97, 17, 19, 2, 14, 235, " ");
+               do
+               {
+                    gotoXY(101, 18);
+                    cout << " ";
+                    gotoXY(101, 18);
+                    changeColor(11);
+                    ShowCur(1);
+                    cin >> att;
+                    att = tolower(att);
+                    gotoXY(101, 18);
+                    cout << att;
+                    ShowCur(0);
+                    if (!isalpha(att))
+                    {
+                         gotoXY(70, 19);
+                         changeColor(4);
+                         cout << "Only alphabetic letters. Press Enter...";
+                         _getch();
+                         gotoXY(70, 19);
+                         cout << string(65, ' ');
+                    }
+                    else
+                    {
+                         changeColor(7);
+                         break;
+                    }
+               } while (true);
 
-          for (auto cus : customers)
-          {
-               if (toLower(cus.getLastName()).find(att) != string::npos)
-                    findCus.push_back(cus);
+               for (auto cus : customers)
+               {
+                    string fullName = toLower(cus.getLastName());
+                    size_t firstSpace = fullName.find(' ');
+
+                    string lastName = (firstSpace != string::npos) ? fullName.substr(0, firstSpace) : fullName;
+                    if (lastName[0] == att)
+                    {
+                         findCus.push_back(cus);
+                    }
+               }
+
+               if (findCus.empty())
+                    return false;
+               else
+                    return true;
           }
-          break;
      }
-     if (findCus.empty())
-          return false;
-     else
-          return true;
 }
 
 bool Staff::changeServicePrice(const string &serID, const string &price)
@@ -1609,7 +1677,7 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
           string inputName, inputCCCD;
           changeConsoleColor(7);
           do
-          {               
+          {
                gotoXY(55, 15);
                getline(cin, inputName);
                if (inputName.empty())
