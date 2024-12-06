@@ -160,7 +160,7 @@ void Person::displayPerson(const vector<Person>& people) {
     }
 }
 
-string Person::getFirstName()
+string Person::getLastName()
 {
      std::istringstream iss(fullName);
      std::string firstName;
@@ -168,7 +168,7 @@ string Person::getFirstName()
      return firstName;
 }
 
-string Person::getLastName()
+string Person::getFirstName()
 {
      std::istringstream iss(fullName);
      vector<std::string> nameParts;
