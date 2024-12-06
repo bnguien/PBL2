@@ -1294,11 +1294,11 @@ void customerFunction(Staff &staff, vector<string> &function)
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          
+
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
 
           vector<Customer> findCus;
-          if(staff.findCustomer(findCus))
+          if (staff.findCustomer(findCus))
           {
                gotoXY(1, 21);
                staff.displayCustomer(findCus);
@@ -1350,12 +1350,27 @@ void customerFunction(Staff &staff, vector<string> &function)
           cout << "+----------------------------------------------------------------------+";
 
           ShowCur(1);
-          string fullName, CCCD;
+          string FullName, CCCD;
+     do {
           do
           {
                gotoXY(68, 17);
-               getline(cin, fullName);
-          } while (!fullName.empty());
+               cout << string(FullName.length(), ' ');
+               gotoXY(68, 19);
+               cout << string(CCCD.length(), ' ');
+               gotoXY(68, 17);
+               std::getline(std::cin, FullName);
+               if (FullName.empty())
+               {
+                    changeConsoleColor(4);
+                    gotoXY(113, 17);
+                    std::cout << "Customer's name cannot be empty";
+                    changeConsoleColor(7);
+                    _getch();
+                    gotoXY(113, 17);
+                    std::cout << string(75, ' ');
+               }
+          } while (FullName.empty());
 
           do
           {
@@ -1366,11 +1381,13 @@ void customerFunction(Staff &staff, vector<string> &function)
 
                if (CCCD.length() != 12)
                {
+                    changeConsoleColor(4);
                     gotoXY(113, 19);
                     cout << "Exactly 12 digits! Try again!";
                     _getch();
                     gotoXY(113, 19);
                     cout << string(30, ' ');
+                    changeConsoleColor(7);
                     continue;
                }
                else
@@ -1379,23 +1396,57 @@ void customerFunction(Staff &staff, vector<string> &function)
                     {
                          if (!isdigit(CCCD[i]))
                          {
+                              changeConsoleColor(4);
                               gotoXY(113, 19);
                               cout << "Only DIGITS! Try again!";
                               _getch();
                               gotoXY(113, 19);
                               cout << string(30, ' ');
+                              changeConsoleColor(7);
                               continue;
                          }
                     }
                     break;
                }
+          } while(true);
+     
+               bool foundCustomer = false;
+               for (const auto &customer : customers)
+               {
+                    if (customer.getFullName() == FullName && customer.getCCCD() == CCCD)
+                    {
+                         foundCustomer = true;
+                         break;
+                    }
+               }
+
+               if (!foundCustomer)
+               {
+                    changeConsoleColor(4);
+                    gotoXY(40, 22);
+                    cout << "Error: Customer not found. Please check customer's information again!!";
+                    changeConsoleColor(7);
+                    _getch();
+                    gotoXY(40, 22);
+                    cout << string(75, ' ');
+                    gotoXY(68, 17);
+                    continue;
+               }
+               else 
+               {
+                    foundCustomer = true;
+                    break;
+               }
           } while (true);
 
-          clearFromPosition(1, 11);
-          string username = createUsername(trim(fullName));
-          string password = trim(CCCD);
-          Customer cus;
-          cus.bookServices(username, password, customers);
+          changeColor(14);
+          system("cls");
+          string filename = "title.txt";
+          read_lines(filename, 43, 52);
+          changeColor(7);
+          string username1 = createUsername(trim(FullName));
+          string password1 = trim(CCCD);
+          cus.bookServices(username1, password1, customers);
           ShowCur(0);
           break;
      }
