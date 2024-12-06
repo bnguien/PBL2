@@ -1030,7 +1030,24 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
         std::cout << "No services booked." << endl;
     else
     {
-        std::cout << "Services booked successfully for Room ID: " << roomID << endl;
+        system("cls");
+        changeColor(9);
+        string filename = "title.txt";
+        read_lines(filename, 54, 58);
+        changeColor(2);
+        gotoXY(40, 10);
+        cout << "+----------------------------------------------------------------------+";
+        gotoXY(40, 11);
+        cout << "|  Services booked successfully for Room ID:                           |";
+        gotoXY(40, 12);
+        cout << "+----------------------------------------------------------------------+";
+        gotoXY(87, 11);
+        for (size_t i = 0; i < roomID.length(); i++)
+        {
+            roomID[i] = toupper(roomID[i]);
+        }
+        std::cout << roomID;
+        changeColor(7);
     }
 }
 
