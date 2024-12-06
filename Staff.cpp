@@ -926,9 +926,21 @@ bool Staff::addNewCustomer(Staff &staff)
      std::cout << "+-------------------------------------------------------+" << std::endl;
 
      changeConsoleColor(15);
-
-     gotoXY(69, 14);
-     std::getline(std::cin, fullName);
+     do
+    {
+        gotoXY(69, 14);
+        std::getline(std::cin, fullName);
+        if (fullName.empty())
+        {
+            changeConsoleColor(4);
+            gotoXY(99, 14);
+            std::cout << "Customer's name cannot be empty. Please try again.";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(99, 14);
+            std::cout << string(75, ' ');
+        }
+    } while (fullName.empty());
 
      bool isValidCCCD = false;
 
@@ -1369,7 +1381,7 @@ bool Staff::findCustomer(vector<Customer> &findCus)
      vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
      if (customers.empty())
           return false;
-     
+
      string attribute;
      string nameType;
      char att;
@@ -1452,7 +1464,7 @@ bool Staff::findCustomer(vector<Customer> &findCus)
           for (auto cus : customers)
           {
                if ((button == 2 && cus.getFirstName() == attribute) ||
-                    (button == 3 && cus.getLastName() == attribute))
+                   (button == 3 && cus.getLastName() == attribute))
                     findCus.push_back(cus);
           }
           break;
@@ -1474,7 +1486,8 @@ bool Staff::findCustomer(vector<Customer> &findCus)
                cout << attribute;
                ShowCur(0);
 
-               if (!std::all_of(attribute.begin(), attribute.end(), [](char c) { return ::isalpha(c) || ::isspace(c); }))
+               if (!std::all_of(attribute.begin(), attribute.end(), [](char c)
+                                { return ::isalpha(c) || ::isspace(c); }))
                {
                     gotoXY(81, 17);
                     changeColor(4);
@@ -1595,8 +1608,21 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
           std::cout << "+----------------------------+----------------------------------------+" << std::endl;
           string inputName, inputCCCD;
           changeConsoleColor(7);
-          gotoXY(55, 15);
-          getline(cin, inputName);
+          do
+          {               
+               gotoXY(55, 15);
+               getline(cin, inputName);
+               if (inputName.empty())
+               {
+                    changeConsoleColor(4);
+                    gotoXY(98, 15);
+                    std::cout << "Customer's name cannot be empty. Please try again.";
+                    changeConsoleColor(7);
+                    _getch();
+                    gotoXY(98, 15);
+                    std::cout << string(75, ' ');
+               }
+          } while (inputName.empty());
           bool isValidCCCD = false;
           do
           {

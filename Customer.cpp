@@ -143,14 +143,14 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
         maxColumnWidth = std::max(maxColumnWidth, serviceWidth);
     }
     const int consoleWidth = 120;
-   
-     system("cls");
-     changeColor(12);
-     string filename = "title.txt";
-     ifstream inputFile(filename);
-     read_lines(filename, 33, 42);
-     inputFile.close();
-     changeColor(7);
+
+    system("cls");
+    changeColor(12);
+    string filename = "title.txt";
+    ifstream inputFile(filename);
+    read_lines(filename, 33, 42);
+    inputFile.close();
+    changeColor(7);
     for (const auto &customer : customers)
     {
         string border = "+---------------+" + string(maxColumnWidth + 2, '-') + "+";
@@ -327,7 +327,7 @@ void Customer::bookedRoom()
     changeColor(6);
     system("cls");
     string filename = "title.txt";
-    read_lines(filename, 1, 11);    
+    read_lines(filename, 1, 11);
     changeColor(7);
 
     for (const auto &room : rooms)
@@ -502,12 +502,22 @@ void Customer::bookedRoom()
     std::cout << "+-------------------------------------------------------+" << std::endl;
 
     changeConsoleColor(15);
-
-    gotoXY(69, 14);
-    std::getline(std::cin, fullName);
-
+    do
+    {
+        gotoXY(69, 14);
+        std::getline(std::cin, fullName);
+        if (fullName.empty())
+        {
+            changeConsoleColor(4);
+            gotoXY(99, 14);
+            std::cout << "Customer's name cannot be empty. Please try again.";
+            changeConsoleColor(7);
+            _getch();
+            gotoXY(99, 14);
+            std::cout << string(75, ' ');
+        }
+    } while (fullName.empty());
     bool isValidCCCD = false;
-
     do
     {
         gotoXY(69, 16);
