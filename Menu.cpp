@@ -1351,65 +1351,66 @@ void customerFunction(Staff &staff, vector<string> &function)
 
           ShowCur(1);
           string FullName, CCCD;
-     do {
           do
           {
-               gotoXY(68, 17);
-               cout << string(FullName.length(), ' ');
-               gotoXY(68, 19);
-               cout << string(CCCD.length(), ' ');
-               gotoXY(68, 17);
-               std::getline(std::cin, FullName);
-               if (FullName.empty())
+               do
                {
-                    changeConsoleColor(4);
-                    gotoXY(113, 17);
-                    std::cout << "Customer's name cannot be empty";
-                    changeConsoleColor(7);
-                    _getch();
-                    gotoXY(113, 17);
-                    std::cout << string(75, ' ');
-               }
-          } while (FullName.empty());
-
-          do
-          {
-               gotoXY(68, 19);
-               cout << string(CCCD.length(), ' ');
-               gotoXY(68, 19);
-               getline(cin, CCCD);
-
-               if (CCCD.length() != 12)
-               {
-                    changeConsoleColor(4);
-                    gotoXY(113, 19);
-                    cout << "Exactly 12 digits! Try again!";
-                    _getch();
-                    gotoXY(113, 19);
-                    cout << string(30, ' ');
-                    changeConsoleColor(7);
-                    continue;
-               }
-               else
-               {
-                    for (size_t i = 0; i < CCCD.length(); i++)
+                    gotoXY(68, 17);
+                    cout << string(FullName.length(), ' ');
+                    gotoXY(68, 19);
+                    cout << string(CCCD.length(), ' ');
+                    gotoXY(68, 17);
+                    std::getline(std::cin, FullName);
+                    if (FullName.empty())
                     {
-                         if (!isdigit(CCCD[i]))
-                         {
-                              changeConsoleColor(4);
-                              gotoXY(113, 19);
-                              cout << "Only DIGITS! Try again!";
-                              _getch();
-                              gotoXY(113, 19);
-                              cout << string(30, ' ');
-                              changeConsoleColor(7);
-                              continue;
-                         }
+                         changeConsoleColor(4);
+                         gotoXY(113, 17);
+                         std::cout << "Customer's name cannot be empty";
+                         changeConsoleColor(7);
+                         _getch();
+                         gotoXY(113, 17);
+                         std::cout << string(75, ' ');
                     }
-                    break;
-               }
-          } while(true);
-     
+               } while (FullName.empty());
+
+               do
+               {
+                    gotoXY(68, 19);
+                    cout << string(CCCD.length(), ' ');
+                    gotoXY(68, 19);
+                    getline(cin, CCCD);
+
+                    if (CCCD.length() != 12)
+                    {
+                         changeConsoleColor(4);
+                         gotoXY(113, 19);
+                         cout << "Exactly 12 digits! Try again!";
+                         _getch();
+                         gotoXY(113, 19);
+                         cout << string(30, ' ');
+                         changeConsoleColor(7);
+                         continue;
+                    }
+                    else
+                    {
+                         for (size_t i = 0; i < CCCD.length(); i++)
+                         {
+                              if (!isdigit(CCCD[i]))
+                              {
+                                   changeConsoleColor(4);
+                                   gotoXY(113, 19);
+                                   cout << "Only DIGITS! Try again!";
+                                   _getch();
+                                   gotoXY(113, 19);
+                                   cout << string(30, ' ');
+                                   changeConsoleColor(7);
+                                   continue;
+                              }
+                         }
+                         break;
+                    }
+               } while (true);
+
                bool foundCustomer = false;
                for (const auto &customer : customers)
                {
@@ -1432,7 +1433,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                     gotoXY(68, 17);
                     continue;
                }
-               else 
+               else
                {
                     foundCustomer = true;
                     break;
@@ -1656,32 +1657,31 @@ void serBillFunction(Staff &staff, vector<string> &function)
      int choice = buttonList(40, 13, 30, 2, 2, function, "column");
      switch (choice)
      {
-     case 1:
+     case 1: // Change Service Price
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          // Change Service Price
           cout << "\t\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
 
-          cout << "\nEnter service ID: ";
-          string ID;
-          cin >> ID;
-
-          cout << "Enter new price: ";
-          string price;
-          cin >> price;
-
-          if (!staff.changeServicePrice(ID, price))
+          while (!staff.changeServicePrice())
           {
-               cout << "\nDo you want to try again? (y/n)";
-               string ch;
-               cin >> ch;
-               ch = toLower(ch);
-               if (ch == "n")
+               system("cls");
+               cout << delLuna << endl;
+               gotoXY(30, 9);
+               changeColor(12);
+               string username = trim(createUsername(staff.getFullName()));
+               cout << "Your username: " << username;
+               gotoXY(1, 10);
+               changeColor(11);
+               cout << "\t\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
+               changeColor(7);
+               gotoXY(30, 12);
+               cout << "Do you want to try again?";
+               vector<string> content = {"Yes", "No"};
+               if (buttonList(25, 14, 10, 2, 4, content, "row") == 2)
                     break;
           }
-          break;
      }
 
      case 2:

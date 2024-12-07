@@ -3,7 +3,7 @@
 Service::Service() {}
 Service::Service(const Service &s) : ID(s.ID), name(s.name), type(s.type), description(s.description), price(s.price) {}
 Service::Service(const string &ID, const string &name, const string &type, const string &description, const string &price)
-        : ID(ID), name(name), type(type), description(description), price(price) {}
+    : ID(ID), name(name), type(type), description(description), price(price) {}
 Service::~Service() {}
 
 string Service::getID() const
@@ -35,7 +35,7 @@ bool Service::setPrice(const string &price)
           changeColor(7);
           return false;
      }
-     
+
      this->price = price;
      return true;
 }
@@ -50,7 +50,7 @@ void displayService(const vector<Service> &services)
      int count = 0;
      for (const auto &service : services)
      {
-          ++ count;
+          ++count;
           cout << "\t| " << setw(3) << setfill('0') << right << count << " | "
                << setw(5) << setfill(' ') << left << service.getID() << "| ";
 
@@ -72,43 +72,93 @@ void displayService(const vector<Service> &services)
      }
 }
 
-vector<Service> Service::readFileService(const string &fileName) {
-    ifstream file(fileName);
-    vector<Service> services;
-    string line;
+string Service::standardizePrice(const string &price, const string &desc)
+{
+     std::string formatted;
+     int count = 0;
 
-    if (!file.is_open()) {
-        cout << "Cannot open file!" << endl;
-        return services;
-    }
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string ID, name, type, description, price;
-        getline(ss, ID, '|');
-        getline(ss, name, '|');
-        getline(ss, type, '|');
-        getline(ss, description, '|');
-        getline(ss, price, '|');
-        Service service(ID, name, type, description, price);
-        services.push_back(service);
-    }
+     for (int i = price.length() - 1; i >= 0; --i)
+     {
+          formatted.push_back(price[i]);
+          count++;
+          if (count % 3 == 0 && i != 0)
+          {
+               formatted.push_back('.');
+          }
+     }
 
-    file.close();
-    return services;
+     std::reverse(formatted.begin(), formatted.end());
+
+     if (desc == "Breakfast" || desc == "Launch" || desc == "Dinner" || desc == "Combo")
+     {
+          formatted += "/person";
+     }
+     else if (desc == "Family combo")
+     {
+          formatted += "/4 people";
+     }
+     else if (desc == "Potato chips" || desc == "Peanuts")
+     {
+          formatted += "/bag";
+     }
+     else if (desc == "Chocolate bars")
+     {
+          formatted += "/piece";
+     }
+     else if (desc == "Soft drinks" || desc == "Soda" || desc == "Milk" ||
+              desc == "Beer" || desc == "Fruit juice" || desc == "Coffee" ||
+              desc == "Soju" || desc == "Strongbow" || desc == "Mineral water")
+     {
+          formatted += "/can";
+     }
+     else if (desc == "Shirt" || desc == "Trousers" || desc == "Suit Jacket" ||
+              desc == "Dress" || desc == "Skirt")
+     {
+          formatted += "/item";
+     }
+
+     return formatted;
+}
+
+vector<Service> Service::readFileService(const string &fileName)
+{
+     ifstream file(fileName);
+     vector<Service> services;
+     string line;
+
+     if (!file.is_open())
+     {
+          cout << "Cannot open file!" << endl;
+          return services;
+     }
+     while (getline(file, line))
+     {
+          stringstream ss(line);
+          string ID, name, type, description, price;
+          getline(ss, ID, '|');
+          getline(ss, name, '|');
+          getline(ss, type, '|');
+          getline(ss, description, '|');
+          getline(ss, price, '|');
+          Service service(ID, name, type, description, price);
+          services.push_back(service);
+     }
+
+     file.close();
+     return services;
 }
 
 string Service::getServiceName(const string &serviceID, const vector<Service> &services)
 {
-    for (const auto &service : services)
-    {
-        if (service.getID() == serviceID)
-        {
-            return service.getName();
-        }
-    }
-    return "Unknown Service";
+     for (const auto &service : services)
+     {
+          if (service.getID() == serviceID)
+          {
+               return service.getName();
+          }
+     }
+     return "Unknown Service";
 }
-
 
 string Service::generateSerID(const vector<Service> &services, const string &name)
 {
@@ -147,7 +197,7 @@ bool Service::updateServiceFile(const vector<Service> &services, const string &f
      ofstream file(fileName, ios::trunc);
      if (!file.is_open())
      {
-          cout << "Cannot open file for writing!" << endl;
+          cout << "\n\tCannot open file for writing!" << endl;
           return false;
      }
 
