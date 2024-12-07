@@ -61,7 +61,7 @@ public:
      bool findCustomer(vector<Customer> &findCus);
 
      bool changeRoomStatus(const string &roomID);
-     bool changeServicePrice(const string &serID, const string &price);
+     bool changeServicePrice();
 
      static void displayCustomer (const vector<Customer> customers);
 
