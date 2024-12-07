@@ -441,8 +441,36 @@ bool Staff::removeStaffByCCCD(vector<Staff> &staffs)
      {
           if (staffs[i].getCCCD() == CCCD)
           {
-               index = i;
-               break;
+               if (staffs[i].getPosition() == "Manager")
+               {
+                    changeConsoleColor(4);
+                    gotoXY(30, 15);
+                    cout << "+---------------------------+";
+                    gotoXY(30, 16);
+                    cout << "|          Warning          |";
+                    gotoXY(30, 17);
+                    cout << "+---------------------------+";
+                    changeConsoleColor(2);
+                    gotoXY(30, 18);
+                    cout << "|                           |";
+                    gotoXY(30, 19);
+                    cout << "|   Cann't remove Manager   |";
+                    gotoXY(30, 20);
+                    cout << "|                           |";
+                    gotoXY(30, 21);
+                    cout << "+---------------------------+";
+                    gotoXY(30, 22);
+                    changeConsoleColor(11);
+                    cout << "Press Enter to continue ...";
+                    changeConsoleColor(7);
+                    _getch();
+                    return false;
+               }
+               else
+               {
+                    index = i;
+                    break;
+               }
           }
      }
 
@@ -1624,37 +1652,120 @@ bool Staff::findCustomer(vector<Customer> &findCus)
      }
 }
 
-bool Staff::changeServicePrice(const string &serID, const string &price)
+bool Staff::changeServicePrice()
 {
-     vector<Service> services = Service::readFileService("Service.txt");
-     bool found = false;
+     changeConsoleColor(14);
+     gotoXY(30, 12);
+     cout << "+---------------------------------------------------+";
+     gotoXY(30, 13);
+     cout << "|                    INFORMATION                    |";
+     gotoXY(30, 14);
+     cout << "+-------------------------+-------------------------+";
+     gotoXY(30, 15);
+     cout << "| Service ID              |                         |";
+     gotoXY(30, 16);
+     cout << "+-------------------------+-------------------------+";
+     gotoXY(30, 17);
+     cout << "| Service Description     |                         |";
+     gotoXY(30, 18);
+     cout << "+-------------------------+-------------------------+";
+     gotoXY(30, 19);
+     cout << "| New price (Only digits) |                         |";
+     gotoXY(30, 20);
+     cout << "+-------------------------+-------------------------+";
+     changeConsoleColor(7);
 
-     for (auto &service : services)
+     vector<Service> services = Service::readFileService("Service.txt");
+     gotoXY(1, 28); 
+     Sleep(500);
+     displayService(services);
+     cout << "\n\tPress Enter to start ...";
+     _getch();
+
+     string serID, price, desc;
+     do //id
      {
-          if (service.getID() == serID)
+          ShowCur(1);
+          gotoXY(58, 15);
+          cout << string(serID.length(), ' ');
+          gotoXY(58, 15);
+          cin >> serID;
+          if (!(isalpha(serID[0])&&isdigit(serID[1])&&isdigit(serID[2])))
           {
-               service.setPrice(price);
-               found = true;
+               ShowCur(0);
+               changeColor(4);
+               gotoXY(84, 15);
+               cout << "Wrong SERVICE ID format! Press Enter ...";
+               _getch();
+               gotoXY(84, 15);
+               changeColor(7);
+               cout << string (40, ' ');
+          }
+          else
+          {
+               serID[0] = toupper(serID[0]);
+               gotoXY(58, 15);
+               cout << serID;
+               break;
+          }
+     } while (true);
+     
+     int index = -1;
+     for (size_t i = 0; i < services.size(); i++)
+     {
+          if (services[i].getID() == serID)
+          {
+               index = i;
+               desc = services[i].getDesc();
                break;
           }
      }
 
-     if (!found)
-     {
-          cout << "\nCannot find service's ID: " << serID << endl;
+     if (index == -1)
           return false;
+     else 
+     {
+          gotoXY(58, 17);
+          cout << desc;
      }
 
-     if (services[0].updateServiceFile(services, "Service.txt"))
+     do //price
      {
-          cout << "Successfully changed price of service with ID: " << serID << " to " << price << endl;
-          return true;
+          ShowCur(1);
+          gotoXY(58, 19);
+          cout << string(price.length(), ' ');
+          gotoXY(58, 19);
+          cin >> price;
+          if (!(std::all_of(price.begin(), price.end(), ::isdigit)))
+          {
+               ShowCur(0);
+               changeColor(4);
+               gotoXY(84, 19);
+               cout << "Please, only DIGITS! Press Enter ...";
+               _getch();
+               changeColor(7);
+               gotoXY(84, 19);
+               cout << string (40, ' ');
+          }
+          else
+          {
+               gotoXY(58, 19);
+               cout << string(price.length(), ' ');
+               price = Service::standardizePrice(price, desc);
+               gotoXY(58, 19);
+               cout << price;
+          }
+     } while (true);
+     vector<string> content = {"Confirm", "Cancel"};
+     if (buttonList(30, 22, 14, 2, 9, content, "row") == 1)
+     {
+          services[index].setPrice(price);
+          if (!Service::updateServiceFile(services, "Service.txt"))
+               return false;
+          else return true;
      }
      else
-     {
-          cout << "Failed to update service file!" << endl;
           return false;
-     }
 }
 bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer> &customers)
 {
