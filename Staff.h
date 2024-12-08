@@ -60,8 +60,8 @@ public:
 
      bool findCustomer(vector<Customer> &findCus);
 
-     bool changeRoomStatus(const string &roomID);
-     bool changeServicePrice();
+     bool changeRoomStatus(vector<Room> &rooms);
+     void changeServicePrice(vector<Service> &services);
 
      static void displayCustomer (const vector<Customer> customers);
 

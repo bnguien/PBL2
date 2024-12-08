@@ -13,14 +13,14 @@ S02|Snack|-|Peanuts|30.000/bag
 S03|Snack|-|Chocolate bars|75.000/piece
 D01|Drinks|Can|Soft drinks|55.000/can
 D02|Drinks|Can|Fruit juice|50.000/can
-D03|Drinks|Can|Mineral water|30.000/can
+D03|Drinks|Can|Mineral water|25.000/can
 D04|Drinks|Can|Soda|45.000/can
 D05|Drinks|Can|Milk|45.000/can
 D06|Drinks|Can|Coffee|40.000/can
 D07|Drinks|Can|Beer|100.000/can
 D08|Drinks|Can|Soju|55.000/can
 D09|Drinks|Can|Strongbow|50.000/can
-L01|Laundary|Regular Wash|Shirt|45.000/item
+L01|Laundary|Regular Wash|Shirt|40.000/item
 L02|Laundary|Regular Wash|Trousers|65.000/item
 L03|Laundary|Regular Wash|Suit Jacket|100.000/item
 L04|Laundary|Regular Wash|Dress|85.000/item
@@ -29,4 +29,4 @@ L06|Laundary|Dry Cleaning|Shirt|100.000/item
 L07|Laundary|Dry Cleaning|Trousers|120.000/item
 L08|Laundary|Dry Cleaning|Suit Jacket|200.000/item
 L09|Laundary|Dry Cleaning|Dress|150.000/item
-L10|Laundary|Dry Cleaning|Skirt|125.000/item
+L10|Laundary|Dry Cleaning|Skirt|105.000/item

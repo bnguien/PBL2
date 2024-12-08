@@ -219,7 +219,7 @@ bool Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
              << svList << endl;
     }
     file.close();
-    return false;
+    return true;
 }
 
 void Room::addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs)
