@@ -22,3 +22,4 @@ Huynh Ngoc Hung|045201023418|0974531180|Quang Tri|Male|05/06/2001|S006|Server|7.
 Ngan Nguyen|047389251238|0384698955|Quang Tri|Female|10/10/2006|L005|Laundry|4.000.000/month
 Luong Quang Nguyen Thuan|045299041937|0939745519|Ha Tinh|Male|25/05/1999|S007|Server|2.340.000/month
 Che Quang Nguyen Thien|045189004547|0233471014|Ba Ria - Vung Tau|Male|07/06/1989|S008|Server|2.710.000/month
+Luong The Nguyen|040204012507|0751208133|Nghe An|Male|25/07/2004|H007|Housekeeping|3.210.000/month
