@@ -201,13 +201,19 @@ bool Service::updateServiceFile(const vector<Service> &services, const string &f
           return false;
      }
 
-     for (const auto &service : services)
+     for (size_t i = 0; i < services.size(); ++i)
      {
+          const auto &service = services[i];
           file << service.getID() << "|"
                << service.getName() << "|"
                << service.getType() << "|"
                << service.getDesc() << "|"
-               << service.getPrice() << endl;
+               << service.getPrice();
+               
+          if (i != services.size() - 1)
+          {
+               file << endl;
+          }
      }
 
      file.close();
