@@ -1288,6 +1288,7 @@ void customerFunction(Staff &staff, vector<string> &function)
           staff.updateCustomer(staff, fileName, customers);
           changeColor(7);
 
+
           break;
      }
      case 3: // Find
@@ -1459,26 +1460,79 @@ void customerFunction(Staff &staff, vector<string> &function)
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
           changeColor(7);
 
+          changeColor(14);
+          gotoXY(30, 12);
+          cout << "+--------------------------------------------+";
+          gotoXY(30, 13);
+          cout << "|      CUSTOMER'S INFORMATION TO REMOVE      |";
+          gotoXY(30, 14);
+          cout << "+-----------+--------------------------------+";
+          gotoXY(30, 15);
+          cout << "| CCCD      |                                |";
+          gotoXY(30, 16);
+          cout << "+-----------+--------------------------------+";
+          gotoXY(30, 17);
+          cout << "| Full Name |                                |";
+          gotoXY(30, 18);
+          cout << "+-----------+--------------------------------+";
+          gotoXY(30, 19);
+          cout << "| Phone     |                                |";
+          gotoXY(30, 20);
+          cout << "+-----------+--------------------------------+";
+          gotoXY(30, 21);
+          cout << "| Address   |                                |";
+          gotoXY(30, 22);
+          cout << "+-----------+--------------------------------+";
+
+          changeColor(7);
+          string cccd;
           do
           {
-               cout << "\nEnter customer's CCCD you want to remove: ";
-               string CCCD;
-               cin >> CCCD;
-               CCCD = trim(CCCD);
+               gotoXY(44, 15);
+               cout << string(cccd.length(), ' ');
+               gotoXY(44, 15);
+               ShowCur(1);
+               cin >> cccd;
 
-               char ch;
-               if (!staff.removeCustomerByCCCD(staff, CCCD))
+               if (cccd.length() != 12 || cccd[0] != '0'
+                    || !(std::all_of(cccd.begin(), cccd.end(), ::isdigit)))
                {
-                    cout << "\nDo you want to try again? (y/n)";
-                    cin >> ch;
-                    ch = tolower(ch);
-                    if (ch == 'n')
-                         break;
+                    ShowCur(0);
+                    gotoXY(77, 15);
+                    changeColor(4);
+                    cout << "Invalid CCCD format! Press Enter ...";
+                    _getch();
+                    gotoXY(77, 15);
+                    cout << string (40, ' ');
+                    changeColor(7);
                }
                else
+               {
+                    ShowCur(0);
                     break;
+               }
           } while (true);
 
+          vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
+          for (const auto &cus : customers)
+          {
+               if (cus.getCCCD() == cccd)
+               {
+                    gotoXY(44, 17);
+                    cout << cus.getFullName();
+                    gotoXY(44, 19);
+                    cout << cus.getPhone();
+                    gotoXY(44, 21);
+                    cout << cus.getAdd();
+               }
+          }
+          vector<string> content = {"Confirm", "Cancel"};
+          if(buttonList(30, 24, 14, 2, 18, content, "row") == 1)
+          {
+               gotoXY(1, 28);
+               staff.removeCustomerByCCCD(staff, cccd);
+          }
+          
           break;
      }
      case 6:
@@ -1544,40 +1598,57 @@ void roomFunction(Staff &staff, vector<string> &function)
      int choice = buttonList(40, 13, 28, 2, 2, function, "column");
      switch (choice)
      {
-     case 1:
+     case 1: // Change Status
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          // Change Status
+          
           cout << "\t\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
-          do
+
+          vector<Room> rooms = Room::readFileRoom("Room.txt");
+          vector<Service> services = Service::readFileService("Service.txt");
+
+          if (staff.changeRoomStatus(rooms))
           {
-               string ID;
-               cout << "\nEnter room ID you want to change status:\n\t";
-               cin >> ID;
+               system("cls");
+               changeConsoleColor(2);
+               gotoXY(30, 10);
+               cout << "+-------------------------------------+";
+               gotoXY(30, 11);
+               cout << "|                                     |";
+               gotoXY(30, 12);
+               cout << "|   Successfully change Room status   |";
+               gotoXY(30, 13);
+               cout << "|                                     |";
+               gotoXY(30, 14);
+               cout << "+-------------------------------------+";
 
-               if (ID.empty())
+               gotoXY(30, 16);
+               cout << "Do you want to check ROOM INFORMATION?";
+               vector<string> content = {"Yes", "No"};
+               if (buttonList(35, 17, 10, 2, 8, content, "row") == 1)
                {
-                    changeConsoleColor(4);
-                    cout << "Room ID cannot be empty. Please try again.\n";
-                    changeConsoleColor(7);
-                    continue;
+                    gotoXY(1, 21);
+                    Room::printRoom(rooms, services);
                }
-
-               if (!staff.changeRoomStatus(ID))
-               {
-                    cout << "\nDo you want to try again? (y/n): ";
-                    string ch;
-                    cin >> ch;
-                    ch = toLower(ch);
-                    if (ch == "n")
-                         break;
-               }
-               else
-                    break;
-          } while (true);
-
+          }
+          else 
+          {
+               system("cls");
+               changeConsoleColor(2);
+               gotoXY(30, 10);
+               cout << "+-------------------------------------+";
+               gotoXY(30, 11);
+               cout << "|                                     |";
+               gotoXY(30, 12);
+               cout << "|    Failed to change Room status!    |";
+               gotoXY(30, 13);
+               cout << "|                                     |";
+               gotoXY(30, 14);
+               cout << "+-------------------------------------+";
+          }
+          changeColor(7);
           break;
      }
 
@@ -1664,24 +1735,13 @@ void serBillFunction(Staff &staff, vector<string> &function)
           cout << "\t\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
 
-          while (!staff.changeServicePrice())
-          {
-               system("cls");
-               cout << delLuna << endl;
-               gotoXY(30, 9);
-               changeColor(12);
-               string username = trim(createUsername(staff.getFullName()));
-               cout << "Your username: " << username;
-               gotoXY(1, 10);
-               changeColor(11);
-               cout << "\t\t\t---------- SERVICE FUNCTIONS: " << function[choice - 1] << " ----------\n";
-               changeColor(7);
-               gotoXY(30, 12);
-               cout << "Do you want to try again?";
-               vector<string> content = {"Yes", "No"};
-               if (buttonList(25, 14, 10, 2, 4, content, "row") == 2)
-                    break;
-          }
+          vector<Service> services = Service::readFileService("Service.txt");
+          gotoXY(1, 12);
+          displayService(services);
+          
+          staff.changeServicePrice(services);
+
+          break;
      }
 
      case 2:
