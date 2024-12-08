@@ -339,7 +339,7 @@ bool Staff::addNewStaff(Staff &newStaff)
      if (this->position != "Manager")
      {
           changeConsoleColor(4);
-          cout << "Access Denied: Only Managers can add new staff members!" << endl;
+          cout << "\nAccess Denied: Only Managers can add new staff members!" << endl;
           changeConsoleColor(7);
           return false;
      }
@@ -498,7 +498,7 @@ bool Staff::removeStaffByCCCD(vector<Staff> &staffs)
      }
 }
 
-bool Staff::changeRoomStatus(const string &roomID)
+bool Staff::changeRoomStatus(vector<Room> &rooms)
 {
      if (this->position != "Manager" && this->position != "Receptionist")
      {
@@ -509,48 +509,85 @@ bool Staff::changeRoomStatus(const string &roomID)
           return false;
      }
 
-     string roomFile = "Room.txt";
-     vector<Room> rooms = Room::readFileRoom(roomFile);
-     if (rooms.empty())
-     {
-          changeConsoleColor(4);
-          cout << "\nError: Unable to load room data. Please check the file!" << endl;
-          changeConsoleColor(7);
+     vector<Service> services = Service::readFileService("Service.txt");
+
+     if (rooms.empty() || services.empty())
           return false;
-     }
 
-     bool exists = false;
+     gotoXY(1, 12);
+     Room::printRoom(rooms, services);
 
-     for (auto &room : rooms)
+     changeColor(14);
+     cout << endl;
+     cout << "\n\t\t+---------------------------------------+";
+     cout << "\n\t\t|              INFORMATION              |";
+     cout << "\n\t\t+---------------------------------------+";
+     cout << "\n\t\t| Room ID        |                      |";
+     cout << "\n\t\t+----------------+----------------------+";
+     cout << "\n\t\t| Current Status |                      |";
+     cout << "\n\t\t+----------------+----------------------+";
+     cout << "\n\t\t| New Status     |                      |";
+     cout << "\n\t\t+----------------+----------------------+";
+     cout << endl;
+     changeColor(7);
+     int y = whereY();
+     string roomID;
+     do
      {
-          if (room.getID() == roomID)
+          ShowCur(1);
+          gotoXY(36, y - 5);
+          cout << string(roomID.length(), ' ');
+          gotoXY(36, y - 5);
+          cin >> roomID;
+
+          if (!(isalpha(roomID[0]) && isdigit(roomID[1]) && isdigit(roomID[2])) || roomID.length() != 4)
           {
-               exists = true;
-               room.setStatus(room.checkAvailable() ? "Unavailable" : "Available");
+               ShowCur(0);
+               changeColor(4);
+               gotoXY(59, y - 5);
+               cout << "Invalid room ID format! Press Enter ...";
+               _getch();
+               gotoXY(59, y - 5);
+               cout << string(40, ' ');
+               changeColor(7);
+          }
+          else
+          {
+               ShowCur(0);
+               roomID[0] = toupper(roomID[0]);
+               gotoXY(36, y - 5);
+               cout << roomID;
                break;
           }
-     }
+     } while (true);
 
-     if (!exists)
+     bool exist = false;
+     for (size_t i = 0; i < rooms.size(); i++)
      {
-          changeConsoleColor(4);
-          cout << "Error: Room with ID " << roomID << " not found. Please try adding a new one." << endl;
-          changeConsoleColor(7);
-          return false;
+          if (rooms[i].getID() == roomID)
+          {
+               exist = true;
+               gotoXY(36, y - 3);
+               string status = rooms[i].getStatus();
+               if (status == "Available")
+                    changeColor(2);
+               else changeColor(4);
+               cout << status;
+               string newSta = (status == "Available") ? "Unavailable" : "Available";
+               gotoXY(36, y - 1);
+               if (newSta == "Available")
+                    changeColor(2);
+               else changeColor(4);
+               cout << newSta;
+               rooms[i].setStatus(newSta);
+               _getch();
+          }
      }
-
-     if (!Room::updateRoomFile(rooms, roomFile))
-     {
-          changeConsoleColor(4);
-          cout << "Error: Failed to update room file. Please try again!" << endl;
-          changeConsoleColor(7);
+     if (!exist)
           return false;
-     }
-
-     changeConsoleColor(2);
-     cout << "Successfully changed room status for ID: " << roomID << endl;
-     changeConsoleColor(7);
-     return true;
+     if (Room::updateRoomFile(rooms, "Room.txt"))
+          return true;
+     else return false;
 }
 
 bool Staff::updateStaff(vector<Staff> &staffs, const int &index)
@@ -812,6 +849,7 @@ bool Staff::addNewCustomer(Staff &staff)
      cout << "\n________________________________________________________________________________________________________________\n";
      vector<string> unavailableRoomIDs;
      vector<string> availableRoomIDs;
+     ShowCur(0);
      while (true)
      {
           std::cout << "Enter the room IDs that the customer wants to book (separated by commas): ";
@@ -1243,6 +1281,7 @@ bool Staff::addNewCustomer(Staff &staff)
                break;
           }
      }
+     ShowCur(0);
      vector<string> Options = {"Cancel", "Confirm"};
      int optionIndex = buttonList(45, 29, 15, 2, 18, Options, "row");
      string selectedOption = Options[optionIndex - 1];
@@ -1335,7 +1374,7 @@ bool Staff::removeCustomerByCCCD(const Staff &staff, const string &CCCDToRemove)
           if (!inFile)
           {
                changeConsoleColor(4);
-               cout << "Failed to open customer file!" << endl;
+               cout << "\nFailed to open customer file!" << endl;
                changeConsoleColor(7);
                return false;
           }
@@ -1372,7 +1411,7 @@ bool Staff::removeCustomerByCCCD(const Staff &staff, const string &CCCDToRemove)
           if (!found)
           {
                changeConsoleColor(4);
-               cout << "Cannot find this customer's information to remove!" << endl;
+               cout << "\nCannot find this customer's information to remove!" << endl;
                changeConsoleColor(7);
                return false;
           }
@@ -1380,7 +1419,7 @@ bool Staff::removeCustomerByCCCD(const Staff &staff, const string &CCCDToRemove)
           if (!outFile)
           {
                changeConsoleColor(4);
-               cout << "Failed to write to customer file!" << endl;
+               cout << "\nFailed to write to customer file!" << endl;
                changeConsoleColor(7);
                return false;
           }
@@ -1391,7 +1430,7 @@ bool Staff::removeCustomerByCCCD(const Staff &staff, const string &CCCDToRemove)
           }
           outFile.close();
           changeConsoleColor(2);
-          cout << "Successfully removed customer with CCCD: " << CCCDToRemove << endl;
+          cout << "\nSuccessfully removed customer with CCCD: " << CCCDToRemove << endl;
           changeConsoleColor(7);
           return true;
      }
@@ -1544,7 +1583,7 @@ bool Staff::findCustomer(vector<Customer> &findCus)
               "Find by First Name",
               "Find by Last Name",
           };
-          int choice = buttonList(18, 17, 25, 2, 2, options, "row");
+          int choice = buttonList(18, 17, 25, 2, 5, options, "row");
 
           switch (choice)
           {
@@ -1596,7 +1635,7 @@ bool Staff::findCustomer(vector<Customer> &findCus)
                {
                     changeColor(4);
                     gotoXY(70, 19);
-                    cout << "No customers found with last name starting with '" << att << "'.";
+                    cout << "No customers found with last name starting with \'" << att << "\'.";
                     changeColor(7);
                     _getch();
                }
@@ -1643,73 +1682,60 @@ bool Staff::findCustomer(vector<Customer> &findCus)
                          findCus.push_back(cus);
                     }
                }
-
-               if (findCus.empty())
-                    return false;
-               else
-                    return true;
           }
      }
+
+     if (findCus.empty())
+          return false;
+     else
+          return true;
 }
 
-bool Staff::changeServicePrice()
+void Staff::changeServicePrice(vector<Service> &services)
 {
      changeConsoleColor(14);
-     gotoXY(30, 12);
-     cout << "+---------------------------------------------------+";
-     gotoXY(30, 13);
-     cout << "|                    INFORMATION                    |";
-     gotoXY(30, 14);
-     cout << "+-------------------------+-------------------------+";
-     gotoXY(30, 15);
-     cout << "| Service ID              |                         |";
-     gotoXY(30, 16);
-     cout << "+-------------------------+-------------------------+";
-     gotoXY(30, 17);
-     cout << "| Service Description     |                         |";
-     gotoXY(30, 18);
-     cout << "+-------------------------+-------------------------+";
-     gotoXY(30, 19);
-     cout << "| New price (Only digits) |                         |";
-     gotoXY(30, 20);
-     cout << "+-------------------------+-------------------------+";
-     changeConsoleColor(7);
-
-     vector<Service> services = Service::readFileService("Service.txt");
-     gotoXY(1, 28); 
-     Sleep(500);
-     displayService(services);
-     cout << "\n\tPress Enter to start ...";
-     _getch();
-
-     string serID, price, desc;
-     do //id
+     cout << endl;
+     cout << "\t\t+---------------------------------------------------+" << endl;
+     cout << "\t\t|                    INFORMATION                    |" << endl;
+     cout << "\t\t+---------------------------------------------------+" << endl;
+     cout << "\t\t| Service ID              |                         |" << endl;
+     cout << "\t\t+---------------------------------------------------+" << endl;
+     cout << "\t\t| Service Description     |                         |" << endl;
+     cout << "\t\t+---------------------------------------------------+" << endl;
+     cout << "\t\t| Old price               |                         |" << endl;
+     cout << "\t\t+---------------------------------------------------+" << endl;
+     cout << "\t\t| New price (Only digits) |                         |" << endl;
+     cout << "\t\t+---------------------------------------------------+" << endl;
+     changeColor(7);
+     int y = whereY();
+     string serID, newPrice, desc, oldPrice;
+     do // id
      {
           ShowCur(1);
-          gotoXY(58, 15);
+          gotoXY(45, y - 7);
           cout << string(serID.length(), ' ');
-          gotoXY(58, 15);
+          gotoXY(45, y - 7);
           cin >> serID;
-          if (!(isalpha(serID[0])&&isdigit(serID[1])&&isdigit(serID[2])))
+          if (!(isalpha(serID[0]) && isdigit(serID[1]) && isdigit(serID[2])))
           {
                ShowCur(0);
                changeColor(4);
-               gotoXY(84, 15);
+               gotoXY(71, y - 7);
                cout << "Wrong SERVICE ID format! Press Enter ...";
                _getch();
-               gotoXY(84, 15);
+               gotoXY(71, y - 7);
                changeColor(7);
-               cout << string (40, ' ');
+               cout << string(40, ' ');
           }
           else
           {
                serID[0] = toupper(serID[0]);
-               gotoXY(58, 15);
+               gotoXY(45, y - 7);
                cout << serID;
                break;
           }
      } while (true);
-     
+
      int index = -1;
      for (size_t i = 0; i < services.size(); i++)
      {
@@ -1717,56 +1743,99 @@ bool Staff::changeServicePrice()
           {
                index = i;
                desc = services[i].getDesc();
+               oldPrice = services[i].getPrice();
                break;
           }
      }
 
      if (index == -1)
-          return false;
-     else 
      {
-          gotoXY(58, 17);
+          gotoXY(1, y + 1);
+          ShowCur(0);
+          cout << "\n\t+-------------------------------------------+";
+          cout << "\n\t|                                           |";
+          cout << "\n\t|            Cannot find service            |";
+          cout << "\n\t|               with ID: " << serID << "!               |";
+          cout << "\n\t|                                           |";
+          cout << "\n\t+-------------------------------------------+\n";
+          return;
+     }
+     else
+     {
+          gotoXY(45, y - 5);
           cout << desc;
+          gotoXY(45, y - 3);
+          changeConsoleColor(2);
+          cout << oldPrice;
+          changeConsoleColor(7);
      }
 
-     do //price
+     do // newPrice
      {
           ShowCur(1);
-          gotoXY(58, 19);
-          cout << string(price.length(), ' ');
-          gotoXY(58, 19);
-          cin >> price;
-          if (!(std::all_of(price.begin(), price.end(), ::isdigit)))
+          gotoXY(45, y - 1);
+          cout << string(newPrice.length(), ' ');
+          gotoXY(45, y - 1);
+          cin >> newPrice;
+          if (!(std::all_of(newPrice.begin(), newPrice.end(), ::isdigit)))
           {
                ShowCur(0);
                changeColor(4);
-               gotoXY(84, 19);
+               gotoXY(71, y - 1);
                cout << "Please, only DIGITS! Press Enter ...";
                _getch();
                changeColor(7);
-               gotoXY(84, 19);
-               cout << string (40, ' ');
+               gotoXY(71, y - 1);
+               cout << string(40, ' ');
           }
           else
           {
-               gotoXY(58, 19);
-               cout << string(price.length(), ' ');
-               price = Service::standardizePrice(price, desc);
-               gotoXY(58, 19);
-               cout << price;
+               ShowCur(0);
+               gotoXY(45, y - 1);
+               cout << string(newPrice.length(), ' ');
+               newPrice = Service::standardizePrice(newPrice, desc);
+               gotoXY(45, y - 1);
+               cout << newPrice;
+               break;
           }
      } while (true);
+
+     cout << "\n\n\n\n\n\n";
+
      vector<string> content = {"Confirm", "Cancel"};
-     if (buttonList(30, 22, 14, 2, 9, content, "row") == 1)
+     if (buttonList(20, whereY() - 3, 14, 2, 9, content, "row") == 1)
      {
-          services[index].setPrice(price);
+          services[index].setPrice(newPrice);
           if (!Service::updateServiceFile(services, "Service.txt"))
-               return false;
-          else return true;
+          {
+               changeColor(4);
+               cout << "\n\t+-------------------------------------------+";
+               cout << "\n\t|                                           |";
+               cout << "\n\t|   Failed to update new Price of service   |";
+               cout << "\n\t|               with ID: " << serID << "!               |";
+               cout << "\n\t|                                           |";
+               cout << "\n\t+-------------------------------------------+";
+               changeColor(7);
+          }
+          else
+          {
+               system("cls");
+               changeConsoleColor(2);
+               cout << "\n\t\t+----------------------------------------------+";
+               cout << "\n\t\t|                                              |";
+               cout << "\n\t\t|     Successfully change price of service     |";
+               cout << "\n\t\t|                 with ID: " << serID << "                 |";
+               cout << "\n\t\t|                                              |";
+               cout << "\n\t\t+----------------------------------------------+\n"
+                    << endl;
+               changeColor(7);
+               displayService(services);
+          }
      }
      else
-          return false;
+          cout << endl;
 }
+
 bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer> &customers)
 {
      while (true)
@@ -1776,23 +1845,25 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
           std::cout << "ENTER CUSTOMER'S NAME AND CUSTOMER'S ID CARD(CCCD)" << endl;
           changeConsoleColor(14);
           gotoXY(25, 14);
-          std::cout << "+----------------------------+----------------------------------------+" << std::endl;
+          std::cout << "+---------------------------+----------------------------------------+" << std::endl;
           gotoXY(25, 15);
-          std::cout << "|  Customer's Name           |                                        |" << std::endl;
+          std::cout << "| Customer's Name           |                                        |" << std::endl;
           gotoXY(25, 16);
-          std::cout << "+----------------------------+----------------------------------------+" << std::endl;
+          std::cout << "+---------------------------+----------------------------------------+" << std::endl;
           gotoXY(25, 17);
-          std::cout << "|  Customer's CCCD (ID card) |                                        |" << std::endl;
+          std::cout << "| Customer's CCCD (ID card) |                                        |" << std::endl;
           gotoXY(25, 18);
-          std::cout << "+----------------------------+----------------------------------------+" << std::endl;
+          std::cout << "+---------------------------+----------------------------------------+" << std::endl;
           string inputName, inputCCCD;
           changeConsoleColor(7);
           do
           {
+               ShowCur(1);
                gotoXY(55, 15);
                getline(cin, inputName);
                if (inputName.empty())
                {
+                    ShowCur(0);
                     changeConsoleColor(4);
                     gotoXY(98, 15);
                     std::cout << "Customer's name cannot be empty. Please try again.";
@@ -1805,11 +1876,13 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
           bool isValidCCCD = false;
           do
           {
+               ShowCur(1);
                gotoXY(55, 17);
                getline(cin, inputCCCD);
 
                if (inputCCCD.length() != 12)
                {
+                    ShowCur(0);
                     changeConsoleColor(4);
                     gotoXY(97, 17);
                     std::cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
@@ -1825,6 +1898,7 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                     {
                          if (!isdigit(inputCCCD[i]))
                          {
+                              ShowCur(0);
                               isDigitOnly = false;
                               gotoXY(97, 17);
                               changeConsoleColor(4);
@@ -1844,12 +1918,14 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
 
                if (!isValidCCCD)
                {
+                    ShowCur(0);
                     gotoXY(55, 17);
                     std::cout << string(inputCCCD.length(), ' ');
                }
 
           } while (!isValidCCCD);
 
+          ShowCur(0);
           bool customerFound = false;
           for (Customer &customer : customers)
           {
