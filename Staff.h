@@ -44,7 +44,7 @@ public:
      bool operator==(const Staff &staff) const;
      static vector<Staff> readFileStaff(const string &fileName);
      static string generateStaffID(const vector<Staff> &staffs, const string &position);
-     void displayStaff();
+     void display() const override;
      bool hasAccess(const Staff &staff) const ;
 
      void updateStaffFile(const vector<Staff> &staffs, const string &fileName);
