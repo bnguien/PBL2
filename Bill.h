@@ -33,14 +33,14 @@ public:
     }
     Date getCheckoutDate() const;
     void setCheckoutDate(const Date &date);
-    virtual int convert(const string &input);
+    int convert(const string &input);
     static string createID(const Customer &customer);
     void calculateTotalPrice(const Customer &customer, const vector<Room> &rooms, const vector<Service> &services, Date checkoutDate);
     std::string formatCurrency(int amount);
     void setPaymentMethod(const string &method);
 
     Date inputCheckoutDate(const Date &checkInDate);
-    void virtual checkBillInfo(const string& inputUserName, const string& inputPassword, const vector<Customer>& customers, const vector<Room>& rooms, const vector<Service>& services);
+    void checkBillInfo(const string& inputUserName, const string& inputPassword, const vector<Customer>& customers, const vector<Room>& rooms, const vector<Service>& services);
     ~Bill();
 };
 
