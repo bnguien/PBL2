@@ -189,7 +189,7 @@ void Staff::showList(const vector<Staff> staffs)
      cout << endl;
 }
 
-void Staff::displayStaff()
+void Staff::display() const
 {
      Sleep(1000);
      string border = "\t+---------------+------------------------------+";
@@ -479,7 +479,7 @@ bool Staff::removeStaffByCCCD(vector<Staff> &staffs)
      else
      {
           gotoXY(1, 15);
-          staffs[index].displayStaff();
+          staffs[index].display();
           vector<string> content = {"Confirm", "Cancel"};
           if (buttonList(60, 18, 14, 2, 7, content, "row"))
           {
@@ -605,7 +605,7 @@ bool Staff::updateStaff(vector<Staff> &staffs, const int &index)
 
      clearFromPosition(1, 16);
 
-     staffs[index].displayStaff();
+     staffs[index].display();
      changeConsoleColor(14);
 
      gotoXY(60, 16);
@@ -787,7 +787,7 @@ bool Staff::updateStaff(vector<Staff> &staffs, const int &index)
      cout << "Updated information successfully! Review new information ...";
      gotoXY(1, 16);
      changeConsoleColor(7);
-     staffs[index].displayStaff();
+     staffs[index].display();
      _getch();
 
      return true;
@@ -1287,9 +1287,8 @@ bool Staff::addNewCustomer(Staff &staff)
           fullName = Person::standardizeString(fullName);
           add = Person::standardizeString(add);
           gender = Person::standardizeString(gender);
-          Person person(fullName, CCCD, phone, add, gender, DOB);
 
-          Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
+          Customer newCustomer(fullName, CCCD, phone, add, gender, DOB, availableRoomIDs, arrivalDate, {"None"}, {"None"});
           string customerFile = "Customer.txt";
           if (!Customer::saveCustomerToFile(newCustomer, customerFile))
           {
@@ -2085,6 +2084,16 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                          }
                     }
                     else if (selectedOption == "Change Date of Birth (DOB)")
+            {
+                gotoXY(10, 5);
+                changeConsoleColor(9);
+                cout << "Enter the new Date of Birth (DD/MM/YYYY): ";
+                changeConsoleColor(7);
+                string newDOB;
+                while (true)
+                {
+                    std::getline(std::cin, newDOB);
+                    if (customer.getDOB() == newDOB)
                     {
                          gotoXY(10, 5);
                          changeConsoleColor(9);
@@ -2181,6 +2190,66 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                          }
                     }
                     else
+                    {
+                        if (newDOB.empty())
+                        {
+                            changeConsoleColor(4);
+                            gotoXY(10, 7);
+                            cout << "Date of Birth cannot be empty!" << endl;
+                            changeConsoleColor(7);
+                            _getch();
+                            gotoXY(10, 7);
+                            cout << string(150, ' ');
+                            continue;
+                        }
+
+                        if (!Date::isValidDateFormat(newDOB))
+                        {
+                            _getch();
+                            gotoXY(52, 5);
+                            cout << string(75, ' ');
+                            gotoXY(1, 6);
+                            cout << string(150, ' ');
+                            gotoXY(52, 5);
+                        }
+                        else
+                        {
+                            vector<string> Options = {"Cancel", "Confirm"};
+                            int optionIndex = buttonList(40, 7, 15, 2, 18, Options, "row");
+                            string selectedOption = Options[optionIndex - 1];
+                            if (selectedOption == "Cancel")
+                            {
+                                clearFromPosition(1, 1);
+                                adminScreen(staff);
+                                return false;
+                            }
+                            else if (selectedOption == "Confirm")
+                            {
+                                customer.setDOB(newDOB);
+                                system("cls");
+                                gotoXY(1, 1);
+                                changeConsoleColor(3);
+                                std::cout << "HOTEL DEL LUNA" << endl;
+                                changeConsoleColor(7);
+                                std::cout << "______________" << endl;
+                                changeConsoleColor(14);
+                                gotoXY(40, 5);
+                                std::cout << "|==================================================|";
+                                gotoXY(40, 6);
+                                std::cout << "|                                                  |";
+                                gotoXY(40, 7);
+                                std::cout << "|==================================================|";
+                                gotoXY(49, 6);
+                                changeColor(2);
+                                std::cout << "Date of birth updated successfully";
+                                changeConsoleColor(7);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+               else if (selectedOption == "Return")
                     {
                          clearFromPosition(1, 1);
                          adminScreen(staff);

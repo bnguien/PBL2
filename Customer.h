@@ -29,16 +29,16 @@ public:
           serviceIDs(g.serviceIDs),
           serviceNames(g.serviceNames),
           arrivalDate(g.arrivalDate) {}
-    Customer(const Person &person,
-             const vector<string> &roomIDs,
-             const Date &arrivalDate,
-             const vector<string> &serviceIDs,
-             const vector<string> &serviceNames)
-        : Person(person),
-          roomIDs(roomIDs),
-          arrivalDate(arrivalDate),
-          serviceIDs(serviceIDs),
-          serviceNames(serviceNames) {}
+    Customer(const string &fullName, const string &CCCD, const string &phone,
+         const string &add, const string &gender, const Date &DOB,
+         const vector<string> &roomIDs, const Date &arrivalDate,
+         const vector<string> &serviceIDs, const vector<string> &serviceNames)
+    : Person(fullName, CCCD, phone, add, gender, DOB),
+      roomIDs(roomIDs),
+      arrivalDate(arrivalDate),
+      serviceIDs(serviceIDs),
+      serviceNames(serviceNames) {}
+
 
     void addBill(const Bill &bill) {
         bills.push_back(bill);
@@ -47,7 +47,8 @@ public:
     const vector<Bill>& getBills() const {
         return bills;
     }
-    void displayCustomer(const vector<Customer> &customers, const vector<Service> &services);
+
+    void display() const override;//đa hình
     void setArrivalDate(const Date &arrivalDate);
     Date getArrivalDate() const;
     vector<string> getRoomIDs() const;
@@ -66,7 +67,7 @@ public:
     void bookedRoom();
     void bookServices(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers);
     void addServicesToCustomerFile(const string &inputUserName, const string &inputPassword, const vector<Service> &services, const vector<string> &serviceIDs);
-    void checkInfor(const string &inputUserName, const string &inputPassword,const vector<Customer> &customers,const vector<Service> &services);
+    void checkInfor(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers, const vector<Service> &services);
     void updateCustomerInfo(const string &inputUserName, const string &inputPassword, vector<Customer> &customers, const string &fileName) ;
     ~Customer();
 };

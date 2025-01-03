@@ -8,6 +8,7 @@
 #include "Graphics.h"
 
 using namespace std;
+Customer currentLoggedInCustomer;
 void noAccountScreen();
 void customerScreen(const string &username, const string &password);
 void Customer::setArrivalDate(const Date &arrivalDate)
@@ -112,36 +113,38 @@ vector<Customer> Customer::readFileCustomer(const string &fileName)
             serviceNames.push_back(serviceName);
         }
 
-        Person person(fullName, CCCD, phone, add, gender, DOB);
-        fullName = person.standardizeString(fullName);
-        add = person.standardizeString(add);
-        gender = person.standardizeString(gender);
+        string standardizedFullName = Person::standardizeString(fullName);
+        string standardizedAdd = Person::standardizeString(add);
+        string standardizedGender = Person::standardizeString(gender);
 
-        Customer customer(person, roomIDs, arrivalDate, serviceIDs, serviceNames);
+        Customer customer(standardizedFullName, CCCD, phone, standardizedAdd, standardizedGender, DOB, roomIDs, arrivalDate, serviceIDs, serviceNames);
+
         customers.push_back(customer);
     }
     return customers;
 }
 
-void Customer::displayCustomer(const vector<Customer> &customers, const vector<Service> &services)
+void Customer::display() const
 {
-    size_t maxColumnWidth = 39;
-    for (const auto &customer : customers)
-    {
-        size_t roomWidth = 0;
-        for (const auto &room : customer.getRoomIDs())
-        {
-            roomWidth += room.size() + 1;
-        }
-        maxColumnWidth = std::max(maxColumnWidth, roomWidth);
+    const Customer& customer = currentLoggedInCustomer; 
+    vector<Service> services = Service::readFileService("Service.txt");
 
-        size_t serviceWidth = 0;
-        for (const auto &serviceID : customer.getServiceIDs())
-        {
-            serviceWidth += Service::getServiceName(serviceID, services).size() + 2;
-        }
-        maxColumnWidth = std::max(maxColumnWidth, serviceWidth);
+    size_t maxColumnWidth = 39;
+
+    size_t roomWidth = 0;
+    for (const auto &room : customer.getRoomIDs())
+    {
+        roomWidth += room.size() + 1;
     }
+    maxColumnWidth = max(maxColumnWidth, roomWidth);
+
+    size_t serviceWidth = 0;
+    for (const auto &serviceID : currentLoggedInCustomer.getServiceIDs())
+    {
+        serviceWidth += Service::getServiceName(serviceID, services).size() + 2;
+    }
+    maxColumnWidth = max(maxColumnWidth, serviceWidth);
+
     const int consoleWidth = 120;
 
     system("cls");
@@ -151,120 +154,119 @@ void Customer::displayCustomer(const vector<Customer> &customers, const vector<S
     read_lines(filename, 33, 42);
     inputFile.close();
     changeColor(7);
-    for (const auto &customer : customers)
+
+    string border = "+---------------+" + string(maxColumnWidth + 2, '-') + "+";
+    size_t tableWidth = border.length();
+    int startX = (consoleWidth - tableWidth) / 2;
+    int currentY = 12;
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    gotoXY(startX, currentY++);
+    cout << "| Full Name     | " << left << setw(maxColumnWidth) << customer.getFullName() << " |" << endl;
+
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    gotoXY(startX, currentY++);
+    cout << "| CCCD          | " << left << setw(maxColumnWidth) << customer.getCCCD() << " |" << endl;
+
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    gotoXY(startX, currentY++);
+    cout << "| Phone         | " << left << setw(maxColumnWidth) << customer.getPhone() << " |" << endl;
+
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    gotoXY(startX, currentY++);
+    cout << "| Address       | " << left << setw(maxColumnWidth) << customer.getAdd() << " |" << endl;
+
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    gotoXY(startX, currentY++);
+    cout << "| Gender        | " << left << setw(maxColumnWidth) << customer.getGender() << " |" << endl;
+
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    gotoXY(startX, currentY++);
+    cout << "| Date of birth | " << left << setw(maxColumnWidth);
+    customer.getDOB().display();
+    cout << " |" << endl;
+
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    gotoXY(startX, currentY++);
+    cout << "| Room IDs      | ";
+    string roomsStr;
+    for (const auto &room : customer.getRoomIDs())
     {
-        string border = "+---------------+" + string(maxColumnWidth + 2, '-') + "+";
-        size_t tableWidth = border.length();
-        int startX = (consoleWidth - tableWidth) / 2;
-        int currentY = 12;
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << "| Full Name     | " << left << setw(maxColumnWidth) << customer.getFullName() << " |" << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << "| CCCD          | " << left << setw(maxColumnWidth) << customer.getCCCD() << " |" << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << "| Phone         | " << left << setw(maxColumnWidth) << customer.getPhone() << " |" << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << "| Address       | " << left << setw(maxColumnWidth) << customer.getAdd() << " |" << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << "| Gender        | " << left << setw(maxColumnWidth) << customer.getGender() << " |" << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << "| Date of birth | " << left << setw(maxColumnWidth);
-        customer.getDOB().display();
-        std::cout << " |" << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << "| Room IDs      | ";
-        std::string roomsStr;
-        for (const auto &room : customer.getRoomIDs())
-        {
-            roomsStr += room + " ";
-        }
-        std::cout << left << setw(maxColumnWidth) << roomsStr << " |" << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << "| Arrival Date  | " << left << setw(maxColumnWidth);
-        customer.getArrivalDate().display();
-        std::cout << " |" << endl;
-
-        gotoXY(startX, currentY++);
-        std::cout << border << endl;
-
-        if (customer.getServiceIDs().empty())
-        {
-            gotoXY(startX, currentY++);
-            std::cout << "| Service       | " << left << setw(maxColumnWidth) << "No services booked" << " |" << endl;
-
-            gotoXY(startX, currentY++);
-            std::cout << border << endl;
-        }
-        else
-        {
-            gotoXY(startX, currentY++);
-            std::cout << "| ServiceIDs    | ";
-            std::string serviceIDsStr;
-            for (size_t i = 0; i < customer.getServiceIDs().size(); ++i)
-            {
-                serviceIDsStr += customer.getServiceIDs()[i];
-                if (i < customer.getServiceIDs().size() - 1)
-                {
-                    serviceIDsStr += ", ";
-                }
-            }
-            std::cout << left << setw(maxColumnWidth) << serviceIDsStr << " |" << endl;
-
-            gotoXY(startX, currentY++);
-            std::cout << border << endl;
-
-            gotoXY(startX, currentY++);
-            std::cout << "| ServiceNames  | ";
-            std::string servicesStr;
-            for (size_t i = 0; i < customer.getServiceIDs().size(); ++i)
-            {
-                servicesStr += Service::getServiceName(customer.getServiceIDs()[i], services);
-                if (i < customer.getServiceIDs().size() - 1)
-                {
-                    servicesStr += ", ";
-                }
-            }
-            std::cout << left << setw(maxColumnWidth) << servicesStr << " |" << endl;
-
-            gotoXY(startX, currentY++);
-            std::cout << border << endl;
-        }
-
-        gotoXY(startX, currentY++);
-        std::cout << endl;
+        roomsStr += room + " ";
     }
+    cout << left << setw(maxColumnWidth) << roomsStr << " |" << endl;
+
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    gotoXY(startX, currentY++);
+    cout << "| Arrival Date  | " << left << setw(maxColumnWidth);
+    customer.getArrivalDate().display();
+    cout << " |" << endl;
+
+    gotoXY(startX, currentY++);
+    cout << border << endl;
+
+    if (customer.getServiceIDs().empty())
+    {
+        gotoXY(startX, currentY++);
+        cout << "| Service       | " << left << setw(maxColumnWidth) << "No services booked" << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        cout << border << endl;
+    }
+    else
+    {
+        gotoXY(startX, currentY++);
+        cout << "| ServiceIDs    | ";
+        string serviceIDsStr;
+        for (size_t i = 0; i < customer.getServiceIDs().size(); ++i)
+        {
+            serviceIDsStr += customer.getServiceIDs()[i];
+            if (i < customer.getServiceIDs().size() - 1)
+            {
+                serviceIDsStr += ", ";
+            }
+        }
+        cout << left << setw(maxColumnWidth) << serviceIDsStr << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        cout << border << endl;
+
+        gotoXY(startX, currentY++);
+        cout << "| ServiceNames  | ";
+        string servicesStr;
+        for (size_t i = 0; i < currentLoggedInCustomer.getServiceIDs().size(); ++i)
+        {
+            servicesStr += Service::getServiceName(currentLoggedInCustomer.getServiceIDs()[i], services);
+            if (i < customer.getServiceIDs().size() - 1)
+            {
+                servicesStr += ", ";
+            }
+        }
+        cout << left << setw(maxColumnWidth) << servicesStr << " |" << endl;
+
+        gotoXY(startX, currentY++);
+        cout << border << endl;
+    }
+
+    gotoXY(startX, currentY++);
+    cout << endl;
 }
+
 
 bool Customer::saveCustomerToFile(const Customer &customer, const string &fileName)
 {
@@ -785,9 +787,8 @@ void Customer::bookedRoom()
         fullName = Person::standardizeString(fullName);
         add = Person::standardizeString(add);
         gender = Person::standardizeString(gender);
-        Person person(fullName, CCCD, phone, add, gender, DOB);
 
-        Customer newCustomer(person, availableRoomIDs, arrivalDate, {"None"}, {"None"});
+        Customer newCustomer(fullName, CCCD, phone, add, gender, DOB, availableRoomIDs, arrivalDate, {"None"}, {"None"});
         string customerFile = "Customer.txt";
         if (!saveCustomerToFile(newCustomer, customerFile))
         {
@@ -832,10 +833,10 @@ void Customer::checkInfor(const string &inputUserName, const string &inputPasswo
     {
         if (createUsername(customer.getFullName()) == inputUserName && customer.getCCCD() == inputPassword)
         {
-            vector<Customer> loggedInCustomer = {customer};
-            displayCustomer(loggedInCustomer, services);
+            currentLoggedInCustomer = customer;
+            customer.display();
             currentFullName = customer.getFullName();
-            return;
+            return; 
         }
     }
     std::cout << "No customer found with the given username and password." << std::endl;
@@ -1312,6 +1313,7 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                         cout << string(75, ' ');
                         gotoXY(10, 7);
                         cout << string(150, ' ');
+                        gotoXY(52, 5);
                     }
                     else
                     {
@@ -1349,6 +1351,7 @@ void Customer::updateCustomerInfo(const string &inputUserName, const string &inp
                             }
                             else if (selectedOption == "Confirm")
                             {
+                                customer.setDOB(newDOB);
                                 system("cls");
                                 gotoXY(1, 1);
                                 changeConsoleColor(3);
