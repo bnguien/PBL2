@@ -1543,8 +1543,6 @@ void customerFunction(Staff &staff, vector<string> &function)
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
 
-          vector<Customer> customers = Customer::readFileCustomer("Customer.txt");
-          vector<Service> services = Service::readFileService("Service.txt");
           if (customers.empty())
           {
                changeConsoleColor(4);

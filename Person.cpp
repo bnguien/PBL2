@@ -117,49 +117,6 @@ string Person::standardizeString (const string& input) {
      res.erase(res.length() - 1);
      return res;
 }
-vector<Person> readFilePerson(const string& fileName) {
-    ifstream file(fileName);
-    vector<Person> people;
-    string line;
-
-    if (!file.is_open()) {
-        cout << "Cannot open file!" << endl;
-        return people;
-    }
-
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string fullName, CCCD, phone, add,gender, DOBstr;
-        Date DOB;
-
-        getline(ss, fullName, '|');
-        getline(ss, CCCD, '|');
-        getline(ss, phone, '|');
-        getline(ss, add, '|');
-        getline(ss, DOBstr, '|');
-        DOB = Date(DOBstr);
-        getline(ss, gender, '|');
-
-        Person person(fullName, CCCD, phone, add,gender,DOB);
-        people.push_back(person);
-    }
-
-    file.close();
-    return people;
-}
-void Person::displayPerson(const vector<Person>& people) {
-    for (const auto& person : people) {
-        cout << "Full Name: " << person.getFullName() << endl;
-        cout << "CCCD: " << person.getCCCD() << endl;
-        cout << "Phone: " << person.getPhone() << endl;
-        cout << "Address: " << person.getAdd() << endl;
-        cout << "DOB: ";
-        person.getDOB().display();
-        cout<<"Gender: "<<person.getGender()<<endl;
-        cout << "-----------------------------" << endl;
-    }
-}
-
 string Person::getLastName()
 {
      std::istringstream iss(fullName);
@@ -180,3 +137,4 @@ string Person::getFirstName()
           return nameParts.back();
      return "";
 }
+
