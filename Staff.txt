@@ -2,15 +2,14 @@ Nguyen Thi Bao Ngan|046305001210|0375317270|Thua Thien Hue|Female|12/10/2005|M00
 Nguyen Dang Bao Nguyen|049305002562|0392663097|Quang Nam|Female|02/04/2005|M002|Manager|20.500.000/month
 Nguyen Thuy Trang|079199045672|0346725617|TP Ho Chi Minh|Female|13/10/1999|R001|Receptionist|9.700.000/month
 Tran Nguyen Kim Ngan|046305011670|0521247810|Thua Thien Hue|Female|17/09/2005|R002|Receptionist|8.350.000/month
-Ha Thuc Minh Quan|046201004549|0371048964|Thua Thien Hue|Male|30/03/2001|R003|Receptionist|8.350.000/month
+Ha Thuc Minh Quan|046201004549|0487521695|Thua Thien Hue|Male|30/03/2001|R003|Receptionist|8.260.000/month
 Tran Thuc Thang Long|049095008982|0571045664|Quang Nam|Male|24/11/1995|R004|Receptionist|9.700.000/month
 Dang Ngoc Huyen|044193154203|0324567789|Quang Binh|Female|11/04/1993|H001|Housekeeping|6.850.000/month
 Vo Thi Bao Ngoc|044300652372|0385710298|Quang Binh|Female|17/09/2000|H002|Housekeeping|6.850.000/month
-Bui Hoai Huong|048302128945|0561024897|Da Nang|Female|08/11/2002|H003|Housekeeping|4.720.000/month
 Nguyen Bao Hoang|048097654870|0394267895|Da Nang|Male|11/03/1997|H004|Housekeeping|5.620.000/month
 Hoang Huu Thanh Hoang|046203451023|0789120456|Thua Thien Hue|Male|06/04/2003|H005|Housekeeping|5.620.000/month
 Ninh Ngoc Linh|045196447216|0369245563|Quang Tri|Female|10/02/1996|L001|Laundry|5.490.000/month
-Dao Huu Kim Quy|049201471138|0945317863|Quang Nam|Male|10/02/2001|L002|Laundry|4.740.000/month
+Dao Huu Kim Quy|049201471138|0945317863|Quang Nam|Male|10/02/2001|L002|Laundry|4.280.000/month
 Dinh Tuan Dat|051098453341|0354436981|Quang Ngai|Male|23/03/1998|L003|Laundry|3.500.000/month
 Van Ngoc Linh Nhien|079304635712|0934566228|TP Ho Chi Minh|Female|25/06/2004|L004|Laundry|3.500.000/month
 Ha Thi Thanh Kim|046302008617|0924506123|Thua Thien Hue|Female|10/02/2002|S001|Server|6.800.000/month
@@ -23,3 +22,9 @@ Ngan Nguyen|047389251238|0384698955|Quang Tri|Female|10/10/2006|L005|Laundry|4.0
 Luong Quang Nguyen Thuan|045299041937|0939745519|Ha Tinh|Male|25/05/1999|S007|Server|2.340.000/month
 Che Quang Nguyen Thien|045189004547|0233471014|Ba Ria - Vung Tau|Male|07/06/1989|S008|Server|2.710.000/month
 Luong The Nguyen|040204012507|0751208133|Nghe An|Male|25/07/2004|H007|Housekeeping|3.210.000/month
+Ly Nhat Phuong|045687120445|0785143122|Ha Tinh|Female|17/08/1980|R005|Receptionist|7.240.000/month
+Bui Truong Linh Luc|046588798246|0815467802|Quang Tri|Male|15/04/1992|R006|Receptionist|6.840.000/month
+Mai Anh Khoa|045127890064|0789542633|Da Nang|Male|03/02/2005|S009|Server|3.290.000/month
+Le Van Xin|049793874512|0475139724|Nghe An|Male|21/12/1993|L006|Laundry|2.710.000/month
+Vo The Thuan Thien|046786250334|0457129447|TP Ho Chi Minh|Female|25/07/1986|H008|Housekeeping|5.470.000/month
+Bui Hoai Huong|048302128945|0498724457|Da Nang|Female|08/11/1990|H009|Housekeeping|4.890.000/month
