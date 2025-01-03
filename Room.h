@@ -28,14 +28,14 @@ public:
      string getPrice() const;
      bool setStatus(const string &status);
      string getStatus() const;
-     void setServiceIDs (const vector<string> serviceIDs);
+     void setServiceIDs (const vector<string> &serviceIDs);
      vector<string> getServiceIDs() const;
 
      bool checkAvailable () const;
      static vector<Room> readFileRoom(const string& fileName);
      static void printRoom(const vector<Room> &rooms, const vector<Service> &services);
      static bool updateRoomFile(const vector<Room> &rooms, const string &fileRoom);
-     void addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs);
+     static void addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs);
 
      static vector<string> returnSerIDs (const string &roomID);
      ~Room() {}

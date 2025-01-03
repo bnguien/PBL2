@@ -22,7 +22,7 @@ string Bill::createID(const Customer &customer)
     return BillID;
 }
 
-// dùng để in ra số tiền cho đúng định dạng ví dụ 1150000 -> 1,105,000
+// dùng để in ra số tiền cho đúng định dạng ví dụ 1150000 -> 1.105.000
 std::string Bill::formatCurrency(int amount)
 {
     std::string result;
@@ -35,7 +35,7 @@ std::string Bill::formatCurrency(int amount)
         count++;
         if (count % 3 == 0 && i != 0)
         {
-            result = "," + result;
+            result = "." + result;
         }
     }
 
@@ -116,10 +116,12 @@ Date Bill::inputCheckoutDate(const Date &checkInDate)
         gotoXY(20, 20);
         std::cout << "|Check-out Date (DD MM YYYY)|                              |";
         gotoXY(20, 21);
-        std::cout << "|----------------------------------------------------------|";
+        std::cout << "+----------------------------------------------------------+";
         gotoXY(50, 20);
         changeColor(7);
+        ShowCur(1);
         getline(cin, dateStr);
+        ShowCur(0);
         stringstream ss(dateStr);
         if (!(ss >> day >> month >> year)|| !ss.eof())
         {
@@ -190,11 +192,11 @@ void Bill::checkBillInfo(const string &inputUserName, const string &inputPasswor
         {
             changeColor(14);
             gotoXY(20, 17);
-            std::cout << "|----------------------------------------------------------|";
+            std::cout << "+----------------------------------------------------------+";
             gotoXY(20, 18);
             std::cout << "|Check-in Date              |                              |";
             gotoXY(20, 19);
-            std::cout << "|----------------------------------------------------------|";
+            std::cout << "+----------------------------------------------------------+";
             changeColor(7);
             gotoXY(50, 18);
             customer.getArrivalDate().display();

@@ -45,7 +45,7 @@ D204|Double|550.000/night|Available|None
 D205|Double|550.000/night|Unavailable|None
 D206|Double|550.000/night|Available|None
 D207|Double|580.000/night|Available|None
-D208|Double|580.000/night|Available|None
+D208|Double|580.000/night|Unavailable|None
 D209|Double|580.000/night|Available|None
 D210|Double|580.000/night|Unavailable|None
 T201|Triple|700.000/night|Unavailable|None
@@ -65,7 +65,7 @@ S304|Single|450.000/night|Available|None
 S305|Single|450.000/night|Unavailable|None
 S306|Single|450.000/night|Unavailable|None
 S307|Single|480.000/night|Unavailable|None
-S308|Single|480.000/night|Unavailable|None
+S308|Single|480.000/night|Unavailable|F03,D01,S03,S02,D05
 S309|Single|480.000/night|Unavailable|None
 S310|Single|480.000/night|Unavailable|None
 D301|Double|600.000/night|Unavailable|None
@@ -79,8 +79,8 @@ D308|Double|650.000/night|Unavailable|None
 D309|Double|650.000/night|Available|None
 D310|Double|650.000/night|Unavailable|None
 T301|Triple|750.000/night|Available|None
-T302|Triple|750.000/night|Unavailable|None
-T303|Triple|750.000/night|Unavailable|D04
+T302|Triple|750.000/night|Unavailable|F08
+T303|Triple|750.000/night|Unavailable|None
 T304|Triple|750.000/night|Unavailable|None
 T305|Triple|750.000/night|Available|None
 T306|Triple|750.000/night|Available|None

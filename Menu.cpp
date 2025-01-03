@@ -9,7 +9,6 @@
 #include "Login.cpp"
 #include "Bill.cpp"
 #include "BillStaff.cpp"
-
 #include "Function.h"
 #include "Vector.h"
 
@@ -1026,7 +1025,7 @@ void staffFunction(Staff &staff, vector<string> &function)
                     }
                     else
                     {
-                         Sleep(5000);
+                         _getch();
                          break;
                     }
                }
@@ -1051,7 +1050,7 @@ void staffFunction(Staff &staff, vector<string> &function)
 
           string id;
           int index;
-          do
+          do //Staff's ID
           {
                gotoXY(32, 14);
                cout << string(id.length(), ' ');
@@ -1099,12 +1098,34 @@ void staffFunction(Staff &staff, vector<string> &function)
                     {
                          gotoXY(20, 17);
                          changeConsoleColor(4);
-                         cout << "Cannot found staff's ID: " << id << ". Press Enter to continue ...";
-
-                         _getch();
-                         clearFromPosition(1, 10);
-                         staffFunction(staff, function);
-                    }
+                         cout << "Cannot found staff's ID: " << id << ". Press Y to continue/ N to return!";
+                         changeConsoleColor(2);
+                         char c;
+                         int x = whereX() + 1, y = whereY() + 1;
+                         do
+                         {
+                              gotoXY(x, y);
+                              cout << string(1, ' ');
+                              gotoXY(x, y);
+                              ShowCur(1);
+                              cin >> c;
+                              ShowCur(0);
+                              c = toupper(c);
+                              if (c == 'Y')
+                              {
+                                   gotoXY(20, 17);
+                                   cout << string(72, ' ');
+                                   break;
+                              }
+                              else if (c == 'N')
+                              {
+                                   clearFromPosition(1,11);
+                                   staffFunction(staff, function);
+                                   break;
+                              }
+                              else continue;
+                         } while(true);
+                    } 
                     else
                          break;
                }
@@ -1112,9 +1133,9 @@ void staffFunction(Staff &staff, vector<string> &function)
 
           gotoXY(20, 17);
           changeConsoleColor(2);
-          cout << "The staff's ID was successfully found.! Wait for a second!";
+          cout << "The staff's ID was successfully found.! Press Enter to continue...";
           changeConsoleColor(7);
-          Sleep(1000);
+          _getch();
 
           if (!staff.updateStaff(staffs, index))
           {
@@ -1288,7 +1309,6 @@ void customerFunction(Staff &staff, vector<string> &function)
           staff.updateCustomer(staff, fileName, customers);
           changeColor(7);
 
-
           break;
      }
      case 3: // Find
@@ -1323,11 +1343,11 @@ void customerFunction(Staff &staff, vector<string> &function)
           }
           break;
      }
-     case 4:
-     {
+     case 4: //Book services
+     { 
           clearFromPosition(1, 10);
           changeColor(11);
-          // Book
+          
           cout << "\t\t\t---------- CUSTOMER FUNCTIONS: " << function[choice - 1] << " ----------\n\n";
           changeColor(7);
 
@@ -1494,8 +1514,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                ShowCur(1);
                cin >> cccd;
 
-               if (cccd.length() != 12 || cccd[0] != '0'
-                    || !(std::all_of(cccd.begin(), cccd.end(), ::isdigit)))
+               if (cccd.length() != 12 || cccd[0] != '0' || !(std::all_of(cccd.begin(), cccd.end(), ::isdigit)))
                {
                     ShowCur(0);
                     gotoXY(77, 15);
@@ -1503,7 +1522,7 @@ void customerFunction(Staff &staff, vector<string> &function)
                     cout << "Invalid CCCD format! Press Enter ...";
                     _getch();
                     gotoXY(77, 15);
-                    cout << string (40, ' ');
+                    cout << string(40, ' ');
                     changeColor(7);
                }
                else
@@ -1527,12 +1546,12 @@ void customerFunction(Staff &staff, vector<string> &function)
                }
           }
           vector<string> content = {"Confirm", "Cancel"};
-          if(buttonList(30, 24, 14, 2, 18, content, "row") == 1)
+          if (buttonList(30, 24, 14, 2, 18, content, "row") == 1)
           {
                gotoXY(1, 28);
                staff.removeCustomerByCCCD(staff, cccd);
           }
-          
+
           break;
      }
      case 6:
@@ -1600,7 +1619,7 @@ void roomFunction(Staff &staff, vector<string> &function)
      {
           clearFromPosition(1, 10);
           changeColor(11);
-          
+
           cout << "\t\t\t---------- ROOM FUNCTIONS: " << function[choice - 1] << " ----------\n";
           changeColor(7);
 
@@ -1631,7 +1650,7 @@ void roomFunction(Staff &staff, vector<string> &function)
                     Room::printRoom(rooms, services);
                }
           }
-          else 
+          else
           {
                system("cls");
                changeConsoleColor(2);
@@ -1736,7 +1755,7 @@ void serBillFunction(Staff &staff, vector<string> &function)
           vector<Service> services = Service::readFileService("Service.txt");
           gotoXY(1, 12);
           displayService(services);
-          
+
           staff.changeServicePrice(services);
 
           break;
