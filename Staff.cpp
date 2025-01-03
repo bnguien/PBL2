@@ -571,13 +571,15 @@ bool Staff::changeRoomStatus(vector<Room> &rooms)
                string status = rooms[i].getStatus();
                if (status == "Available")
                     changeColor(2);
-               else changeColor(4);
+               else
+                    changeColor(4);
                cout << status;
                string newSta = (status == "Available") ? "Unavailable" : "Available";
                gotoXY(36, y - 1);
                if (newSta == "Available")
                     changeColor(2);
-               else changeColor(4);
+               else
+                    changeColor(4);
                cout << newSta;
                rooms[i].setStatus(newSta);
                _getch();
@@ -587,7 +589,8 @@ bool Staff::changeRoomStatus(vector<Room> &rooms)
           return false;
      if (Room::updateRoomFile(rooms, "Room.txt"))
           return true;
-     else return false;
+     else
+          return false;
 }
 
 bool Staff::updateStaff(vector<Staff> &staffs, const int &index)
@@ -852,9 +855,11 @@ bool Staff::addNewCustomer(Staff &staff)
      ShowCur(0);
      while (true)
      {
+          ShowCur(1);
           std::cout << "Enter the room IDs that the customer wants to book (separated by commas): ";
           string roomIDsInput;
           getline(cin, roomIDsInput);
+          ShowCur(0);
 
           vector<string> roomIDs;
           string currentRoomID = "";
@@ -863,7 +868,6 @@ bool Staff::addNewCustomer(Staff &staff)
           {
                if (ch == ',')
                {
-
                     if (!currentRoomID.empty())
                     {
                          roomIDs.push_back(currentRoomID);
@@ -872,7 +876,7 @@ bool Staff::addNewCustomer(Staff &staff)
                }
                else
                {
-                    currentRoomID += ch;
+                    currentRoomID += toupper(ch);
                }
           }
 
@@ -910,6 +914,7 @@ bool Staff::addNewCustomer(Staff &staff)
 
           if (!unavailableRoomIDs.empty())
           {
+               changeColor(4);
                std::cout << "Rooms ";
                for (size_t i = 0; i < unavailableRoomIDs.size(); ++i)
                {
@@ -920,11 +925,13 @@ bool Staff::addNewCustomer(Staff &staff)
                     }
                }
                std::cout << " are unavailable. Please choose another room." << endl;
+               changeColor(7);
                continue;
           }
 
           if (!availableRoomIDs.empty())
           {
+               changeColor(2);
                std::cout << "Rooms ";
                for (size_t i = 0; i < availableRoomIDs.size(); ++i)
                {
@@ -934,12 +941,16 @@ bool Staff::addNewCustomer(Staff &staff)
                          std::cout << ", ";
                     }
                }
-               std::cout << " are available. Proceeding with booking." << endl;
+               std::cout << " are available. Press Enter to continue booking." << endl;
+               _getch();
+               changeColor(7);
                break;
           }
           else
           {
+               changeColor(4);
                std::cout << "No available rooms selected. Please try again." << endl;
+               changeColor(7);
           }
      }
      system("cls");
@@ -995,6 +1006,7 @@ bool Staff::addNewCustomer(Staff &staff)
 
      do
      {
+          ShowCur(1);
           gotoXY(69, 14);
           std::getline(std::cin, fullName);
           if (fullName.empty())
@@ -1007,14 +1019,17 @@ bool Staff::addNewCustomer(Staff &staff)
                gotoXY(99, 14);
                std::cout << string(75, ' ');
           }
+          ShowCur(0);
      } while (fullName.empty());
 
      bool isValidCCCD = false;
 
      do
      {
+          ShowCur(1);
           gotoXY(69, 16);
           std::getline(std::cin, CCCD);
+          ShowCur(0);
 
           if (CCCD.length() != 12)
           {
@@ -1061,8 +1076,10 @@ bool Staff::addNewCustomer(Staff &staff)
 
      do
      {
+          ShowCur(1);
           gotoXY(69, 18);
           std::getline(std::cin, phone);
+          ShowCur(0);
 
           if (phone.length() != 10)
           {
@@ -1084,28 +1101,19 @@ bool Staff::addNewCustomer(Staff &staff)
                gotoXY(97, 18);
                cout << string(75, ' ');
           }
+          else if (!std::all_of(phone.begin() + 1, phone.end(), ::isdigit))
+          {
+               gotoXY(97, 18);
+               changeConsoleColor(4);
+               std::cout << "Phone must have only digits! Press enter to try again";
+               changeConsoleColor(7);
+               _getch();
+               gotoXY(97, 18);
+               std::cout << std::string(75, ' ');
+          }
           else
           {
-               bool isDigitOnly = true;
-               for (size_t i = 1; i < phone.length(); i++)
-               {
-                    if (!isdigit(phone[i]))
-                    {
-                         isDigitOnly = false;
-                         gotoXY(97, 18);
-                         changeConsoleColor(4);
-                         cout << "Phone must have only digits! Press enter to try again" << endl;
-                         changeConsoleColor(7);
-                         gotoXY(97, 18);
-                         _getch();
-                         cout << string(75, ' ');
-                         break;
-                    }
-               }
-               if (isDigitOnly)
-               {
-                    isValidPhone = true;
-               }
+               isValidPhone = true;
           }
 
           if (!isValidPhone)
@@ -1113,92 +1121,104 @@ bool Staff::addNewCustomer(Staff &staff)
                gotoXY(69, 18);
                cout << string(phone.length(), ' ');
           }
-
      } while (!isValidPhone);
 
+     ShowCur(1);
      gotoXY(69, 20);
      std::getline(std::cin, add);
 
-     gotoXY(69, 22);
-     std::getline(std::cin, gender);
+     do
+     {
+          ShowCur(1);
+          gotoXY(69, 22);
+          cout << string(gender.length(), ' ');
+          gotoXY(69, 22);
+          getline(cin, gender);
+          gender = toLower(gender);
+          gender[0] = toupper(gender[0]);
+          gotoXY(69, 22);
+          cout << gender;
+
+          if (!(gender == "Male" || gender == "Female"))
+          {
+               gotoXY(69, 22);
+               ShowCur(0);
+               changeConsoleColor(4);
+               cout << "Gender must be \'Male\' or \'Female\'! Try again!";
+               changeConsoleColor(7);
+               _getch();
+               gotoXY(97, 22);
+               cout << string(50, ' ');
+               continue;
+          }
+          break;
+     } while (true);
 
      while (true)
      {
           gotoXY(69, 24);
-          cout << string(25, ' ');
+          cout << string(27, ' ');
           gotoXY(69, 24);
           std::getline(std::cin, DOBstr);
 
           if (DOBstr.empty())
           {
-               gotoXY(97, 24);
+               gotoXY(98, 24);
                changeConsoleColor(4);
                std::cout << "Date of Birth cannot be empty. Press enter to try again (dd/mm/yyyy).";
                changeConsoleColor(7);
                _getch();
-               gotoXY(97, 24);
+               gotoXY(98, 24);
                cout << string(75, ' ');
                continue;
           }
 
-          stringstream ss(DOBstr);
-          string token;
-          int day = 0, month = 0, year = 0;
-          bool validDate = true;
-
-          Date DOBDate(DOBstr);
-          if (!DOBDate.isValidDateFormat(DOBstr))
-          {
-               validDate = false;
-          }
-          else
-          {
-               getline(ss, token, '/');
-               if (DOBDate.isNumber(token))
-               {
-                    day = stoi(token);
-               }
-               else
-               {
-                    validDate = false;
-               }
-
-               getline(ss, token, '/');
-               if (DOBDate.isNumber(token))
-               {
-                    month = stoi(token);
-               }
-               else
-               {
-                    validDate = false;
-               }
-
-               getline(ss, token, '/');
-               if (DOBDate.isNumber(token))
-               {
-                    year = stoi(token);
-               }
-               else
-               {
-                    validDate = false;
-               }
-          }
-
-          if (!validDate || day == 0 || month == 0 || year == 0)
-          {
-               gotoXY(97, 24);
-               changeConsoleColor(4);
-               std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
-               changeConsoleColor(7);
-               _getch();
-               gotoXY(97, 24);
-               cout << string(75, ' ');
-               continue;
-          }
-          else
+          if (Date::isValidDateFormat(DOBstr))
           {
                DOB = Date(DOBstr);
+               if (Date::getCurrentDate().getYear() - DOB.getYear() < 18)
+               {
+                    gotoXY(98, 24);
+                    changeConsoleColor(4);
+                    std::cout << "The customer must be at least 18 years old!";
+                    changeConsoleColor(7);
+                    Sleep(3000);
+
+                    system("cls");
+                    changeConsoleColor(12);
+                    gotoXY(40, 5);
+                    cout << "+---------------------------------------------------+";
+                    gotoXY(40, 6);
+                    cout << "|                                                   |";
+                    gotoXY(40, 7);
+                    cout << "|          Customer is under 18 years old!          |";
+                    gotoXY(40, 8);
+                    cout << "|                                                   |";
+                    gotoXY(40, 9);
+                    cout << "|   Failed to book new room for customer with CCCD  |";
+                    gotoXY(40, 10);
+                    cout << "|                    " << setw(31) << setfill(' ') << CCCD << "|";
+                    gotoXY(40, 11);
+                    cout << "|                                                   |";
+                    gotoXY(40, 12);
+                    cout << "+---------------------------------------------------+" << endl;
+                    changeConsoleColor(7);
+                    ShowCur(0);
+                    return false;
+               }
+
                break;
+          }
+          else
+          {
+               gotoXY(98, 24);
+               changeConsoleColor(4);
+               std::cout << "Invalid date format! Please use dd/mm/yyyy!";
+               changeConsoleColor(7);
+               _getch();
+               gotoXY(98, 24);
+               cout << string(75, ' ');
+               continue;
           }
      }
 
@@ -1207,7 +1227,9 @@ bool Staff::addNewCustomer(Staff &staff)
           gotoXY(69, 26);
           cout << string(25, ' ');
           gotoXY(69, 26);
+          ShowCur(1);
           std::getline(std::cin, arrivalDateStr);
+          ShowCur(0);
 
           if (arrivalDateStr.empty())
           {
@@ -1221,68 +1243,37 @@ bool Staff::addNewCustomer(Staff &staff)
                continue;
           }
 
-          stringstream ss(arrivalDateStr);
-          string token;
-          int day = 0, month = 0, year = 0;
-          bool validDate = true;
-
-          Date arrivalDateTemp(arrivalDateStr);
-          if (!arrivalDateTemp.isValidDateFormat(arrivalDateStr))
+          if (Date::isValidDateFormat(arrivalDateStr))
           {
-               validDate = false;
+               arrivalDate = Date(arrivalDateStr);
+               if (Date::getCurrentDate() > arrivalDate)
+               {
+                    gotoXY(97, 26);
+                    changeConsoleColor(4);
+                    std::cout << "Arrival date must be after current date: " << Date::getCurrentDate();
+                    changeConsoleColor(7);
+                    _getch();
+                    gotoXY(97, 26);
+                    cout << string(75, ' ');
+                    continue;
+               }
+
+               break;
           }
           else
           {
-               getline(ss, token, '/');
-               if (arrivalDateTemp.isNumber(token))
-               {
-                    day = stoi(token);
-               }
-               else
-               {
-                    validDate = false;
-               }
-
-               getline(ss, token, '/');
-               if (arrivalDateTemp.isNumber(token))
-               {
-                    month = stoi(token);
-               }
-               else
-               {
-                    validDate = false;
-               }
-
-               getline(ss, token, '/');
-               if (arrivalDateTemp.isNumber(token))
-               {
-                    year = stoi(token);
-               }
-               else
-               {
-                    validDate = false;
-               }
-          }
-
-          if (!validDate || day == 0 || month == 0 || year == 0)
-          {
                gotoXY(97, 26);
                changeConsoleColor(4);
-               std::cout << "Invalid date format. Press enter to try again (dd/mm/yyyy).";
+               std::cout << "Invalid date format! Please use dd/mm/yyyy!";
                changeConsoleColor(7);
                _getch();
                gotoXY(97, 26);
                cout << string(75, ' ');
                continue;
           }
-          else
-          {
-               arrivalDate = Date(arrivalDateStr);
-               break;
-          }
      }
-     ShowCur(0);
-     vector<string> Options = {"Cancel", "Confirm"};
+
+     vector<string> Options = {"Confirm", "Cancel"};
      int optionIndex = buttonList(45, 29, 15, 2, 18, Options, "row");
      string selectedOption = Options[optionIndex - 1];
      if (selectedOption == "Cancel")
@@ -1861,9 +1852,9 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                ShowCur(1);
                gotoXY(55, 15);
                getline(cin, inputName);
+               ShowCur(0);
                if (inputName.empty())
                {
-                    ShowCur(0);
                     changeConsoleColor(4);
                     gotoXY(98, 15);
                     std::cout << "Customer's name cannot be empty. Please try again.";
@@ -1879,10 +1870,10 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                ShowCur(1);
                gotoXY(55, 17);
                getline(cin, inputCCCD);
+               ShowCur(0);
 
                if (inputCCCD.length() != 12)
                {
-                    ShowCur(0);
                     changeConsoleColor(4);
                     gotoXY(97, 17);
                     std::cout << "CCCD must have exactly 12 digits!Press enter to try again" << endl;
@@ -1925,7 +1916,6 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
 
           } while (!isValidCCCD);
 
-          ShowCur(0);
           bool customerFound = false;
           for (Customer &customer : customers)
           {
@@ -1967,7 +1957,9 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                               changeConsoleColor(9);
                               std::cout << "Enter the new phone number: ";
                               changeConsoleColor(7);
+                              ShowCur(1);
                               getline(cin, newPhone);
+                              ShowCur(0);
                               if (customer.getPhone() == newPhone)
                               {
                                    gotoXY(10, 7);
@@ -2039,7 +2031,9 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                               changeConsoleColor(9);
                               std::cout << "Enter the new address: ";
                               changeConsoleColor(7);
+                              ShowCur(1);
                               getline(cin, newAddress);
+                              ShowCur(0);
                               if (customer.getAdd() == newAddress)
                               {
                                    gotoXY(10, 7);
@@ -2099,7 +2093,10 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                          string newDOB;
                          while (true)
                          {
+                              gotoXY(52, 5);
+                              ShowCur(1);
                               std::getline(std::cin, newDOB);
+                              ShowCur(0);
                               if (customer.getDOB() == newDOB)
                               {
                                    gotoXY(10, 7);
@@ -2122,6 +2119,7 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                         changeConsoleColor(7);
                                         _getch();
                                         gotoXY(10, 7);
+                                        std::cout << string(150, ' ');
                                         continue;
                                    }
                               }
@@ -2133,6 +2131,19 @@ bool Staff::updateCustomer(Staff &staff, const string &fileName, vector<Customer
                                    gotoXY(1, 6);
                                    std::cout << string(150, ' ');
                                    gotoXY(52, 5);
+                              }
+                              else if (Date::getCurrentDate().getYear() - Date(newDOB).getYear() < 18)
+                              {
+                                   changeConsoleColor(4);
+                                   gotoXY(10, 7);
+                                   std::cout << "The customer must be at least 18 years old!" << endl;
+                                   changeConsoleColor(7);
+                                   _getch();
+                                   gotoXY(52, 5);
+                                   std::cout << string(75, ' ');
+                                   gotoXY(10, 7);
+                                   std::cout << string(150, ' ');
+                                   continue;
                               }
                               else
                               {
@@ -2271,22 +2282,25 @@ void Staff::displayCustomer(const vector<Customer> customers)
                string service = "";
                vector<string> serIDs = Room::returnSerIDs(roomIDs[i]);
 
-               for (size_t j = 0; j < serIDs.size() - 1; j++)
+               for (size_t j = 0; j < serIDs.size(); j++)
                {
-                    if (service.length() + serIDs[j].length() + 2 <= 15)
+                    if (service.length() + serIDs[j].length() + (service.empty() ? 0 : 2) <= 15)
                     {
-                         service += serIDs[j];
                          if (!service.empty())
+                         {
                               service += ", ";
+                         }
+                         service += serIDs[j];
                     }
                     else
                     {
-                         cout << service << "|" << endl;
+                         service += ",";
+                         cout << setw(15) << service << "|" << endl;
+                         service = serIDs[j]; 
                          cout << border3;
-                         service.clear();
                     }
                }
-               service += serIDs[serIDs.size() - 1];
+
                cout << setw(15) << service << "|" << endl;
 
                if (i < roomIDs.size() - 1)
