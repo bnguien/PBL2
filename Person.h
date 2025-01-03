@@ -51,9 +51,8 @@ public:
     string getLastName();
     void toLowerCase(string &str);
     static string standardizeString(const string &input);
-    static vector<Person> readFilePerson(const string &fileName);
-    static void displayPerson(const vector<Person> &people);
-    ~Person() {}
+    virtual void display() const = 0;
+    virtual ~Person() = default;
 };
 
 #endif
