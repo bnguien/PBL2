@@ -195,6 +195,57 @@ void Room::printRoom(const vector<Room> &rooms, const vector<Service> &services)
     }
 }
 
+void Room::addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs)
+{
+    if (serviceIDs.empty())
+    {
+        cout << "No services to add." << endl;
+        return;
+    }
+
+    string upperRoomID = roomID;
+    std::transform(upperRoomID.begin(), upperRoomID.end(), upperRoomID.begin(), ::toupper);
+
+    string fileRoom = "Room.txt";
+    vector<Room> rooms = readFileRoom(fileRoom);
+    bool roomFound = false;
+
+    for (size_t i = 0; i < rooms.size(); ++i)
+    {
+        Room &room = rooms[i];
+        if (room.getID() == upperRoomID)
+        {
+            roomFound = true;
+            vector<string> setServiceIDs = room.getServiceIDs();
+
+            if (setServiceIDs.size() == 1 && setServiceIDs[0] == "None")
+            {
+                room.setServiceIDs(serviceIDs);
+            }
+            else
+            {
+                for (const auto &serviceID : serviceIDs)
+                {
+                    setServiceIDs.push_back(serviceID);
+                }
+                room.setServiceIDs(setServiceIDs);
+            }
+
+            cout << "Services added successfully to Room ID: " << upperRoomID << endl;
+            break;
+        }
+    }
+
+    if (roomFound)
+    {
+        updateRoomFile(rooms, fileRoom);
+    }
+    else
+    {
+        cout << "Room ID not found." << endl;
+    }
+}
+
 bool Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
 {
     ofstream file(fileRoom);
@@ -218,57 +269,9 @@ bool Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
              << r.getStatus() << "|"
              << svList << endl;
     }
+
     file.close();
     return true;
-}
-
-void Room::addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs)
-{
-    if (serviceIDs.empty())
-    {
-        cout << "No services to add." << endl;
-        return;
-    }
-
-    string fileRoom = "Room.txt";
-    vector<Room> rooms = readFileRoom(fileRoom);
-    bool roomFound = false;
-
-    for (size_t i = 0; i < rooms.size(); ++i)
-    {
-        Room &room = rooms[i];
-
-        if (room.getID() == roomID)
-        {
-            roomFound = true;
-            vector<string> setServiceIDs = room.getServiceIDs();
-
-            if (setServiceIDs.size() == 1 && setServiceIDs[0] == "None")
-            {
-                room.setServiceIDs(serviceIDs);
-            }
-            else
-            {
-                for (size_t j = 0; j < serviceIDs.size(); ++j)
-                {
-                    setServiceIDs.push_back(serviceIDs[j]);
-                }
-                room.setServiceIDs(setServiceIDs);
-            }
-
-            cout << "Services added successfully to room ID: " << roomID << endl;
-            break;
-        }
-    }
-
-    if (roomFound)
-    {
-        updateRoomFile(rooms, fileRoom);
-    }
-    else
-    {
-        cout << "Room ID not found." << endl;
-    }
 }
 
 vector<string> Room::returnSerIDs (const string &roomID)
