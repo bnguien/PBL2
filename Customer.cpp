@@ -844,13 +844,11 @@ void Customer::checkInfor(const string &inputUserName, const string &inputPasswo
 // Chuc nang khi login customer
 void Customer::bookServices(const string &inputUserName, const string &inputPassword, const vector<Customer> &customers)
 {
-    Service service;
     string fileService = "Service.txt";
-    vector<Service> services = service.readFileService(fileService);
+    vector<Service> services = Service::readFileService(fileService);
 
-    Room room;
     string fileRoom = "Room.txt";
-    vector<Room> rooms = room.readFileRoom(fileRoom);
+    vector<Room> rooms = Room::readFileRoom(fileRoom);
     string border = "*===================================================*";
     changeConsoleColor(1);
     std::cout << "\n";
@@ -902,6 +900,7 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
             }
         }
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
         std::cout << "Enter the Room ID (eg., S101, D201, T301) to book services: ";
         cin.clear();
         getline(cin, roomID);
@@ -912,9 +911,7 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
             changeConsoleColor(7);
             continue;
         }
-
         roomFound = false;
-
         for (const auto &customer : customers)
         {
             if (createUsername(customer.getFullName()) == inputUserName && customer.getCCCD() == inputPassword)
@@ -957,10 +954,33 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
     vector<string> serviceIDs;
     string serviceID;
     char c;
+
     do
     {
-        std::cout << "Enter ServiceID (eg., F01, S01, D01, L01) you want to book: ";
+        std::cout << "\nEnter ServiceID (eg., F01) you want to book: ";
         getline(cin, serviceID);
+        serviceID[0] = toupper(serviceID[0]);
+
+        if (serviceID.length() != 3 ||
+            (toupper(serviceID[0]) != 'F' && toupper(serviceID[0]) != 'S' && toupper(serviceID[0]) != 'D' && toupper(serviceID[0]) != 'L') ||
+            !isdigit(serviceID[1]) || !isdigit(serviceID[2]))
+        {
+            changeColor(4);
+            std::cout << "Invalid ServiceID format. Please enter a valid ServiceID (e.g., F01).\n";
+            changeColor(7);
+            std::cout << "Try another ServiceID? Press (Y/N): ";
+            cin >> c;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            c = toupper(c);
+            while (c != 'Y' && c != 'N')
+            {
+                std::cout << "Invalid input. Press (Y/N): ";
+                cin >> c;
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                c = toupper(c);
+            }
+            continue;
+        }
 
         bool serviceFound = false;
         for (const auto &service : services)
@@ -975,6 +995,7 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
                 if (key == 13)
                 {
                     serviceIDs.push_back(serviceID);
+                    std::cout << "Service " << serviceID << " has been successfully booked.\n";
                 }
                 else if (key == 27)
                 {
@@ -994,38 +1015,39 @@ void Customer::bookServices(const string &inputUserName, const string &inputPass
 
         if (!serviceFound)
         {
+            changeColor(4);
             std::cout << "ServiceID " << serviceID << " not found. Please try again.\n";
-        }
-        if (serviceFound)
-        {
-            std::cout << "Would you like to enjoy more of our services? Press (Y/N)" << endl;
+            changeColor(7);
+            std::cout << "Try another ServiceID? Press (Y/N): ";
             cin >> c;
-            cin.ignore();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             c = toupper(c);
-
             while (c != 'Y' && c != 'N')
             {
-                std::cout << "Press (Y/N)" << endl;
+                std::cout << "Invalid input. Press (Y/N): ";
                 cin >> c;
-                cin.ignore();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 c = toupper(c);
             }
+            continue;
         }
-        else
+
+        std::cout << "Would you like to book more services? Press (Y/N): ";
+        cin >> c;
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        c = toupper(c);
+        while (c != 'Y' && c != 'N')
         {
-            changeConsoleColor(4);
-            std::cout << "ServiceID not found. Please check and try again." << endl;
-            changeConsoleColor(7);
-            std::cout << "Try another ServiceID? Press (Y/N)" << endl;
+            std::cout << "Invalid input. Press (Y/N): ";
             cin >> c;
-            cin.ignore();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             c = toupper(c);
         }
-
     } while (c == 'Y');
 
-    room.addServiceByRoomID(roomID, serviceIDs);
+    Room::addServiceByRoomID(roomID, serviceIDs);
     addServicesToCustomerFile(inputUserName, inputPassword, services, serviceIDs);
+
     if (serviceIDs.empty())
         std::cout << "No services booked." << endl;
     else
