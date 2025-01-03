@@ -203,25 +203,25 @@ bool Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
         return false;
     }
 
-    for (const Room &room : rooms)
+    for (size_t i = 0; i < rooms.size(); ++i)
     {
-        string svList = room.getServiceIDs().empty() ? "None" : room.getServiceIDs()[0];
-        vector<string> serviceIDs = room.getServiceIDs();
-        for (const auto serviceID : serviceIDs)
+        const Room &r = rooms[i];
+        string svList = r.getServiceIDs().empty() ? "None" : r.getServiceIDs()[0];
+        for (size_t j = 1; j < r.getServiceIDs().size(); ++j)
         {
-            svList += ", " + serviceID;
+            svList += "," + r.getServiceIDs()[j];
         }
-
-        file << room.getID() << "|"
-             << room.getType() << "|"
-             << room.getPrice() << "|"
-             << room.getStatus() << "|"
+        file << r.getID() << "|"
+             << r.getType() << "|"
+             << r.getPrice() << "|"
+             << r.getStatus() << "|"
              << svList << endl;
     }
 
     file.close();
     return true;
 }
+
 void Room::addServiceByRoomID(const string &roomID, const vector<string> &serviceIDs)
 {
     if (serviceIDs.empty())
@@ -239,10 +239,25 @@ void Room::addServiceByRoomID(const string &roomID, const vector<string> &servic
 
     for (int i = 0; i < rooms.size(); i++)
     {
-        if (rooms[i].getID() == roomID)
+        Room &room = rooms[i];
+        if (room.getID() == upperRoomID)
         {
             roomFound = true;
-            rooms[i].setServiceIDs(serviceIDs);
+            vector<string> setServiceIDs = room.getServiceIDs();
+
+            if (setServiceIDs.size() == 1 && setServiceIDs[0] == "None")
+            {
+                room.setServiceIDs(serviceIDs);
+            }
+            else
+            {
+                for (const auto &serviceID : serviceIDs)
+                {
+                    setServiceIDs.push_back(serviceID);
+                }
+                room.setServiceIDs(setServiceIDs);
+            }
+            cout << "Services added successfully to Room ID: " << upperRoomID << endl;
             break;
         }
     }
@@ -262,34 +277,6 @@ void Room::addServiceByRoomID(const string &roomID, const vector<string> &servic
     {
         cout << "Room ID not found." << endl;
     }
-}
-
-bool Room::updateRoomFile(const vector<Room> &rooms, const string &fileRoom)
-{
-    ofstream file(fileRoom);
-    if (!file.is_open())
-    {
-        cout << "Cannot open room file!" << endl;
-        return false;
-    }
-
-    for (size_t i = 0; i < rooms.size(); ++i)
-    {
-        const Room &r = rooms[i];
-        string svList = r.getServiceIDs().empty() ? "None" : r.getServiceIDs()[0];
-        for (size_t j = 1; j < r.getServiceIDs().size(); ++j)
-        {
-            svList += "," + r.getServiceIDs()[j];
-        }
-        file << r.getID() << "|"
-             << r.getType() << "|"
-             << r.getPrice() << "|"
-             << r.getStatus() << "|"
-             << svList << endl;
-    }
-
-    file.close();
-    return true;
 }
 
 vector<string> Room::returnSerIDs (const string &roomID)
