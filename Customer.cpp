@@ -313,7 +313,7 @@ bool Customer::saveCustomerToFile(const Customer &customer, const string &fileNa
             file << ",";
         }
     }
-    file << "|" << customer.getArrivalDate().toString() << endl;
+    file << "|" << customer.getArrivalDate().toString() <<"|";
 
     file.seekp(0, ios::end);
     file.close();
